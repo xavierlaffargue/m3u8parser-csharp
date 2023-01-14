@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleM3u8Parser", "SimpleM3u8Parser\SimpleM3u8Parser.csproj", "{6E5D7DBC-6AE3-4C7E-A0B0-D5C54A236633}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{A75E9165-FDF4-4457-8BD4-DE9FB8C7B1E3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E5D7DBC-6AE3-4C7E-A0B0-D5C54A236633}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E5D7DBC-6AE3-4C7E-A0B0-D5C54A236633}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E5D7DBC-6AE3-4C7E-A0B0-D5C54A236633}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E5D7DBC-6AE3-4C7E-A0B0-D5C54A236633}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A75E9165-FDF4-4457-8BD4-DE9FB8C7B1E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A75E9165-FDF4-4457-8BD4-DE9FB8C7B1E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A75E9165-FDF4-4457-8BD4-DE9FB8C7B1E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A75E9165-FDF4-4457-8BD4-DE9FB8C7B1E3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
