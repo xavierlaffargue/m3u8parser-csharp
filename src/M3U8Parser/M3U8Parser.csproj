@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>M3U8Parser</PackageId>
+        <PackageVersion>0.0.1</PackageVersion>
+        <LangVersion>9.0</LangVersion>
+        <Title>M3U8Parser</Title>
+        <Authors>Xavier Laffargue</Authors>
+        <Description>Simple M3U8 parser. Can read and modify an HLS manifest.</Description>
+        <PackageReleaseNotes>First version</PackageReleaseNotes>
+        <Company>M3U8Parser</Company>
+        <Product>M3U8Parser</Product>
+        <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
+        <PackageIcon>icon.png</PackageIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="icon.png" Pack="true" PackagePath="" />
+    </ItemGroup>
+
+</Project>
