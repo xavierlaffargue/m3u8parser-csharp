@@ -8,8 +8,9 @@
 
 	public class MasterPlaylist
 	{
-		public List<Media> Medias = new List<Media>();
-		public List<StreamInf> StreamInfs = new List<StreamInf>();
+		public List<Media> Medias = new ();
+		public List<IframeStreamInf> IFrameStreams = new ();
+		public List<StreamInf> Streams = new ();
 
 		public MasterPlaylist()
 		{}
@@ -20,11 +21,22 @@
 
             foreach (var line in l)
 			{
-
 				if(line.StartsWith(Media.Prefix))
 				{
 					Media media = new Media(line);
 					Medias.Add(media);
+				}
+				
+				if(line.StartsWith(IframeStreamInf.Prefix))
+				{
+					IframeStreamInf streaminf = new IframeStreamInf(line);
+					IFrameStreams.Add(streaminf);
+				}
+				
+				if(line.StartsWith(StreamInf.Prefix))
+				{
+					StreamInf stream = new StreamInf(line);
+					Streams.Add(stream);
 				}
 			}
         }
@@ -37,22 +49,120 @@
 	}
 
 	public class StreamInf : IExtXType
-    {
-        public static string Prefix => "#EXT-X-STREAM-INF";
-    }
+	{
+		public static string Prefix { get => "#EXT-X-STREAM-INF"; }
 
+		private Attribute<int> _programId { get; } = new ("PROGRAM-ID");
+
+		private Attribute<long> Bandwidth { get; } = new ("BANDWIDTH");
+
+		private Attribute<string> Codecs { get; } = new ("CODECS");
+		
+		private Attribute<string> Video { get; } = new ("VIDEO");
+
+		private readonly Attribute<string> _audio = new ("AUDIO");
+
+		public string Audio 
+		{
+			get
+			{
+				return _audio.Value;
+			}
+			set
+			{
+				_audio.Value = value;
+			}
+		}  
+		
+		private string UriSingleLine;
+		
+		public StreamInf(string str)
+		{
+			string lineWithAttribute = string.Empty;
+			string lineWithUri = string.Empty;
+			
+			using var reader = new StringReader(str);
+			lineWithAttribute = reader.ReadLine();
+			lineWithUri = reader.ReadLine();
+
+			_programId.Read(lineWithAttribute);
+			Bandwidth.Read(lineWithAttribute);
+			Codecs.Read(lineWithAttribute);
+			Video.Read(lineWithAttribute);
+			_audio.Read(lineWithAttribute);
+			UriSingleLine = lineWithUri;
+		}
+
+		public new string ToString()
+		{
+			var strBuilder = new StringBuilder();
+			strBuilder.Append(Prefix);
+			strBuilder.Append(":");
+			strBuilder.AppendSeparatorIfTextNotNull(_programId.ToString(), ",");
+			strBuilder.AppendSeparatorIfTextNotNull(Bandwidth.ToString(), ",");
+			strBuilder.AppendSeparatorIfTextNotNull(Codecs.ToString(), ",");
+			strBuilder.AppendSeparatorIfTextNotNull(Video.ToString(), ",");
+			strBuilder.AppendSeparatorIfTextNotNull(_audio.ToString(), ",");
+
+			return strBuilder.ToString().RemoveLastCharacter() + "\r\n" + UriSingleLine;
+		}
+	}
+
+	public class IframeStreamInf : IExtXType
+    {
+	    public static string Prefix { get => "#EXT-X-I-FRAME-STREAM-INF"; }
+	    
+	    private Attribute<string> Uri { get; } = new ("URI");
+	    
+	    private Attribute<long> Bandwidth { get; } = new ("BANDWIDTH");
+	   
+	    private Resolution Resolution { get; } = new ();
+	    
+	    private Attribute<string> Codecs { get; } = new ("CODECS");
+	    
+	    public IframeStreamInf() {}
+
+	    public IframeStreamInf(string str)
+	    {
+		    Bandwidth.Read(str);
+		    Resolution.Read(str);
+		    Codecs.Read(str);
+		    Uri.Read(str); 
+	    }
+
+	    public new string ToString()
+	    {
+		    var strBuilder = new StringBuilder();
+		    strBuilder.Append(Prefix);
+		    strBuilder.Append(":");
+		    strBuilder.AppendSeparatorIfTextNotNull(Bandwidth.ToString(), ",");
+		    strBuilder.AppendSeparatorIfTextNotNull(Resolution.ToString(), ",");
+		    strBuilder.AppendSeparatorIfTextNotNull(Codecs.ToString(), ",");
+		    strBuilder.AppendSeparatorIfTextNotNull(Uri.ToString(), ",");
+            
+		    return strBuilder.ToString().RemoveLastCharacter();
+	    }
+	}
+	
 	public class Media : IExtXType
     {
-        public static string Prefix => "#EXT-X-MEDIA";
+	    public static string Prefix { get => "#EXT-X-MEDIA"; }
 
-        private Attribute<string> Language { get; } = new Attribute<string>("LANGUAGE");
+        private Attribute<string> Language { get; } = new ("LANGUAGE");
+        
+        private Attribute<string> Name { get; } = new ("NAME");
 
-     //   private LanguageAttribut Language { get; } = new LanguageAttribut();
-		private NameAttribut Name { get; } = new NameAttribut();
-        private TypeAttribut MediaType { get; } = new TypeAttribut(SimpleM3u8Parser.MediaType.NONE);
-        private AutoSelectAttribut AutoSelect { get; } = new AutoSelectAttribut();
+        private Attribute<string> Uri { get; } = new ("URI");
+        
+        private Attribute<bool> AutoSelect { get; } = new ("AUTOSELECT");
+        
+        private Attribute<bool> Default { get; } = new ("DEFAULT");
 
-		
+        private TypeAttribut MediaType { get; } = new (SimpleM3u8Parser.MediaType.NONE);
+        
+        private Attribute<string> GroupId { get; } = new ("GROUP-ID");
+        
+        private Attribute<string> InstreamId { get; } = new ("INSTREAM-ID");
 
         public Media()
 		{}
@@ -63,6 +173,10 @@
 			Name.Read(str);
 			MediaType.Read(str);
 			AutoSelect.Read(str);
+			Uri.Read(str);
+			Default.Read(str);
+			GroupId.Read(str);
+			InstreamId.Read(str);
 		}
 		
 		public Media SetLanguage(string l)
@@ -82,8 +196,7 @@
             AutoSelect.Value = l;
             return this;
         }
-
-
+        
         public string GetLanguage()
 		{
 			return Language.Value;
@@ -103,12 +216,23 @@
 		{
 			return MediaType.Value.ToString();
 		}
+        
+        public string GetUri()
+        {
+	        return Uri.Value;
+        }
 
 		public Media SetType(MediaType mediaType)
 		{
 			MediaType.Value = mediaType;
 			return this;
         }
+		
+		public Media SetUri(string uri)
+		{
+			Uri.Value = uri;
+			return this;
+		}
 
 		public new string ToString()
 		{
@@ -116,29 +240,18 @@
 			strBuilder.Append(Prefix);
 			strBuilder.Append(":");
 			strBuilder.AppendSeparatorIfTextNotNull(MediaType.Parse(), ",");
+			strBuilder.AppendSeparatorIfTextNotNull(GroupId.ToString(), ",");
 			strBuilder.AppendSeparatorIfTextNotNull(Language.ToString(), ",");
-			strBuilder.AppendSeparatorIfTextNotNull(Name.Parse(), ",");
-            strBuilder.AppendSeparatorIfTextNotNull(AutoSelect.Parse(), ",");
-
+			strBuilder.AppendSeparatorIfTextNotNull(Name.ToString(), ",");
+            strBuilder.AppendSeparatorIfTextNotNull(AutoSelect.ToString(), ",");
+            strBuilder.AppendSeparatorIfTextNotNull(Default.ToString(), ",");
+            strBuilder.AppendSeparatorIfTextNotNull(Uri.ToString(), ",");
+            
             return strBuilder.ToString().RemoveLastCharacter();
 		}
 	}
 
-	public class LanguageAttribut : StringTag
-	{
-		public override string AttributName => "LANGUAGE";
-	}
 	
-	public class NameAttribut : StringTag
-	{
-		public override string AttributName => "NAME";
-	}
-
-    public class AutoSelectAttribut : BoolTag
-    {
-        public override string AttributName => "AUTOSELECT";
-    }
-
     public class TypeAttribut : EnumTag<MediaType>
     {
         public override string AttributName => "TYPE";
@@ -150,85 +263,10 @@
 
 	public enum MediaType
 	{
-		NONE,AUDIO,VIDEO
+		NONE,AUDIO,VIDEO,CLOSEDCAPTIONS
 	}
 
-    public abstract class StringTag
-	{
-		private string Separator = "=";
-		public abstract string AttributName { get; }
-		public string Value = "";
-		
-		public virtual string Parse()
-		{
-			if (!string.IsNullOrEmpty(Value))
-			{
-				return AttributName + Separator + '"' + Value + '"';
-			}
-
-			return string.Empty;
-		}
-	
-		public void Read(string content)
-		{
-			var regex = new Regex($"(?={AttributName})(.*?)(?=,|$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
-			if (regex.IsMatch(content))
-			{
-				Value = regex.Match(content).Groups[0].Value.Split(Separator)[1].Replace("\"", "");
-			}
-		}
-	}
-
-
-    public abstract class BoolTag
-    {
-        private string Separator = "=";
-        public abstract string AttributName { get; }
-        public bool Value;
-
-        public virtual string Parse()
-        {
-			var valueStr = "YES";
-            if (Value == false)
-            {
-				valueStr = "NO";
-            }
-
-            return AttributName + Separator + valueStr;
-        }
-
-        public void Read(string content)
-        {
-            var regex = new Regex($"(?={AttributName})(.*?)(?=,|$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
-			var valueStr = string.Empty;
-            if (regex.IsMatch(content))
-            {
-                valueStr = regex.Match(content).Groups[0].Value.Split(Separator)[1].Replace("\"", "");
-            }
-
-			if(valueStr == "YES")
-			{
-				Value = true;
-			}
-			else if(valueStr == "NO")
-			{
-				Value = false;
-			}
-
-        }
-
-        public override string ToString()
-        {
-            if (Value)
-            {
-				return "YES";
-            }
-
-			return "NO";
-        }
-    }
-
-    public abstract class EnumTag<T> where T : struct, IConvertible
+	public abstract class EnumTag<T> where T : struct, IConvertible
     {
         private string Separator = "=";
         public abstract string AttributName { get; }
@@ -253,50 +291,113 @@
 
         public void Read(string content)
         {
-            var regex = new Regex($"(?={AttributName})(.*?)(?=,|$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
+	        var regex = new Regex($"(?={AttributName})(.*?)(?=,|$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
             if (regex.IsMatch(content))
             {
                 Value = Tools.ParseEnum<T>(regex.Match(content).Groups[0].Value.Split(Separator)[1]);
+                return;
             }
         }
     }
 
 
 
+	public class Resolution : Attribute<string>
+	{
+		private readonly string separator = "=";
+		
+		public Resolution() : base("RESOLUTION")
+		{
+		}
+
+		public override string ToString()
+		{
+			if(Value != null)
+			{
+				return $"{AttributeName}{separator}{Value}";
+			}
+
+			return string.Empty;
+		}
+	}
 
     public class Attribute<T>
     {
-        private string separator = "=";
+        private readonly string separator = "=";
         public string AttributeName { get; }
         public T Value { get; set; }
 
-		private T DefaultValue;
         public Attribute(string attributeName)
         {
             this.AttributeName = attributeName;
         }
-        public Attribute(string attributeName, T defaultValue)
-        {
-            this.AttributeName = attributeName;
-			DefaultValue = defaultValue;
-            this.Value = defaultValue;
-        }
 
         public override string ToString()
         {
-			if(Value != null && !Value.Equals(DefaultValue))
-            {
-                return $"{AttributeName}{separator}{Value},";
+	        if(Value != null)
+	        {
+		        string textValue = $"{Value}";
+		        if (Value is bool boolValue)
+		        {
+			        textValue = BoolToString(boolValue);
+		        }
+		        else if (Value is string stringValue)
+		        {
+			        textValue = $"\"{textValue}\"";
+		        }
+		        
+                return $"{AttributeName}{separator}{textValue}";
             }
 
             return string.Empty;
         }
 
+        private string BoolToString(bool value)
+        {
+	        if (value)
+	        {
+		        return "YES";
+	        }
+
+	        return "NO";
+        }
+
+        private bool StringToBool(string value)
+        {
+	        if (value == "YES")
+	        {
+		        return true;
+	        }
+
+	        return false;
+        }
+        
+        
         public void Read(string content)
         {
-            var match = Regex.Match(content, $"(?={AttributeName})(.*?)(?=,|$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
+	        var regexStr = Regex.Match(content.Trim(), $"(?<={AttributeName}=\")(.*?)(?=\",|\"$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
+	        if(regexStr.Success)
+	        {
+		        var valueFounded =  regexStr.Groups[0].Value;
+		        Value = (T)Convert.ChangeType(valueFounded, typeof(T));
+		        return;
+	        }
+	        
+            var match = Regex.Match(content.Trim(), $"(?={AttributeName})(.*?)(?=,|$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
             if (match.Success)
-                Value = (T)Convert.ChangeType(match.Groups[0].Value.Split("=")[1], typeof(T));
+            {
+	            var valueFounded = match.Groups[0].Value.Split("=")[1];
+
+	            if (typeof(T) == typeof(bool))
+	            {
+		            Value = (T)Convert.ChangeType(StringToBool(valueFounded), typeof(T));
+	            }
+	            else
+	            {
+		            Value = (T)Convert.ChangeType(valueFounded, typeof(T));
+
+	            }
+            }
         }
     }
 
