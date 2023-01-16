@@ -284,10 +284,11 @@
 
         public override string ToString()
         {
-            if (!Value.Equals(DefaultValue))
+			if(Value != null && !Value.Equals(DefaultValue))
             {
                 return $"{AttributeName}{separator}{Value},";
             }
+
             return string.Empty;
         }
 

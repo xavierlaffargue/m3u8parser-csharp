@@ -16,24 +16,21 @@ namespace ConsoleApp1
 
             var m1 = new MasterPlaylist(txt);
 
+			foreach (var m in m1.Medias)
+			{
 
 
+				var text = m.ToString();
+				Console.WriteLine(text);
+				/*
+				var media = new Media(text).SetName("Anglais DV").SetType(MediaType.AUDIO).SetAutoSelect(false);
 
-			var m = new Media()
-				.SetLanguage("eng")
-				.SetName("Anglais")
-				.SetAutoSelect(true)
-				.SetType(MediaType.VIDEO);
+				Console.WriteLine(media.GetLanguage());
+				Console.WriteLine(media.GetName());
+				Console.WriteLine(media.GetMediaType());
+				Console.WriteLine(media.GetAutoSelect());*/
 
-			var text = m.ToString();
-			Console.WriteLine(text);
-
-			var media = new Media(text).SetName("Anglais DV").SetType(MediaType.AUDIO).SetAutoSelect(false);
-			
-			Console.WriteLine(media.GetLanguage());
-			Console.WriteLine(media.GetName());
-            Console.WriteLine(media.GetMediaType());
-            Console.WriteLine(media.GetAutoSelect());
+			}
             Console.ReadKey();
 		}
 	}
