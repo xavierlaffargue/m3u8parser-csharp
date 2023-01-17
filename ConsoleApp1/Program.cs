@@ -10,7 +10,7 @@ namespace ConsoleApp1
 	{
 		static void Main(string[] args)
 		{
-			var txt = File.ReadAllText(@"C:\Users\LAFFARGX\Desktop\master.m3u8");
+			var txt = File.ReadAllText("master.m3u8");
 		
 
 
