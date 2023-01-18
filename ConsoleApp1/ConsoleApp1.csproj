@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SimpleM3u8Parser\SimpleM3u8Parser.csproj"/>
+        <ProjectReference Include="..\M3U8Parser\M3U8Parser.csproj" />
     </ItemGroup>
 
 </Project>

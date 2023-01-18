@@ -1,5 +1,5 @@
 ﻿using System;
-using SimpleM3u8Parser;
+using M3U8Parser;
 
 namespace ConsoleApp1;
 

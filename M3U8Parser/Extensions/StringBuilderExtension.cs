@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace SimpleM3u8Parser;
+namespace M3U8Parser;
 
 public static class StringBuilderExtension
 {

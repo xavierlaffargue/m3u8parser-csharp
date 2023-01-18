@@ -1,7 +1,7 @@
 using System.IO;
 using System.Text;
 
-namespace SimpleM3u8Parser;
+namespace M3U8Parser;
 
 public class StreamInf : IExtXType
 {

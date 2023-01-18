@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace SimpleM3u8Parser;
+namespace M3U8Parser;
 
 public class MasterPlaylist
 {
