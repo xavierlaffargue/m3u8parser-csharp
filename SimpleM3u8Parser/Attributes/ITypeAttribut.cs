@@ -1,7 +1,6 @@
-﻿namespace SimpleM3u8Parser
+﻿namespace SimpleM3u8Parser;
+
+public interface ITypeAttribut
 {
-    public interface ITypeAttribut
-    {
-        string AttributName { get; }
-    }
+    string AttributName { get; }
 }

@@ -4,27 +4,49 @@ namespace SimpleM3u8Parser;
 
 public class IframeStreamInf : IExtXType
 {
-    public static string Prefix { get => "#EXT-X-I-FRAME-STREAM-INF"; }
-	    
-    private Attribute<string> _uri = new ("URI");
-    private Attribute<long> _bandwidth = new ("BANDWIDTH");
-    private Resolution _resolution = new ();
-    private Attribute<string> _codecs = new ("CODECS");
-	    
-    public string Uri { get => _uri.Value; set => _uri.Value = value; }  
-    public long Bandwidth { get => _bandwidth.Value; set => _bandwidth.Value = value; }  
-    public string Resolution { get => _resolution.Value; set => _resolution.Value = value; }  
-    public string Codecs { get => _codecs.Value; set => _codecs.Value = value; } 
-    
-    public IframeStreamInf() {}
+    private readonly Attribute<long> _bandwidth = new("BANDWIDTH");
+    private readonly Attribute<string> _codecs = new("CODECS");
+    private readonly Resolution _resolution = new();
+
+    private readonly Attribute<string> _uri = new("URI");
+
+    public IframeStreamInf()
+    {
+    }
 
     public IframeStreamInf(string str)
     {
         _bandwidth.Read(str);
         _resolution.Read(str);
         _codecs.Read(str);
-        _uri.Read(str); 
+        _uri.Read(str);
     }
+
+    public string Uri
+    {
+        get => _uri.Value;
+        set => _uri.Value = value;
+    }
+
+    public long Bandwidth
+    {
+        get => _bandwidth.Value;
+        set => _bandwidth.Value = value;
+    }
+
+    public string Resolution
+    {
+        get => _resolution.Value;
+        set => _resolution.Value = value;
+    }
+
+    public string Codecs
+    {
+        get => _codecs.Value;
+        set => _codecs.Value = value;
+    }
+
+    public static string Prefix => "#EXT-X-I-FRAME-STREAM-INF";
 
     public new string ToString()
     {
@@ -35,7 +57,7 @@ public class IframeStreamInf : IExtXType
         strBuilder.AppendSeparatorIfTextNotNull(_resolution.ToString(), ",");
         strBuilder.AppendSeparatorIfTextNotNull(_codecs.ToString(), ",");
         strBuilder.AppendSeparatorIfTextNotNull(_uri.ToString(), ",");
-            
+
         return strBuilder.ToString().RemoveLastCharacter();
     }
 }

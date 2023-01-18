@@ -5,32 +5,22 @@ namespace SimpleM3u8Parser;
 
 public class StreamInf : IExtXType
 {
-    public static string Prefix { get => "#EXT-X-STREAM-INF"; }
+    private readonly Attribute<string> _audio = new("AUDIO");
+    private readonly Attribute<long> _bandwidth = new("BANDWIDTH");
+    private readonly Attribute<string> _codecs = new("CODECS");
 
-    private readonly Attribute<int> _programId = new ("PROGRAM-ID");
-    private readonly Attribute<long> _bandwidth = new ("BANDWIDTH");
-    private readonly Attribute<string> _codecs = new ("CODECS");
-    private readonly Attribute<string> _video = new ("VIDEO");
-    private readonly Attribute<string> _audio = new ("AUDIO");
-
-    public string Uri { get => _uriSingleLine; set => _uriSingleLine = value; }  
-    public int ProgramId { get => _programId.Value; set => _programId.Value = value; }  
-    public long Bandwidth { get => _bandwidth.Value; set => _bandwidth.Value = value; }  
-    public string Codecs { get => _codecs.Value; set => _codecs.Value = value; }  
-    public string Video { get => _video.Value; set => _video.Value = value; }  
-    public string Audio { get => _audio.Value; set => _audio.Value = value; }  
-		
-    private string _uriSingleLine;
+    private readonly Attribute<int> _programId = new("PROGRAM-ID");
+    private readonly Attribute<string> _video = new("VIDEO");
 
     public StreamInf()
     {
     }
-    
+
     public StreamInf(string str)
     {
-        string lineWithAttribute = string.Empty;
-        string lineWithUri = string.Empty;
-			
+        var lineWithAttribute = string.Empty;
+        var lineWithUri = string.Empty;
+
         using var reader = new StringReader(str);
         lineWithAttribute = reader.ReadLine();
         lineWithUri = reader.ReadLine();
@@ -40,8 +30,42 @@ public class StreamInf : IExtXType
         _codecs.Read(lineWithAttribute);
         _video.Read(lineWithAttribute);
         _audio.Read(lineWithAttribute);
-        _uriSingleLine = lineWithUri;
+        Uri = lineWithUri;
     }
+
+    public string Uri { get; set; }
+
+    public int ProgramId
+    {
+        get => _programId.Value;
+        set => _programId.Value = value;
+    }
+
+    public long Bandwidth
+    {
+        get => _bandwidth.Value;
+        set => _bandwidth.Value = value;
+    }
+
+    public string Codecs
+    {
+        get => _codecs.Value;
+        set => _codecs.Value = value;
+    }
+
+    public string Video
+    {
+        get => _video.Value;
+        set => _video.Value = value;
+    }
+
+    public string Audio
+    {
+        get => _audio.Value;
+        set => _audio.Value = value;
+    }
+
+    public static string Prefix => "#EXT-X-STREAM-INF";
 
     public new string ToString()
     {
@@ -54,6 +78,6 @@ public class StreamInf : IExtXType
         strBuilder.AppendSeparatorIfTextNotNull(_video.ToString(), ",");
         strBuilder.AppendSeparatorIfTextNotNull(_audio.ToString(), ",");
 
-        return strBuilder.ToString().RemoveLastCharacter() + "\r\n" + _uriSingleLine;
+        return strBuilder.ToString().RemoveLastCharacter() + "\r\n" + Uri;
     }
 }
