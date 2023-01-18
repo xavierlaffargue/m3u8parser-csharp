@@ -11,6 +11,11 @@ public class IframeStreamInf : IExtXType
     private Resolution _resolution = new ();
     private Attribute<string> _codecs = new ("CODECS");
 	    
+    public string Uri { get => _uri.Value; set => _uri.Value = value; }  
+    public long Bandwidth { get => _bandwidth.Value; set => _bandwidth.Value = value; }  
+    public string Resolution { get => _resolution.Value; set => _resolution.Value = value; }  
+    public string Codecs { get => _codecs.Value; set => _codecs.Value = value; } 
+    
     public IframeStreamInf() {}
 
     public IframeStreamInf(string str)

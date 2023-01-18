@@ -21,7 +21,11 @@ public class StreamInf : IExtXType
     public string Audio { get => _audio.Value; set => _audio.Value = value; }  
 		
     private string _uriSingleLine;
-		
+
+    public StreamInf()
+    {
+    }
+    
     public StreamInf(string str)
     {
         string lineWithAttribute = string.Empty;

@@ -14,6 +14,7 @@ public class Media : IExtXType
     private EnumTag<MediaType> _mediaType = new("TYPE");
     private Attribute<string> _groupId = new ("GROUP-ID");
     private Attribute<string> _instreamId = new ("INSTREAM-ID");
+    private Attribute<string> _characteristics = new ("CHARACTERISTICS");
     
     public string Uri { get => _uri.Value; set => _uri.Value = value; }  
     public string Language { get => _language.Value; set => _language.Value = value; }  
@@ -23,6 +24,7 @@ public class Media : IExtXType
     public string GroupId { get => _groupId.Value; set => _groupId.Value = value; }  
     public string InstreamId { get => _instreamId.Value; set => _instreamId.Value = value; }
     public MediaType Type { get => _mediaType.Value; set => _mediaType.Value = value; }
+    public string Characteristics { get => _characteristics.Value; set => _characteristics.Value = value; }
 
     public Media()
     {}
@@ -37,6 +39,7 @@ public class Media : IExtXType
         _default.Read(str);
         _groupId.Read(str);
         _instreamId.Read(str);
+        _characteristics.Read(str);
     }
 
     public new string ToString()
@@ -52,6 +55,7 @@ public class Media : IExtXType
         strBuilder.AppendSeparatorIfTextNotNull(_default.ToString(), ",");
         strBuilder.AppendSeparatorIfTextNotNull(_uri.ToString(), ",");
         strBuilder.AppendSeparatorIfTextNotNull(_instreamId.ToString(), ",");
+        strBuilder.AppendSeparatorIfTextNotNull(_characteristics.ToString(), ",");
 
         return strBuilder.ToString().RemoveLastCharacter();
     }

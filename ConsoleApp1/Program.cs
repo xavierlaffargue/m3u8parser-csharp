@@ -10,61 +10,69 @@ namespace ConsoleApp1
 	{
 		static void Main(string[] args)
 		{
-			var txt = File.ReadAllText("master.m3u8");
-		
+			var m1 = new MasterPlaylist(4);
 
-
-            var m1 = new MasterPlaylist(txt);
-
-			foreach (var m in m1.Medias)
+			m1.AddMedia(new Media()
 			{
+				Default = true,
+				AutoSelect = true,
+				Language = "fra",
+				Name = "Français",
+				Type = MediaType.AUDIO,
+				GroupId = "audio-high"
+			});
 
+			m1.AddMedia(new Media()
+			{
+				Default = false,
+				AutoSelect = true,
+				Language = "fra",
+				Name = "Français",
+				Type = MediaType.AUDIO,
+				GroupId = "audio-high",
+				Characteristics = "public.accessibility.describes-video"
+			});
+			
+			m1.AddMedia(new Media()
+			{
+				Default = true,
+				AutoSelect = true,
+				Language = "fra",
+				Name = "Français",
+				Type = MediaType.AUDIO,
+				GroupId = "audio-low"
+			});
 
-				var text = m.ToString();
-				Console.WriteLine(text);
-				/*
-				var media = new Media(text).SetName("Anglais DV").SetType(MediaType.AUDIO).SetAutoSelect(false);
-
-				Console.WriteLine(media.GetLanguage());
-				Console.WriteLine(media.GetName());
-				Console.WriteLine(media.GetMediaType());
-				Console.WriteLine(media.GetAutoSelect());*/
-
-			}
+			m1.AddMedia(new Media()
+			{
+				Default = false,
+				AutoSelect = true,
+				Language = "fra",
+				Name = "Français",
+				Type = MediaType.AUDIO,
+				GroupId = "audio-low",
+				Characteristics = "public.accessibility.describes-video"
+			});
+			
+			m1.AddStream(new StreamInf()
+			{
+				Audio = "audio-high",
+				Bandwidth = 150000,
+				Codecs = "m4a.40.5",
+				Uri = "playlist_audio.m3u8"
+			});
+			
+			m1.AddStream(new StreamInf()
+			{
+				Audio = "audio-low",
+				Bandwidth = 70000,
+				Codecs = "m4a.40.5",
+				Uri = "playlist_audio.m3u8"
+			});
 			
 			
-			foreach (var m in m1.Streams)
-			{
-
-				m.Audio = "test";
-
-				var text = m.ToString();
-				Console.WriteLine(text);
-				/*
-				var media = new Media(text).SetName("Anglais DV").SetType(MediaType.AUDIO).SetAutoSelect(false);
-
-				Console.WriteLine(media.GetLanguage());
-				Console.WriteLine(media.GetName());
-				Console.WriteLine(media.GetMediaType());
-				Console.WriteLine(media.GetAutoSelect());*/
-
-			}
+			Console.WriteLine(m1.ToString());
 			
-			foreach (var m in m1.IFrameStreams)
-			{
-
-
-				var text = m.ToString();
-				Console.WriteLine(text);
-				/*
-				var media = new Media(text).SetName("Anglais DV").SetType(MediaType.AUDIO).SetAutoSelect(false);
-
-				Console.WriteLine(media.GetLanguage());
-				Console.WriteLine(media.GetName());
-				Console.WriteLine(media.GetMediaType());
-				Console.WriteLine(media.GetAutoSelect());*/
-
-			}
             Console.ReadKey();
 		}
 	}
