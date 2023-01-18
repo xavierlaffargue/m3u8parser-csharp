@@ -4,7 +4,7 @@ namespace SimpleM3u8Parser;
 
 public static class StringBuilderExtension
 {
-    public static StringBuilder AppendSeparatorIfTextNotNull(this StringBuilder strBuilder, string text,
+    public static StringBuilder AppendWithSeparator(this StringBuilder strBuilder, string text,
         string separator)
     {
         if (!string.IsNullOrEmpty(text)) strBuilder.Append(text + separator);

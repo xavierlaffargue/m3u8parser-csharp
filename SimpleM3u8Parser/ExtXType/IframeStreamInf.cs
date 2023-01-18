@@ -7,7 +7,6 @@ public class IframeStreamInf : IExtXType
     private readonly Attribute<long> _bandwidth = new("BANDWIDTH");
     private readonly Attribute<string> _codecs = new("CODECS");
     private readonly Resolution _resolution = new();
-
     private readonly Attribute<string> _uri = new("URI");
 
     public IframeStreamInf()
@@ -53,10 +52,10 @@ public class IframeStreamInf : IExtXType
         var strBuilder = new StringBuilder();
         strBuilder.Append(Prefix);
         strBuilder.Append(":");
-        strBuilder.AppendSeparatorIfTextNotNull(_bandwidth.ToString(), ",");
-        strBuilder.AppendSeparatorIfTextNotNull(_resolution.ToString(), ",");
-        strBuilder.AppendSeparatorIfTextNotNull(_codecs.ToString(), ",");
-        strBuilder.AppendSeparatorIfTextNotNull(_uri.ToString(), ",");
+        strBuilder.AppendWithSeparator(_bandwidth.ToString(), ",");
+        strBuilder.AppendWithSeparator(_resolution.ToString(), ",");
+        strBuilder.AppendWithSeparator(_codecs.ToString(), ",");
+        strBuilder.AppendWithSeparator(_uri.ToString(), ",");
 
         return strBuilder.ToString().RemoveLastCharacter();
     }

@@ -9,7 +9,6 @@ public class Media : IExtXType
     private readonly Attribute<bool> _default = new("DEFAULT");
     private readonly Attribute<string> _groupId = new("GROUP-ID");
     private readonly Attribute<string> _instreamId = new("INSTREAM-ID");
-
     private readonly Attribute<string> _language = new("LANGUAGE");
     private readonly Attribute<MediaType> _mediaType = new("TYPE");
     private readonly Attribute<string> _name = new("NAME");
@@ -93,15 +92,15 @@ public class Media : IExtXType
         var strBuilder = new StringBuilder();
         strBuilder.Append(Prefix);
         strBuilder.Append(":");
-        strBuilder.AppendSeparatorIfTextNotNull(_mediaType.ToString(), ",");
-        strBuilder.AppendSeparatorIfTextNotNull(_groupId.ToString(), ",");
-        strBuilder.AppendSeparatorIfTextNotNull(_language.ToString(), ",");
-        strBuilder.AppendSeparatorIfTextNotNull(_name.ToString(), ",");
-        strBuilder.AppendSeparatorIfTextNotNull(_autoSelect.ToString(), ",");
-        strBuilder.AppendSeparatorIfTextNotNull(_default.ToString(), ",");
-        strBuilder.AppendSeparatorIfTextNotNull(_uri.ToString(), ",");
-        strBuilder.AppendSeparatorIfTextNotNull(_instreamId.ToString(), ",");
-        strBuilder.AppendSeparatorIfTextNotNull(_characteristics.ToString(), ",");
+        strBuilder.AppendWithSeparator(_mediaType.ToString(), ",");
+        strBuilder.AppendWithSeparator(_groupId.ToString(), ",");
+        strBuilder.AppendWithSeparator(_language.ToString(), ",");
+        strBuilder.AppendWithSeparator(_name.ToString(), ",");
+        strBuilder.AppendWithSeparator(_autoSelect.ToString(), ",");
+        strBuilder.AppendWithSeparator(_default.ToString(), ",");
+        strBuilder.AppendWithSeparator(_uri.ToString(), ",");
+        strBuilder.AppendWithSeparator(_instreamId.ToString(), ",");
+        strBuilder.AppendWithSeparator(_characteristics.ToString(), ",");
 
         return strBuilder.ToString().RemoveLastCharacter();
     }

@@ -8,7 +8,6 @@ public class StreamInf : IExtXType
     private readonly Attribute<string> _audio = new("AUDIO");
     private readonly Attribute<long> _bandwidth = new("BANDWIDTH");
     private readonly Attribute<string> _codecs = new("CODECS");
-
     private readonly Attribute<int> _programId = new("PROGRAM-ID");
     private readonly Attribute<string> _video = new("VIDEO");
 
@@ -72,11 +71,11 @@ public class StreamInf : IExtXType
         var strBuilder = new StringBuilder();
         strBuilder.Append(Prefix);
         strBuilder.Append(":");
-        strBuilder.AppendSeparatorIfTextNotNull(_programId.ToString(), ",");
-        strBuilder.AppendSeparatorIfTextNotNull(_bandwidth.ToString(), ",");
-        strBuilder.AppendSeparatorIfTextNotNull(_codecs.ToString(), ",");
-        strBuilder.AppendSeparatorIfTextNotNull(_video.ToString(), ",");
-        strBuilder.AppendSeparatorIfTextNotNull(_audio.ToString(), ",");
+        strBuilder.AppendWithSeparator(_programId.ToString(), ",");
+        strBuilder.AppendWithSeparator(_bandwidth.ToString(), ",");
+        strBuilder.AppendWithSeparator(_codecs.ToString(), ",");
+        strBuilder.AppendWithSeparator(_video.ToString(), ",");
+        strBuilder.AppendWithSeparator(_audio.ToString(), ",");
 
         return strBuilder.ToString().RemoveLastCharacter() + "\r\n" + Uri;
     }
