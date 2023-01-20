@@ -1,6 +1,7 @@
-﻿namespace M3U8Parser;
-
-public interface ITypeAttribut
+﻿namespace M3U8Parser
 {
-	string AttributName { get; }
+	public interface ITypeAttribut
+	{
+		string AttributName { get; }
+	}
 }

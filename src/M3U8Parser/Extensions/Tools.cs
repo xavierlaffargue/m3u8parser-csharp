@@ -1,11 +1,12 @@
 using System;
 
-namespace M3U8Parser;
-
-public static class Tools
+namespace M3U8Parser
 {
-	public static T ParseEnum<T>(string value)
+	public static class Tools
 	{
-		return (T)Enum.Parse(typeof(T), value, true);
+		public static T ParseEnum<T>(string value)
+		{
+			return (T)Enum.Parse(typeof(T), value, true);
+		}
 	}
 }

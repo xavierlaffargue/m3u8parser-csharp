@@ -1,58 +1,60 @@
 using System.Text;
 
-namespace M3U8Parser;
-
-public class IframeStreamInf : IExtXType
+namespace M3U8Parser
 {
-	private readonly Attribute<long> _bandwidth = new ("BANDWIDTH");
-	private readonly Attribute<string> _codecs = new ("CODECS");
-	private readonly Resolution _resolution = new ();
-	private readonly Attribute<string> _uri = new ("URI");
 
-	public IframeStreamInf()
+	public class IframeStreamInf : IExtXType
 	{
-	}
+		private readonly Attribute<long> _bandwidth = new ("BANDWIDTH");
+		private readonly Attribute<string> _codecs = new ("CODECS");
+		private readonly Resolution _resolution = new ();
+		private readonly Attribute<string> _uri = new ("URI");
 
-	public IframeStreamInf(string str)
-	{
-		_bandwidth.Read(str);
-		_resolution.Read(str);
-		_codecs.Read(str);
-		_uri.Read(str);
-	}
+		public IframeStreamInf()
+		{
+		}
 
-	public string Uri {
-		get => _uri.Value;
-		set => _uri.Value = value;
-	}
+		public IframeStreamInf(string str)
+		{
+			_bandwidth.Read(str);
+			_resolution.Read(str);
+			_codecs.Read(str);
+			_uri.Read(str);
+		}
 
-	public long Bandwidth {
-		get => _bandwidth.Value;
-		set => _bandwidth.Value = value;
-	}
+		public string Uri {
+			get => _uri.Value;
+			set => _uri.Value = value;
+		}
 
-	public string Resolution {
-		get => _resolution.Value;
-		set => _resolution.Value = value;
-	}
+		public long Bandwidth {
+			get => _bandwidth.Value;
+			set => _bandwidth.Value = value;
+		}
 
-	public string Codecs {
-		get => _codecs.Value;
-		set => _codecs.Value = value;
-	}
+		public string Resolution {
+			get => _resolution.Value;
+			set => _resolution.Value = value;
+		}
 
-	public static string Prefix => "#EXT-X-I-FRAME-STREAM-INF";
+		public string Codecs {
+			get => _codecs.Value;
+			set => _codecs.Value = value;
+		}
 
-	public new string ToString()
-	{
-		var strBuilder = new StringBuilder();
-		strBuilder.Append(Prefix);
-		strBuilder.Append(":");
-		strBuilder.AppendWithSeparator(_bandwidth.ToString(), ",");
-		strBuilder.AppendWithSeparator(_resolution.ToString(), ",");
-		strBuilder.AppendWithSeparator(_codecs.ToString(), ",");
-		strBuilder.AppendWithSeparator(_uri.ToString(), ",");
+		public static string Prefix => "#EXT-X-I-FRAME-STREAM-INF";
 
-		return strBuilder.ToString().RemoveLastCharacter();
+		public new string ToString()
+		{
+			var strBuilder = new StringBuilder();
+			strBuilder.Append(Prefix);
+			strBuilder.Append(":");
+			strBuilder.AppendWithSeparator(_bandwidth.ToString(), ",");
+			strBuilder.AppendWithSeparator(_resolution.ToString(), ",");
+			strBuilder.AppendWithSeparator(_codecs.ToString(), ",");
+			strBuilder.AppendWithSeparator(_uri.ToString(), ",");
+
+			return strBuilder.ToString().RemoveLastCharacter();
+		}
 	}
 }

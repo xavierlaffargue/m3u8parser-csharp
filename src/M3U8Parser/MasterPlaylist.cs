@@ -3,134 +3,136 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace M3U8Parser;
-
-public class MasterPlaylist
+namespace M3U8Parser
 {
-	public int HlsVersion { get => _hlsVersion; }
-	private readonly int _hlsVersion;
 
-	public MasterPlaylist(int hlsVersion = 4)
+	public class MasterPlaylist
 	{
-		_hlsVersion = hlsVersion;
-	}
+		public int HlsVersion { get => _hlsVersion; }
+		private readonly int _hlsVersion;
 
-	public List<Media> Medias { get; private set; } = new ();
-
-	public List<IframeStreamInf> IFrameStreams { get; private set; } = new ();
-
-	public List<StreamInf> Streams { get; private set; } = new ();
-
-	public static MasterPlaylist LoadFromFile(string path)
-	{
-		if (!File.Exists(path)) throw new FileNotFoundException($"File not found : {path}");
-
-		return LoadFromText(File.ReadAllText(path));
-	}
-
-	public void AddMedia(Media media)
-	{
-		Medias.Add(media);
-	}
-
-	public void AddMedias(IEnumerable<Media> medias)
-	{
-		Medias.AddRange(medias);
-	}
-
-	public void AddStream(StreamInf streamInf)
-	{
-		Streams.Add(streamInf);
-	}
-
-	public void AddStreams(IEnumerable<StreamInf> streamInfs)
-	{
-		Streams.AddRange(streamInfs);
-	}
-
-	public void AddIframeStreamInf(IframeStreamInf iframeStreamInf)
-	{
-		IFrameStreams.Add(iframeStreamInf);
-	}
-
-	public void AddIframeStreamInfs(IEnumerable<IframeStreamInf> iframeStreamInfs)
-	{
-		IFrameStreams.AddRange(iframeStreamInfs);
-	}
-
-	public static MasterPlaylist LoadFromText(string text)
-	{
-		List<Media> medias = new ();
-		List<IframeStreamInf> iFrameStreams = new ();
-		List<StreamInf> streams = new ();
-		var hlsVersion = 4;
-
-		var matchHlsVersion = Regex.Match(text, "(?<=#EXT-X-VERSION:)(.*?)(?<=$)", RegexOptions.Multiline);
-		if (matchHlsVersion.Success)
+		public MasterPlaylist(int hlsVersion = 4)
 		{
-			var info = matchHlsVersion.Groups[0].Value;
-			hlsVersion = int.Parse(info);
+			_hlsVersion = hlsVersion;
 		}
 
+		public List<Media> Medias { get; private set; } = new ();
 
-		var l = Regex.Split(text, "(?=#EXT-X)");
+		public List<IframeStreamInf> IFrameStreams { get; private set; } = new ();
 
-		foreach (var line in l)
+		public List<StreamInf> Streams { get; private set; } = new ();
+
+		public static MasterPlaylist LoadFromFile(string path)
 		{
-			if (line.StartsWith(Media.Prefix))
+			if (!File.Exists(path)) throw new FileNotFoundException($"File not found : {path}");
+
+			return LoadFromText(File.ReadAllText(path));
+		}
+
+		public void AddMedia(Media media)
+		{
+			Medias.Add(media);
+		}
+
+		public void AddMedias(IEnumerable<Media> medias)
+		{
+			Medias.AddRange(medias);
+		}
+
+		public void AddStream(StreamInf streamInf)
+		{
+			Streams.Add(streamInf);
+		}
+
+		public void AddStreams(IEnumerable<StreamInf> streamInfs)
+		{
+			Streams.AddRange(streamInfs);
+		}
+
+		public void AddIframeStreamInf(IframeStreamInf iframeStreamInf)
+		{
+			IFrameStreams.Add(iframeStreamInf);
+		}
+
+		public void AddIframeStreamInfs(IEnumerable<IframeStreamInf> iframeStreamInfs)
+		{
+			IFrameStreams.AddRange(iframeStreamInfs);
+		}
+
+		public static MasterPlaylist LoadFromText(string text)
+		{
+			List<Media> medias = new ();
+			List<IframeStreamInf> iFrameStreams = new ();
+			List<StreamInf> streams = new ();
+			var hlsVersion = 4;
+
+			var matchHlsVersion = Regex.Match(text, "(?<=#EXT-X-VERSION:)(.*?)(?<=$)", RegexOptions.Multiline);
+			if (matchHlsVersion.Success)
 			{
-				var media = new Media(line);
-				medias.Add(media);
+				var info = matchHlsVersion.Groups[0].Value;
+				hlsVersion = int.Parse(info);
 			}
 
-			if (line.StartsWith(IframeStreamInf.Prefix))
+
+			var l = Regex.Split(text, "(?=#EXT-X)");
+
+			foreach (var line in l)
 			{
-				var streaminf = new IframeStreamInf(line);
-				iFrameStreams.Add(streaminf);
+				if (line.StartsWith(Media.Prefix))
+				{
+					var media = new Media(line);
+					medias.Add(media);
+				}
+
+				if (line.StartsWith(IframeStreamInf.Prefix))
+				{
+					var streaminf = new IframeStreamInf(line);
+					iFrameStreams.Add(streaminf);
+				}
+
+				if (line.StartsWith(StreamInf.Prefix))
+				{
+					var stream = new StreamInf(line);
+					streams.Add(stream);
+				}
 			}
 
-			if (line.StartsWith(StreamInf.Prefix))
+			return new MasterPlaylist(hlsVersion)
 			{
-				var stream = new StreamInf(line);
-				streams.Add(stream);
+				Medias = medias,
+				Streams = streams,
+				IFrameStreams = iFrameStreams
+			};
+		}
+
+		public override string ToString()
+		{
+			var strBuilder = new StringBuilder();
+
+			strBuilder.AppendLine("#EXTM3U");
+			strBuilder.AppendLine($"#EXT-X-VERSION:{_hlsVersion}");
+
+			strBuilder.AppendLine();
+
+			if (Medias.Count > 0)
+			{
+				foreach (var media in Medias) strBuilder.AppendLine(media.ToString());
+				strBuilder.AppendLine();
 			}
+
+			if (IFrameStreams.Count > 0)
+			{
+				foreach (var iframeStream in IFrameStreams) strBuilder.AppendLine(iframeStream.ToString());
+				strBuilder.AppendLine();
+			}
+
+			if (Streams.Count > 0)
+			{
+				foreach (var stream in Streams) strBuilder.AppendLine(stream.ToString());
+				strBuilder.AppendLine();
+			}
+
+			return strBuilder.ToString().TrimEnd();
 		}
-
-		return new MasterPlaylist(hlsVersion)
-		{
-			Medias = medias,
-			Streams = streams,
-			IFrameStreams = iFrameStreams
-		};
-	}
-
-	public override string ToString()
-	{
-		var strBuilder = new StringBuilder();
-
-		strBuilder.AppendLine("#EXTM3U");
-		strBuilder.AppendLine($"#EXT-X-VERSION:{_hlsVersion}");
-
-		strBuilder.AppendLine();
-
-		if (Medias.Count > 0)
-		{
-			foreach (var media in Medias) strBuilder.AppendLine(media.ToString());
-			strBuilder.AppendLine();
-		}
-
-		if (IFrameStreams.Count > 0)
-		{
-			foreach (var iframeStream in IFrameStreams) strBuilder.AppendLine(iframeStream.ToString());
-			strBuilder.AppendLine();
-		}
-
-		if (Streams.Count > 0)
-		{
-			foreach (var stream in Streams) strBuilder.AppendLine(stream.ToString());
-			strBuilder.AppendLine();
-		}
-
-		return strBuilder.ToString().TrimEnd();
 	}
 }
