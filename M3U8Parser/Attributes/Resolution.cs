@@ -2,16 +2,16 @@ namespace M3U8Parser;
 
 public class Resolution : Attribute<string>
 {
-    private readonly string separator = "=";
+	private readonly string separator = "=";
 
-    public Resolution() : base("RESOLUTION")
-    {
-    }
+	public Resolution() : base("RESOLUTION")
+	{
+	}
 
-    public override string ToString()
-    {
-        if (Value != null) return $"{AttributeName}{separator}{Value}";
+	public override string ToString()
+	{
+		if (Value != null) return $"{AttributeName}{separator}{Value}";
 
-        return string.Empty;
-    }
+		return string.Empty;
+	}
 }

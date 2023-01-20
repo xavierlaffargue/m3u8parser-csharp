@@ -2,5 +2,5 @@
 
 public interface ITypeAttribut
 {
-    string AttributName { get; }
+	string AttributName { get; }
 }
