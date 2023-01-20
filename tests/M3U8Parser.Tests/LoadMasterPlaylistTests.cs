@@ -2,6 +2,7 @@ using NUnit.Framework;
 
 namespace M3U8Parser.Tests;
 
+using System;
 using System.IO;
 
 public class LoadMasterPlaylistTests
@@ -131,12 +132,12 @@ public class LoadMasterPlaylistTests
 	[Test]
 	public void MasterPlaylistShouldBeContainExtM3u()
 	{
-		Assert.That(_masterPlaylist.ToString(), Does.Contain("#EXTM3U\r\n"));
+		Assert.That(_masterPlaylist.ToString(), Does.Contain("#EXTM3U" + Environment.NewLine));
 	}
 	
 	[Test]
 	public void MasterPlaylistShouldBeContainVersionExtM3u()
 	{
-		Assert.That(_masterPlaylist.ToString(), Does.Contain("#EXT-X-VERSION:7\r\n"));
+		Assert.That(_masterPlaylist.ToString(), Does.Contain("#EXT-X-VERSION:7" + Environment.NewLine));
 	}
 }
