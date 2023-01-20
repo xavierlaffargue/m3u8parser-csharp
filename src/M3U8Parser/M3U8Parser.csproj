@@ -12,6 +12,14 @@
         <Company>M3U8Parser</Company>
         <Product>M3U8Parser</Product>
         <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
+        <PackageIcon>icon.png</PackageIcon>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Update="icon.png">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+      </None>
+    </ItemGroup>
 
 </Project>
