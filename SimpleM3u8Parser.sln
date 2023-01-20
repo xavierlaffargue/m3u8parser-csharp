@@ -1,10 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M3U8Parser", "M3U8Parser\M3U8Parser.csproj", "{6E5D7DBC-6AE3-4C7E-A0B0-D5C54A236633}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M3U8Parser", "src\M3U8Parser\M3U8Parser.csproj", "{6E5D7DBC-6AE3-4C7E-A0B0-D5C54A236633}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{A75E9165-FDF4-4457-8BD4-DE9FB8C7B1E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "src\ConsoleApp1\ConsoleApp1.csproj", "{A75E9165-FDF4-4457-8BD4-DE9FB8C7B1E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M3U8Parser.Tests", "M3U8Parser.Tests\M3U8Parser.Tests.csproj", "{204C00ED-15A2-4DCE-AE3C-97E938E5A058}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "M3U8Parser.Tests", "tests\M3U8Parser.Tests\M3U8Parser.Tests.csproj", "{204C00ED-15A2-4DCE-AE3C-97E938E5A058}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
