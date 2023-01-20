@@ -4,7 +4,7 @@
 
 M3U8Parser makes it easy to read, edit and create a m3u8 file. 
 * M3U8Parser does not try to validate your file, it's your responsability to follow RFC.
-* Require .net6
+* Require .netstandard2.0 / .net6
 
 Usage:
 
