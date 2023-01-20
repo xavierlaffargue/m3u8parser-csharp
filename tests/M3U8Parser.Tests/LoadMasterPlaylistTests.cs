@@ -2,6 +2,8 @@ using NUnit.Framework;
 
 namespace M3U8Parser.Tests;
 
+using System.IO;
+
 public class LoadMasterPlaylistTests
 {
 
@@ -10,7 +12,7 @@ public class LoadMasterPlaylistTests
 	[SetUp]
 	public void Setup()
 	{
-		_masterPlaylist = MasterPlaylist.LoadFromFile(@"Sample\gem_manifest.m3u8");
+		_masterPlaylist = MasterPlaylist.LoadFromFile(@"Sample" + Path.PathSeparator + "gem_manifest.m3u8");
 	}
 
 	[Test]
