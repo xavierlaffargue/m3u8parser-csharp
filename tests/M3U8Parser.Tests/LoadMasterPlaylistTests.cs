@@ -12,7 +12,7 @@ public class LoadMasterPlaylistTests
 	[SetUp]
 	public void Setup()
 	{
-		_masterPlaylist = MasterPlaylist.LoadFromFile(@"Sample" + Path.PathSeparator + "gem_manifest.m3u8");
+		_masterPlaylist = MasterPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "gem_manifest.m3u8");
 	}
 
 	[Test]
