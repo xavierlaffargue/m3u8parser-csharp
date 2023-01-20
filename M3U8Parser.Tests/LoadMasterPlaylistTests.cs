@@ -105,9 +105,36 @@ public class LoadMasterPlaylistTests
 	}
 	
 	[Test]
-	public void ParseAndToStringShouldBeEqual()
+	public void ParseAndToStringMediaShouldBeEqual()
 	{
 		var media = new Media("#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",NAME=\"English\",LANGUAGE=\"eng\",AUTOSELECT=YES,DEFAULT=YES,URI=\"uri/Manifest\"");
 		Assert.AreEqual("#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",NAME=\"English\",LANGUAGE=\"eng\",AUTOSELECT=YES,DEFAULT=YES,URI=\"uri/Manifest\"", media.ToString());
+	}
+	
+	[Test]
+	public void ParseAndToStringStreamShouldBeEqual()
+	{
+		var media = new StreamInf("#EXT-X-STREAM-INF:BANDWIDTH=2767446,RESOLUTION=1280x720,CODECS=\"avc1.4d401f,mp4a.40.2\",AUDIO=\"audio\",CLOSED-CAPTIONS=\"cc\"\r\nQualityLevels(2499905)/Manifest(video,format=m3u8-aapl,filter=desktop)");
+		Assert.AreEqual("#EXT-X-STREAM-INF:BANDWIDTH=2767446,RESOLUTION=1280x720,CODECS=\"avc1.4d401f,mp4a.40.2\",AUDIO=\"audio\",CLOSED-CAPTIONS=\"cc\"\r\nQualityLevels(2499905)/Manifest(video,format=m3u8-aapl,filter=desktop)", media.ToString());
+	}
+	
+	[Test]
+	public void ParseAndToStringIFrameStreamShouldBeEqual()
+	{
+		var media = new IframeStreamInf("#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=621335,RESOLUTION=416x234,CODECS=\"avc1.42c00d\",URI=\"QualityLevels(399992)/Manifest(video,format=m3u8-aapl,filter=desktop,type=keyframes)\"");
+		Assert.AreEqual("#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=621335,RESOLUTION=416x234,CODECS=\"avc1.42c00d\",URI=\"QualityLevels(399992)/Manifest(video,format=m3u8-aapl,filter=desktop,type=keyframes)\"", media.ToString());
+	}
+	
+	
+	[Test]
+	public void MasterPlaylistShouldBeContainExtM3u()
+	{
+		Assert.That(_masterPlaylist.ToString(), Does.Contain("#EXTM3U\r\n"));
+	}
+	
+	[Test]
+	public void MasterPlaylistShouldBeContainVersionExtM3u()
+	{
+		Assert.That(_masterPlaylist.ToString(), Does.Contain("#EXT-X-VERSION:7\r\n"));
 	}
 }
