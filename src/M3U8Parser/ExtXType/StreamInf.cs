@@ -11,7 +11,7 @@ namespace M3U8Parser.ExtXType
 		private readonly CustomAttribute<long> _bandwidth = new ("BANDWIDTH");
         private readonly CustomAttribute<long> _averageBandwidth = new ("AVERAGE-BANDWIDTH");
 		private readonly StringAttribute _codecs = new ("CODECS");
-        private readonly CustomAttribute<decimal> _frameRate = new ("FRAME-RATE");
+        private readonly DecimalAttribute _frameRate = new ("FRAME-RATE");
         private readonly CustomAttribute<VideoRangeType> _videoRange = new ("VIDEO-RANGE");
         private readonly CustomAttribute<HdcpLevelType> _hdcpLevel = new ("HDCP-LEVEL");
         private readonly StringAttribute _audio = new ("AUDIO");
