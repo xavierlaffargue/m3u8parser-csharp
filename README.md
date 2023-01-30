@@ -92,6 +92,6 @@ The following tags should be fully supported:
 | TAGS  | ATTRIBUTE                                                                                                           |
 | ------------- |---------------------------------------------------------------------------------------------------------------------|
 | EXT-X-MEDIA  | GROUP-ID, AUTOSELECT, DEFAULT, LANGUAGE, NAME, TYPE, URI, CHARACTERISTICS, INSTREAM-ID                              |
-| EXT-X-STREAM-INF  | BANDWIDTH, CODECS, RESOLUTION, URI                                                                                  |
-| EXT-X-I-FRAME-STREAM-INF  | BANDWIDTH, CODECS, RESOLUTION, AUDIO, VIDEO, CLOSED-CAPTIONS, SUBTITLES, VIDEO-RANGE, HDCP-LEVEL, AVERAGE-BANDWIDTH |
+| EXT-X-STREAM-INF  | BANDWIDTH, CODECS, RESOLUTION, URI,  SUBTITLES, VIDEO-RANGE, HDCP-LEVEL, AVERAGE-BANDWIDTH                                                                                  |
+| EXT-X-I-FRAME-STREAM-INF  | BANDWIDTH, CODECS, RESOLUTION, AUDIO, VIDEO, CLOSED-CAPTIONS |
 
