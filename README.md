@@ -89,9 +89,9 @@ The following tags should be fully supported:
 | EXT-X-VERSION |
 
 ### Master Playlist Tags
-| TAGS  |  ATTRIBUTE |
-| ------------- | ------------- |
-| EXT-X-MEDIA  | GROUP-ID, AUTOSELECT, DEFAULT, LANGUAGE, NAME, TYPE, URI, CHARACTERISTICS, INSTREAM-ID  |
-| EXT-X-STREAM-INF  | BANDWIDTH, CODECS, RESOLUTION, URI  |
-| EXT-X-I-FRAME-STREAM-INF  | BANDWIDTH, CODECS, RESOLUTION, AUDIO, VIDEO, CLOSED-CAPTIONS |
+| TAGS  | ATTRIBUTE                                                                                                           |
+| ------------- |---------------------------------------------------------------------------------------------------------------------|
+| EXT-X-MEDIA  | GROUP-ID, AUTOSELECT, DEFAULT, LANGUAGE, NAME, TYPE, URI, CHARACTERISTICS, INSTREAM-ID                              |
+| EXT-X-STREAM-INF  | BANDWIDTH, CODECS, RESOLUTION, URI                                                                                  |
+| EXT-X-I-FRAME-STREAM-INF  | BANDWIDTH, CODECS, RESOLUTION, AUDIO, VIDEO, CLOSED-CAPTIONS, SUBTITLES, VIDEO-RANGE, HDCP-LEVEL, AVERAGE-BANDWIDTH |
 
