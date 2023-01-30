@@ -1,5 +1,9 @@
 # M3U8Parser
 
+## Installation
+Package NuGet : https://www.nuget.org/packages/M3U8Parser/
+
+## Documentation
 ⚠️ This is an alpha version
 
 M3U8Parser makes it easy to read, edit and create a m3u8 file. 
