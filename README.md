@@ -3,6 +3,8 @@
 ## Installation
 Package NuGet : https://www.nuget.org/packages/M3U8Parser/
 
+```dotnet add package M3U8Parser```
+
 ## Documentation
 ⚠️ This is an alpha version
 
