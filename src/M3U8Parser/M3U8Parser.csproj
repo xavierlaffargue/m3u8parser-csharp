@@ -13,10 +13,12 @@
         <Product>M3U8Parser</Product>
         <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
         <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
         <None Include="icon.png" Pack="true" PackagePath="" />
+        <None Include="../../readme.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>
