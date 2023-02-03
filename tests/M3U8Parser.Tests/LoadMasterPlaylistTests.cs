@@ -154,12 +154,22 @@ namespace M3U8Parser.Tests
 		}
 
 		[Test]
+		public void OptionnalAttributesShouldBeNullable()
+		{
+			var media = new StreamInf("#EXT-X-STREAM-INF:BANDWIDTH=2778321,CODECS=\"hvc1.2.4.L123.B0\"\r\nsdr_720/prog_index.m3u8");
+			Assert.AreEqual(media.AverageBandwidth, null);
+			Assert.AreEqual(media.FrameRate, null);
+			Assert.AreEqual(media.VideoRange, null);
+			Assert.AreEqual(media.Resolution, null);
+			Assert.AreEqual(media.HdcpLevel, null);
+		}
+
+		[Test]
 		public void ParseAndToStringIFrameStreamShouldBeEqual()
 		{
 			var media = new IframeStreamInf("#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=621335,RESOLUTION=416x234,CODECS=\"avc1.42c00d\",URI=\"QualityLevels(399992)/Manifest(video,format=m3u8-aapl,filter=desktop,type=keyframes)\"");
 			Assert.AreEqual("#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=621335,RESOLUTION=416x234,CODECS=\"avc1.42c00d\",URI=\"QualityLevels(399992)/Manifest(video,format=m3u8-aapl,filter=desktop,type=keyframes)\"", media.ToString());
 		}
-
 
 		[Test]
 		public void MasterPlaylistShouldBeContainExtM3U()

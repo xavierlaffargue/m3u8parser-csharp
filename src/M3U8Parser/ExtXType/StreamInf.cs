@@ -9,7 +9,7 @@ namespace M3U8Parser.ExtXType
     public class StreamInf : IExtXType
 	{
 		private readonly CustomAttribute<long> _bandwidth = new ("BANDWIDTH");
-        private readonly CustomAttribute<long> _averageBandwidth = new ("AVERAGE-BANDWIDTH");
+        private readonly CustomAttribute<long?> _averageBandwidth = new ("AVERAGE-BANDWIDTH");
 		private readonly StringAttribute _codecs = new ("CODECS");
         private readonly DecimalAttribute _frameRate = new ("FRAME-RATE");
         private readonly CustomAttribute<VideoRangeType> _videoRange = new ("VIDEO-RANGE");
@@ -54,7 +54,7 @@ namespace M3U8Parser.ExtXType
 			set => _bandwidth.Value = value;
 		}
         
-        public long AverageBandwidth {
+        public long? AverageBandwidth {
             get => _averageBandwidth.Value;
             set => _averageBandwidth.Value = value;
         }
@@ -64,7 +64,7 @@ namespace M3U8Parser.ExtXType
 			set => _codecs.Value = value;
 		}
         
-        public decimal FrameRate {
+        public decimal? FrameRate {
             get => _frameRate.Value;
             set => _frameRate.Value = value;
         }

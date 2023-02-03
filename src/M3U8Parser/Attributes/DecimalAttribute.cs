@@ -4,7 +4,7 @@ namespace M3U8Parser.Attributes
 {
     using System.Text.RegularExpressions;
 
-    public class DecimalAttribute : CustomAttribute<decimal>
+    public class DecimalAttribute : CustomAttribute<decimal?>
 	{
 		public DecimalAttribute(string attributeName) : base(attributeName)
 		{
@@ -14,7 +14,7 @@ namespace M3U8Parser.Attributes
 		{
 			if (Value != null)
 			{
-				return $"{AttributeName}={Value.ToString(CultureInfo.InvariantCulture)}";
+				return $"{AttributeName}={Value.Value.ToString(CultureInfo.InvariantCulture)}";
 			}
 
 			return string.Empty;
