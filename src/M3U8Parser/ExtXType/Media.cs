@@ -7,15 +7,15 @@ namespace M3U8Parser.ExtXType
 
     public class Media : IExtXType
 	{
-		private readonly BoolAttribute _autoSelect = new ("AUTOSELECT");
-		private readonly StringAttribute _characteristics = new ("CHARACTERISTICS");
-		private readonly BoolAttribute _default = new ("DEFAULT");
-		private readonly StringAttribute _groupId = new ("GROUP-ID");
-		private readonly StringAttribute _instreamId = new ("INSTREAM-ID");
-		private readonly StringAttribute _language = new ("LANGUAGE");
-		private readonly CustomAttribute<MediaType> _mediaType = new ("TYPE");
-		private readonly StringAttribute _name = new ("NAME");
-		private readonly StringAttribute _uri = new ("URI");
+		private readonly Autoselect _autoSelect = new ();
+		private readonly Characteristics _characteristics = new ();
+		private readonly Default _default = new ();
+		private readonly GroupId _groupId = new ();
+		private readonly InstreamId _instreamId = new ();
+		private readonly Language _language = new ();
+		private readonly Type _mediaType = new ();
+		private readonly Name _name = new ();
+		private readonly Uri _uri = new ();
 
 		public Media()
 		{
