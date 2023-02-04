@@ -8,17 +8,17 @@ namespace M3U8Parser.ExtXType
 
     public class StreamInf : IExtXType
 	{
-		private readonly CustomAttribute<long> _bandwidth = new ("BANDWIDTH");
-        private readonly CustomAttribute<long?> _averageBandwidth = new ("AVERAGE-BANDWIDTH");
-		private readonly StringAttribute _codecs = new ("CODECS");
-        private readonly DecimalAttribute _frameRate = new ("FRAME-RATE");
-        private readonly CustomAttribute<VideoRangeType> _videoRange = new ("VIDEO-RANGE");
-        private readonly CustomAttribute<HdcpLevelType> _hdcpLevel = new ("HDCP-LEVEL");
-        private readonly StringAttribute _audio = new ("AUDIO");
-        private readonly StringAttribute _video = new ("VIDEO");
-        private readonly StringAttribute _subtitles = new ("SUBTITLES");
-		private readonly StringAttribute _closedCaptions = new ("CLOSED-CAPTIONS");
-		private readonly CustomAttribute<ResolutionType> _resolutionAttribute = new ("RESOLUTION");
+		private readonly Bandwidth _bandwidth = new ();
+        private readonly AverageBandwidth _averageBandwidth = new ();
+		private readonly Codecs _codecs = new ();
+        private readonly FrameRate _frameRate = new ();
+        private readonly VideoRange _videoRange = new ();
+        private readonly HdcpLevel _hdcpLevel = new ();
+        private readonly Audio _audio = new ();
+        private readonly Video _video = new ();
+        private readonly Subtitles _subtitles = new ();
+		private readonly ClosedCaptions _closedCaptions = new ();
+		private readonly Resolution _resolutionAttribute = new ();
 
 		public StreamInf()
 		{
