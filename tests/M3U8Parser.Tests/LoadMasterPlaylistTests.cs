@@ -167,8 +167,8 @@ namespace M3U8Parser.Tests
 		[Test]
 		public void ParseAndToStringIFrameStreamShouldBeEqual()
 		{
-			var media = new IframeStreamInf("#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=621335,RESOLUTION=416x234,CODECS=\"avc1.42c00d\",URI=\"QualityLevels(399992)/Manifest(video,format=m3u8-aapl,filter=desktop,type=keyframes)\"");
-			Assert.AreEqual("#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=621335,RESOLUTION=416x234,CODECS=\"avc1.42c00d\",URI=\"QualityLevels(399992)/Manifest(video,format=m3u8-aapl,filter=desktop,type=keyframes)\"", media.ToString());
+			var media = new IframeStreamInf("#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=621335,CODECS=\"avc1.42c00d\",RESOLUTION=416x234,URI=\"QualityLevels(399992)/Manifest(video,format=m3u8-aapl,filter=desktop,type=keyframes)\"");
+			Assert.AreEqual("#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=621335,CODECS=\"avc1.42c00d\",RESOLUTION=416x234,URI=\"QualityLevels(399992)/Manifest(video,format=m3u8-aapl,filter=desktop,type=keyframes)\"", media.ToString());
 		}
 
 		[Test]
