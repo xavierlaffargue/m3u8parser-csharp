@@ -5,8 +5,8 @@ namespace M3U8Parser.ExtXType
     using M3U8Parser.Extensions;
     using System.Text;
 
-    public class IframeStreamInf : IExtXType
-	{
+    public class IframeStreamInf : BaseExtX
+    {
 		private readonly Bandwidth _bandwidth = new ();
 		private readonly AverageBandwidth _averageBandwidth = new ();
 		private readonly Codecs _codecs = new ();
@@ -24,21 +24,7 @@ namespace M3U8Parser.ExtXType
 		{
 		}
 
-		public IframeStreamInf(string str)
-		{
-			_bandwidth.Read(str);
-			_averageBandwidth.Read(str);
-			_codecs.Read(str);
-			_frameRate.Read(str);
-			_videoRange.Read(str);
-			_hdcpLevel.Read(str);
-			_audio.Read(str);
-			_video.Read(str);
-			_subtitles.Read(str);
-			_closedCaptions.Read(str);
-			_resolutionAttribute.Read(str);
-			_uri.Read(str);
-		}
+		public IframeStreamInf(string str) : base(str) { }
 
 		public long Bandwidth {
 			get => _bandwidth.Value;
@@ -95,26 +81,9 @@ namespace M3U8Parser.ExtXType
 			set => _resolutionAttribute.Value = value;
 		}
 
-		public static string Prefix => "#EXT-X-I-FRAME-STREAM-INF";
 
-		public override string ToString()
-		{
-			var strBuilder = new StringBuilder();
-			strBuilder.Append(Prefix);
-			strBuilder.Append(":");
-			strBuilder.AppendWithSeparator(_bandwidth.ToString(), ",");
-			strBuilder.AppendWithSeparator(_averageBandwidth.ToString(), ",");
-			strBuilder.AppendWithSeparator(_videoRange.ToString(), ",");
-			strBuilder.AppendWithSeparator(_codecs.ToString(), ",");
-			strBuilder.AppendWithSeparator(_resolutionAttribute.ToString(), ",");
-			strBuilder.AppendWithSeparator(_frameRate.ToString(), ",");
-			strBuilder.AppendWithSeparator(_closedCaptions.ToString(), ",");
-			strBuilder.AppendWithSeparator(_hdcpLevel.ToString(), ",");
-			strBuilder.AppendWithSeparator(_video.ToString(), ",");
-			strBuilder.AppendWithSeparator(_audio.ToString(), ",");
-			strBuilder.AppendWithSeparator(_uri.ToString(), ",");
+        public static string Prefix = "#EXT-X-I-FRAME-STREAM-INF";
 
-			return strBuilder.ToString().RemoveLastCharacter();
-		}
+        protected override string ExtPrefix => Prefix;
 	}
 }

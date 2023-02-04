@@ -1,10 +1,11 @@
 namespace M3U8Parser.Attributes
 {
     using M3U8Parser.CustomType;
-    using System;
+	using M3U8Parser.Interfaces;
+	using System;
     using System.Text.RegularExpressions;
 
-    public class CustomAttribute<T>
+    public class CustomAttribute<T> : IAttribute
 	{
 		public CustomAttribute(string attributeName)
 		{
