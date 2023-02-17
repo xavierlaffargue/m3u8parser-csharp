@@ -25,6 +25,9 @@
         <None Update="Sample\mediaplaylist_vod_1.m3u8">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="Sample\mediaplaylist_vod_2.m3u8">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

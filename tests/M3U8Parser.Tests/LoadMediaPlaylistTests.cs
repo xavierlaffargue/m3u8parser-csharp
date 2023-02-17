@@ -20,10 +20,22 @@ namespace M3U8Parser.Tests
 		[Test]
 		public void ShouldBePlaylistTypeVod()
 		{
-			var mediaPlaylist = MediaPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "mediaplaylist_vod_1.m3u8");
-			
+			var mediaPlaylist = MediaPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "mediaplaylist_vod_2.m3u8");
 			Assert.AreEqual(PlaylistType.Vod, mediaPlaylist.PlaylistType);
 		}
 		
+		[Test]
+		public void ShouldBeHlsVersion4()
+		{
+			var mediaPlaylist = MediaPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "mediaplaylist_vod_2.m3u8");
+			Assert.AreEqual(4, mediaPlaylist.HlsVersion);
+		}
+
+		[Test]
+		public void WriteToString()
+		{
+			var mediaPlaylist = MediaPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "mediaplaylist_vod_2.m3u8");
+			Console.WriteLine(mediaPlaylist.ToString());
+		}
 	}
 }
