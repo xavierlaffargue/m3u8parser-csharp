@@ -79,7 +79,7 @@ namespace M3U8Parser
 			}
 
 
-			var l = Regex.Split(text, "(?=#EXT-X)");
+			var l = Regex.Split(text, "(?=#EXT)");
 
 			foreach (var line in l)
 			{
