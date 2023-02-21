@@ -34,7 +34,7 @@ namespace M3U8Parser.Tests
 		[Test]
 		public void WriteToString()
 		{
-			var mediaPlaylist = MediaPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "mediaplaylist_vod_2.m3u8");
+			var mediaPlaylist = MediaPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "mediaplaylist_live_3.m3u8");
 			Console.WriteLine(mediaPlaylist.ToString());
 		}
 	}

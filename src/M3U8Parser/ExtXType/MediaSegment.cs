@@ -1,6 +1,7 @@
 ﻿namespace M3U8Parser
 {
 	using M3U8Parser.ExtXType;
+	using System.Globalization;
 	using System.IO;
 	using System.Text;
 	using System.Text.RegularExpressions;
@@ -34,7 +35,8 @@
 
 					if (match.Success)
 					{
-						Duration = double.Parse(match.Groups[0].Value.Split(',')[0]);
+						var durationStr = match.Groups[0].Value.Split(',')[0];
+                        Duration = double.Parse(durationStr, CultureInfo.InvariantCulture);
 					}
 				}
 				else if (line.StartsWith("#EXT-X-BYTERANGE"))
