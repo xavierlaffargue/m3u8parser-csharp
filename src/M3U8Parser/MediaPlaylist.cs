@@ -85,8 +85,9 @@ namespace M3U8Parser
 
                 }
             }
-		
-			var l = Regex.Split(text, $"(?={MediaSegment.Prefix})");
+            
+            var l = Regex.Split(text, $"(?=#EXT-X-KEY|#EXTINF)");
+		//	var l = Regex.Split(text, $"(?={MediaSegment.Prefix})");
 
 			foreach (var line in l)
 			{
