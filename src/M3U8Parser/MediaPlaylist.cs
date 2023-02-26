@@ -87,15 +87,34 @@ namespace M3U8Parser
             }
             
             var l = Regex.Split(text, $"(?=#EXT-X-KEY|#EXTINF)");
-		//	var l = Regex.Split(text, $"(?={MediaSegment.Prefix})");
-
+			var segments = new List<Segment>();
+            MediaSegment mediaSegment = null;
 			foreach (var line in l)
 			{
-				if (line.StartsWith(MediaSegment.Prefix))
+                if (line.StartsWith(Key.Prefix))
+                {
+                    if(mediaSegment != null)
+                    {
+						mediaSegment.Segments = segments;
+						mediaSegments.Add(mediaSegment);
+					}
+
+                    mediaSegment = new MediaSegment(line);
+                }
+
+                if (line.StartsWith(Segment.Prefix))
 				{
-					mediaSegments.Add(new MediaSegment(line));
+					if (mediaSegment == null)
+					{
+						mediaSegment= new MediaSegment();
+					}
+
+					segments.Add(new Segment(line));
 				}
 			}
+
+            mediaSegment.Segments = segments;
+            mediaSegments.Add(mediaSegment);
 
 			return new MediaPlaylist()
 			{
