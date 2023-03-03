@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace M3U8Parser.Tests
@@ -14,28 +15,136 @@ namespace M3U8Parser.Tests
 		[SetUp]
 		public void Setup()
 		{
-			//_mediaPlaylist = MediaPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "mediaplaylist_vod_1.m3u8");
+			_mediaPlaylist = MediaPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "mediaplaylist_vod_1.m3u8");
 		}
 		
 		[Test]
-		public void ShouldBePlaylistTypeVod()
+		public void PlaylistTypeShouldBePVod()
 		{
-			var mediaPlaylist = MediaPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "mediaplaylist_vod_2.m3u8");
-			Assert.AreEqual(PlaylistType.Vod, mediaPlaylist.PlaylistType);
+			Assert.AreEqual(PlaylistType.Vod, _mediaPlaylist.PlaylistType);
 		}
 		
 		[Test]
-		public void ShouldBeHlsVersion4()
+		public void TargetDurationShouldBe10()
 		{
-			var mediaPlaylist = MediaPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "mediaplaylist_vod_2.m3u8");
-			Assert.AreEqual(4, mediaPlaylist.HlsVersion);
+			Assert.AreEqual(10, _mediaPlaylist.TargetDuration);
+		}
+		
+		[Test]
+		public void MediaSequenceShouldBe0()
+		{
+			Assert.AreEqual(0, _mediaPlaylist.MediaSequence);
+		}
+		
+		[Test]
+		public void MediaSequenceShouldBeTrue()
+		{
+			Assert.AreEqual(true, _mediaPlaylist.IFrameOnly);
+		}
+		
+		[Test]
+		public void HlsVersionShouldBe4()
+		{
+			Assert.AreEqual(4, _mediaPlaylist.HlsVersion);
 		}
 
+		[Test]
+		public void MediaSegmentKeyShouldBeNull()
+		{
+			Assert.AreEqual(null, _mediaPlaylist.MediaSegments[0].Key);
+		}
+		
+		[Test]
+		public void MediaSegmentCountShouldBe4()
+		{
+			Assert.AreEqual(4, _mediaPlaylist.MediaSegments[0].Segments.Count);
+		}
+
+		[Test]
+		public void FirstMediaSegmentDurationShouldBe10()
+		{
+			Assert.AreEqual(10, _mediaPlaylist.MediaSegments[0].Segments[0].Duration);
+		}
+		
+		[Test]
+		public void UrlMediaSegmentDurationShouldBefileSequenceTs()
+		{
+			Assert.AreEqual("http://example.com/movie1/fileSequenceA.ts", _mediaPlaylist.MediaSegments[0].Segments[0].Uri);
+		}
+		
 		[Test]
 		public void WriteToString()
 		{
 			var mediaPlaylist = MediaPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "mediaplaylist_vod_3.m3u8");
 			Console.WriteLine(mediaPlaylist.ToString());
 		}
+		
+		[Test]
+		public void CreateMediaPlaylist()
+		{
+			var mediaPlaylist = new MediaPlaylist()
+			{
+				HasEndList = true,
+				HlsVersion = 7,
+				IFrameOnly = true,
+				PlaylistType = PlaylistType.Vod,
+				TargetDuration = 3600,
+				MediaSequence = null,
+				MediaSegments =
+				{
+					new MediaSegment()
+					{
+						Key = new Key()
+						{
+							Method = MethodType.AES_128, Uri = "http://test.local"
+						},
+						Segments = new List<Segment>()
+						{
+							new Segment()
+							{
+								ByteRangeLentgh = 100,
+								ByteRangeStartSubRange = 0,
+								Duration = 100,
+								Uri = "http://test/1.mp4"
+							},
+							new Segment()
+							{
+								ByteRangeLentgh = 100,
+								ByteRangeStartSubRange = 100,
+								Duration = 100,
+								Uri = "http://test/2.mp4"
+							}
+						}
+					},
+					new MediaSegment()
+					{
+						Key = new Key()
+						{
+							Method = MethodType.AES_128, Uri = "http://test2.local"
+						},
+						Segments = new List<Segment>()
+						{
+							new Segment()
+							{
+								ByteRangeLentgh = 100,
+								ByteRangeStartSubRange = 300,
+								Duration = 100,
+								Uri = "http://test/3.mp4"
+							},
+							new Segment()
+							{
+								ByteRangeLentgh = 100,
+								ByteRangeStartSubRange = 400,
+								Duration = 100,
+								Uri = "http://test/4.mp4"
+							}
+						}
+					}
+				}
+			};
+
+			Console.WriteLine(mediaPlaylist.ToString());
+		}
+
 	}
 }

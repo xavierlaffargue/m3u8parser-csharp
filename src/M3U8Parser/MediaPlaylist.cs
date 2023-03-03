@@ -29,7 +29,6 @@ namespace M3U8Parser
 		{
 		}
 		
-
 		public static MediaPlaylist LoadFromFile(string path)
 		{
 			if (!File.Exists(path))
@@ -49,11 +48,8 @@ namespace M3U8Parser
 			int? targetDuration = null;
             int? mediaSequence = null;
 			bool? iFrameOnly = null;
-            //var l = Regex.Split(text, "(?=#EXT-X)");
 
-            //var l = Regex.Match(text, "(?=#EXT-X)");
-
-            Regex regex = new Regex("(?=#EXT-X)(.*?)(?<=$)", RegexOptions.Multiline);
+			Regex regex = new Regex("(?=#EXT-X)(.*?)(?<=$)", RegexOptions.Multiline);
 			var matches = regex.Matches(text);
 
             foreach (Match match in matches)
@@ -75,7 +71,7 @@ namespace M3U8Parser
 				{
                     iFrameOnly = true;
                 }
-				else if(line.StartsWith("#EXT-X-TARGETDURATION"))
+				else if(line.StartsWith(ExtXType.TargetDuration.Prefix))
 				{
                     targetDuration = new TargetDuration(line).Value;
                 }
@@ -133,7 +129,6 @@ namespace M3U8Parser
 			var strBuilder = new StringBuilder();
 
 			strBuilder.AppendLine("#EXTM3U");
-
 			strBuilder.AppendLine($"#EXT-X-VERSION:{HlsVersion}");
 
 			if (TargetDuration != null)
