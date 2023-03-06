@@ -1,4 +1,4 @@
-namespace M3U8Parser.ExtXType
+namespace M3U8Parser.Interfaces
 {
 	public interface IExtXType
 	{

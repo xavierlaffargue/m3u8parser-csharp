@@ -1,8 +1,9 @@
-namespace M3U8Parser.CustomType
-{
-    using System;
+using System;
+using M3U8Parser.Interfaces;
 
-    public class MediaType : ICustomAttribute, IEquatable<MediaType>
+namespace M3U8Parser.Attributes.BaseAttribute
+{
+	public class MediaType : ICustomAttribute, IEquatable<MediaType>
 	{
 		public MediaType()
 		{
@@ -57,11 +58,6 @@ namespace M3U8Parser.CustomType
 			}
 
 			return false;
-		}
-
-        public override int GetHashCode()
-		{
-			return _value != null ? _value.GetHashCode() : 0;
 		}
 	}
 }

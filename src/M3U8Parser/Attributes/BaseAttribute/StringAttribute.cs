@@ -1,9 +1,9 @@
-namespace M3U8Parser.Attributes
-{
-    using System;
-    using System.Text.RegularExpressions;
+using System;
+using System.Text.RegularExpressions;
 
-    public class StringAttribute : CustomAttribute<string>
+namespace M3U8Parser.Attributes.BaseAttribute
+{
+	public class StringAttribute : CustomAttribute<string>
 	{
 		public StringAttribute(string attributeName) : base(attributeName)
 		{

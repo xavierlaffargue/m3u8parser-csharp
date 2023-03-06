@@ -1,7 +1,9 @@
+using M3U8Parser.Attributes.BaseAttribute;
+using M3U8Parser.Interfaces;
+
 namespace M3U8Parser.ExtXType
 {
     using M3U8Parser.Attributes;
-    using M3U8Parser.CustomType;
     using M3U8Parser.Extensions;
     using System.IO;
     using System.Text;

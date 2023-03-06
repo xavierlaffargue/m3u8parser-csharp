@@ -1,9 +1,9 @@
+using M3U8Parser.Attributes.BaseAttribute;
 using NUnit.Framework;
 
 namespace M3U8Parser.Tests
 {
-    using M3U8Parser.CustomType;
-    using M3U8Parser.ExtXType;
+	using M3U8Parser.ExtXType;
     using System;
 	using System.IO;
 
@@ -143,7 +143,7 @@ namespace M3U8Parser.Tests
 		public void ParseAndToStringMediaShouldBeEqual()
 		{
 			var media = new Media("#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",NAME=\"English\",LANGUAGE=\"eng\",AUTOSELECT=YES,DEFAULT=YES,URI=\"uri/Manifest\"");
-			Assert.AreEqual("#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",NAME=\"English\",LANGUAGE=\"eng\",AUTOSELECT=YES,DEFAULT=YES,URI=\"uri/Manifest\"", media.ToString());
+			Assert.AreEqual("#EXT-X-MEDIA:AUTOSELECT=YES,DEFAULT=YES,GROUP-ID=\"audio\",LANGUAGE=\"eng\",TYPE=AUDIO,NAME=\"English\",URI=\"uri/Manifest\"", media.ToString());
 		}
 
 		[Test]

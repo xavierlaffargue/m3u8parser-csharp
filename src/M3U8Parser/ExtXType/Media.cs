@@ -1,12 +1,11 @@
+using M3U8Parser.Attributes.BaseAttribute;
+
 namespace M3U8Parser.ExtXType
 {
     using M3U8Parser.Attributes;
-    using M3U8Parser.CustomType;
-    using M3U8Parser.Extensions;
-    using System.Text;
 
-    public class Media : IExtXType
-	{
+    public class Media : BaseExtX
+    {
 		private readonly Autoselect _autoSelect = new ();
 		private readonly Characteristics _characteristics = new ();
 		private readonly Default _default = new ();
@@ -21,18 +20,9 @@ namespace M3U8Parser.ExtXType
 		{
 		}
 
-		public Media(string str)
+		public Media(string str) : base(str)
 		{
-			_language.Read(str);
-			_name.Read(str);
-			_mediaType.Read(str);
-			_autoSelect.Read(str);
-			_uri.Read(str);
-			_default.Read(str);
-			_groupId.Read(str);
-			_instreamId.Read(str);
-			_characteristics.Read(str);
-		}
+        }
 
 		public string Uri {
 			get => _uri.Value;
@@ -79,24 +69,8 @@ namespace M3U8Parser.ExtXType
 			set => _characteristics.Value = value;
 		}
 
-		public static string Prefix => "#EXT-X-MEDIA";
+		public static string Prefix = "#EXT-X-MEDIA";
 
-		public override string ToString()
-		{
-			var strBuilder = new StringBuilder();
-			strBuilder.Append(Prefix);
-			strBuilder.Append(":");
-			strBuilder.AppendWithSeparator(_mediaType.ToString(), ",");
-			strBuilder.AppendWithSeparator(_groupId.ToString(), ",");
-			strBuilder.AppendWithSeparator(_name.ToString(), ",");
-			strBuilder.AppendWithSeparator(_language.ToString(), ",");
-			strBuilder.AppendWithSeparator(_autoSelect.ToString(), ",");
-			strBuilder.AppendWithSeparator(_default.ToString(), ",");
-			strBuilder.AppendWithSeparator(_instreamId.ToString(), ",");
-			strBuilder.AppendWithSeparator(_characteristics.ToString(), ",");
-			strBuilder.AppendWithSeparator(_uri.ToString(), ",");
-
-			return strBuilder.ToString().RemoveLastCharacter();
-		}
-	}
+        protected override string ExtPrefix => Media.Prefix;
+    }
 }
