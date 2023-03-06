@@ -1,8 +1,9 @@
-namespace M3U8Parser.CustomType
-{
-    using System;
+using System;
+using M3U8Parser.Interfaces;
 
-    public class MethodType : ICustomAttribute, IEquatable<MethodType>
+namespace M3U8Parser.Attributes.BaseAttribute
+{
+	public class MethodType : ICustomAttribute, IEquatable<MethodType>
 	{
 		public MethodType()
 		{
@@ -52,11 +53,6 @@ namespace M3U8Parser.CustomType
 			}
 
 			return false;
-		}
-
-        public override int GetHashCode()
-		{
-			return _value != null ? _value.GetHashCode() : 0;
 		}
 	}
 }

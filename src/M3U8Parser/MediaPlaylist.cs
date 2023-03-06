@@ -2,16 +2,15 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using M3U8Parser.Attributes.BaseAttribute;
 
 namespace M3U8Parser
 {
-	using M3U8Parser.CustomType;
 	using M3U8Parser.ExtXType;
-	using System.Runtime.CompilerServices;
 
 	public class MediaPlaylist
 	{
-		public PlaylistType? PlaylistType { get; set; } = new ();
+		public PlaylistType PlaylistType { get; set; } = new ();
 		
 		public int HlsVersion { get; set; }
 
@@ -151,10 +150,9 @@ namespace M3U8Parser
                 strBuilder.AppendLine($"#EXT-X-I-FRAMES-ONLY");
             }
 
-            strBuilder.AppendLine();
-
             foreach (var segment in MediaSegments)
 			{
+				strBuilder.AppendLine();
 				strBuilder.Append(segment);
 			}
 

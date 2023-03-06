@@ -1,10 +1,8 @@
+using M3U8Parser.Attributes.BaseAttribute;
+
 namespace M3U8Parser.ExtXType
 {
     using M3U8Parser.Attributes;
-    using M3U8Parser.CustomType;
-    using M3U8Parser.Extensions;
-	using System.Reflection;
-	using System.Text;
 
     public class Key : BaseExtX
     {
@@ -31,6 +29,6 @@ namespace M3U8Parser.ExtXType
 
 		public static string Prefix = "#EXT-X-KEY";
 
-        protected override string ExtPrefix => Key.Prefix;
+        protected override string ExtPrefix => Prefix;
     }
 }

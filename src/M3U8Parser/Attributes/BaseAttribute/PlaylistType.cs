@@ -1,8 +1,9 @@
-namespace M3U8Parser.CustomType
-{
-    using System;
+using System;
+using M3U8Parser.Interfaces;
 
-    public class PlaylistType : ICustomAttribute, IEquatable<PlaylistType>
+namespace M3U8Parser.Attributes.BaseAttribute
+{
+	public class PlaylistType : ICustomAttribute, IEquatable<PlaylistType>
 	{
 		public PlaylistType()
 		{
@@ -47,11 +48,6 @@ namespace M3U8Parser.CustomType
 			}
 
 			return false;
-		}
-
-        public override int GetHashCode()
-		{
-			return _value != null ? _value.GetHashCode() : 0;
 		}
 	}
 }

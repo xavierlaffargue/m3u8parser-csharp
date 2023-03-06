@@ -1,4 +1,4 @@
-using M3U8Parser.CustomType;
+using M3U8Parser.Attributes.BaseAttribute;
 
 namespace M3U8Parser.Attributes
 {

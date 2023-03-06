@@ -1,4 +1,4 @@
-﻿namespace M3U8Parser.CustomType
+﻿namespace M3U8Parser.Interfaces
 {
     public interface ICustomAttribute
     {

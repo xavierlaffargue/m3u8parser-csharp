@@ -1,16 +1,15 @@
 ﻿// <copyright file="ResolutionType.cs" company="PlaceholderCompany">Copyright (c) PlaceholderCompany. All rights reserved.</copyright>
 
-namespace M3U8Parser.CustomType
-{
-    using System;
+using System;
+using M3U8Parser.Interfaces;
 
+namespace M3U8Parser.Attributes.BaseAttribute
+{
     public class ResolutionType : ICustomAttribute, IEquatable<ResolutionType>
     {
         public long Width { get; set; }
 
         public long Height { get; set; }
-
-        
         
         public object ParseFromString(string value)
         {

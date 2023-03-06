@@ -1,9 +1,9 @@
+using M3U8Parser.Attributes.BaseAttribute;
 using NUnit.Framework;
 
 namespace M3U8Parser.Tests
 {
-    using M3U8Parser.CustomType;
-    using M3U8Parser.ExtXType;
+	using M3U8Parser.ExtXType;
     using System;
 	using System.IO;
 

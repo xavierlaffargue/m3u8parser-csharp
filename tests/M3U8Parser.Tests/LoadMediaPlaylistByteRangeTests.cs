@@ -8,14 +8,14 @@ namespace M3U8Parser.Tests
     using System;
 	using System.IO;
 
-	public class LoadMediaPlaylistTests
+	public class LoadMediaPlaylistByteRangeTests
 	{
 		private MediaPlaylist _mediaPlaylist = new ();
-
+		
 		[SetUp]
 		public void Setup()
 		{
-			_mediaPlaylist = MediaPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "mediaplaylist_vod_1.m3u8");
+			_mediaPlaylist = MediaPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "mediaplaylist_vod_2.m3u8");
 		}
 		
 		[Test]
@@ -27,19 +27,19 @@ namespace M3U8Parser.Tests
 		[Test]
 		public void TargetDurationShouldBe10()
 		{
-			Assert.AreEqual(10, _mediaPlaylist.TargetDuration);
+			Assert.AreEqual(11, _mediaPlaylist.TargetDuration);
 		}
 		
 		[Test]
 		public void MediaSequenceShouldBe0()
 		{
-			Assert.AreEqual(0, _mediaPlaylist.MediaSequence);
+			Assert.AreEqual(1, _mediaPlaylist.MediaSequence);
 		}
 		
 		[Test]
 		public void MediaSequenceShouldBeTrue()
 		{
-			Assert.AreEqual(true, _mediaPlaylist.IFrameOnly);
+			Assert.AreEqual(null, _mediaPlaylist.IFrameOnly);
 		}
 		
 		[Test]
@@ -57,19 +57,19 @@ namespace M3U8Parser.Tests
 		[Test]
 		public void MediaSegmentCountShouldBe4()
 		{
-			Assert.AreEqual(4, _mediaPlaylist.MediaSegments[0].Segments.Count);
+			Assert.AreEqual(296, _mediaPlaylist.MediaSegments[0].Segments.Count);
 		}
 
 		[Test]
 		public void FirstMediaSegmentDurationShouldBe10()
 		{
-			Assert.AreEqual(10, _mediaPlaylist.MediaSegments[0].Segments[0].Duration);
+			Assert.AreEqual(10.005, _mediaPlaylist.MediaSegments[0].Segments[0].Duration);
 		}
 		
 		[Test]
 		public void UrlMediaSegmentDurationShouldBefileSequenceTs()
 		{
-			Assert.AreEqual("http://example.com/movie1/fileSequenceA.ts", _mediaPlaylist.MediaSegments[0].Segments[0].Uri);
+			Assert.AreEqual("mediaFileSample.aac", _mediaPlaylist.MediaSegments[0].Segments[0].Uri);
 		}
 		
 		[Test]

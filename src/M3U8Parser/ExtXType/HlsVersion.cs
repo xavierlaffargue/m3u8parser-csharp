@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using M3U8Parser.CustomType;
+using M3U8Parser.Interfaces;
 
 namespace M3U8Parser.ExtXType
 {

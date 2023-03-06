@@ -1,12 +1,11 @@
-﻿namespace M3U8Parser
-{
-	using M3U8Parser.ExtXType;
-	using System.Collections.Generic;
-	using System.Globalization;
-	using System.IO;
-	using System.Text;
-	using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using M3U8Parser.Attributes.BaseAttribute;
+using M3U8Parser.Interfaces;
 
+namespace M3U8Parser.ExtXType
+{
 	public class MediaSegment : IExtXType
 	{
 		public List<Segment> Segments { get; set; } = new List<Segment>();
@@ -40,7 +39,7 @@
 		{
 			var strBuilder = new StringBuilder();
 
-			if(Key != null && Key.Method != CustomType.MethodType.None)
+			if(Key != null && Key.Method != MethodType.None)
 			{
                 strBuilder.AppendLine(Key.ToString());
             }

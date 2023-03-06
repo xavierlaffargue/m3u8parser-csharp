@@ -1,12 +1,7 @@
-﻿using M3U8Parser.Attributes;
-using M3U8Parser.Extensions;
+﻿using M3U8Parser.Extensions;
 using M3U8Parser.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace M3U8Parser.ExtXType
 {
