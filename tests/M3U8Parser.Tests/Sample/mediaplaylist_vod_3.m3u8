@@ -3,7 +3,7 @@
 #EXT-X-TARGETDURATION:11
 #EXT-X-MEDIA-SEQUENCE:1
 #EXT-X-PLAYLIST-TYPE:VOD
-#EXT-X-KEY:METHOD=AES-128,URI="https://rcavmedias-static.akamaized.net/hls/3be4de80-8494-4ccc-9d73-0580460c6162/secured/serve.key?hdntl=exp=1677029848~acl=/*~data=hdntl~hmac=7de77df1bc4d82a60dc9fcf9e0d341ef1010295865d2acbe8633bd9b7f09f43f&aka_me_session_id=AAAAAAAAAADYcfVjAAAAABmjLrLZInYBuDtxy852CLOTzQmE0xLhxFeVIIPuZjQ3chzCRQBDAcsCNou%2f6OcPjVAbmkxUO9MB"
+#EXT-X-KEY:METHOD=AES-128,URI="https://sample.net/hls/serve.key?hdntl=exp=1677029848~acl=/*~data=hdntl~hmac=7de77df1bc4d82a60dc9fcf9e0d341ef1010295865d2acbe8633bd9b7f09f43f&aka_me_session_id=AAAAAAAAAADYcfVjAAAAABmjLrLZInYBuDtxy852CLOTzQmE0xLhxFeVIIPuZjQ3chzCRQBDAcsCNou%2f6OcPjVAbmkxUO9MB"
 #EXTINF:10.005,
 mediaFileSample.aac?aka_me_session_id=AAAAAAAAAADYcfVjAAAAABmjLrLZInYBuDtxy852CLOTzQmE0xLhxFeVIIPuZjQ3chzCRQBDAcsCNou%2f6OcPjVAbmkxUO9MB&aka_msn=1&aka_hls_version=4&aka_br=bytes=0-160612&aka_media_format_type=hls
 #EXTINF:10.005,
