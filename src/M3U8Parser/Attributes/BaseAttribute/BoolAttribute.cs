@@ -1,8 +1,8 @@
-namespace M3U8Parser.Attributes
-{
-    using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 
-    public class BoolAttribute : CustomAttribute<bool>
+namespace M3U8Parser.Attributes.BaseAttribute
+{
+	public class BoolAttribute : CustomAttribute<bool>
 	{
         private const string YesValue = "YES";
         private const string NoValue = "NO";

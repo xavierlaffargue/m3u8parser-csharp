@@ -1,10 +1,9 @@
 using System.Globalization;
+using System.Text.RegularExpressions;
 
-namespace M3U8Parser.Attributes
+namespace M3U8Parser.Attributes.BaseAttribute
 {
-    using System.Text.RegularExpressions;
-
-    public class DecimalAttribute : CustomAttribute<decimal?>
+	public class DecimalAttribute : CustomAttribute<decimal?>
 	{
 		public DecimalAttribute(string attributeName) : base(attributeName)
 		{

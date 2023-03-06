@@ -33,37 +33,7 @@ namespace M3U8Parser
 
 			return LoadFromText(File.ReadAllText(path));
 		}
-
-		public void AddMedia(Media media)
-		{
-			Medias.Add(media);
-		}
-
-		public void AddMedias(IEnumerable<Media> medias)
-		{
-			Medias.AddRange(medias);
-		}
-
-		public void AddStream(StreamInf streamInf)
-		{
-			Streams.Add(streamInf);
-		}
-
-		public void AddStreams(IEnumerable<StreamInf> streamInfs)
-		{
-			Streams.AddRange(streamInfs);
-		}
-
-		public void AddIframeStreamInf(IframeStreamInf iframeStreamInf)
-		{
-			IFrameStreams.Add(iframeStreamInf);
-		}
-
-		public void AddIframeStreamInfs(IEnumerable<IframeStreamInf> iframeStreamInfs)
-		{
-			IFrameStreams.AddRange(iframeStreamInfs);
-		}
-
+		
 		public static MasterPlaylist LoadFromText(string text)
 		{
 			List<Media> medias = new ();
@@ -79,7 +49,7 @@ namespace M3U8Parser
 			}
 
 
-			var l = Regex.Split(text, "(?=#EXT-X)");
+			var l = Regex.Split(text, "(?=#EXT)");
 
 			foreach (var line in l)
 			{

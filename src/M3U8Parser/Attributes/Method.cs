@@ -2,9 +2,9 @@ using M3U8Parser.Attributes.BaseAttribute;
 
 namespace M3U8Parser.Attributes
 {
-    public class Name : StringAttribute
+    public class Method : CustomAttribute<MethodType>
     {
-        public Name() : base("NAME")
+        public Method() : base("METHOD")
         {
         }
     }

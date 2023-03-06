@@ -1,9 +1,8 @@
+using M3U8Parser.Attributes.BaseAttribute;
+
 namespace M3U8Parser.ExtXType
 {
     using M3U8Parser.Attributes;
-    using M3U8Parser.CustomType;
-    using M3U8Parser.Extensions;
-    using System.Text;
 
     public class IframeStreamInf : BaseExtX
     {
