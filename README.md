@@ -1,4 +1,4 @@
-# M3U8Parser
+# M3U8 HLS Parser C#
 
 ## Installation
 Package NuGet : https://www.nuget.org/packages/M3U8Parser/
@@ -6,7 +6,6 @@ Package NuGet : https://www.nuget.org/packages/M3U8Parser/
 ```dotnet add package M3U8Parser```
 
 ## Documentation
-⚠️ This is an alpha version
 
 M3U8Parser makes it easy to read, edit and create a m3u8 file. 
 * M3U8Parser does not try to validate your file, it's your responsability to follow RFC.
