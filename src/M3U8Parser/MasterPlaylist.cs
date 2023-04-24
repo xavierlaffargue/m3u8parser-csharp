@@ -9,13 +9,12 @@ namespace M3U8Parser
 
     public class MasterPlaylist
 	{
-		public int HlsVersion => _hlsVersion;
+		private const int DefaultHlsVersion = 4;
+		public int HlsVersion { get; private set; }
 
-		private readonly int _hlsVersion;
-
-		public MasterPlaylist(int hlsVersion = 4)
+		public MasterPlaylist(int hlsVersion = DefaultHlsVersion)
 		{
-			_hlsVersion = hlsVersion;
+			HlsVersion = hlsVersion;
 		}
 
 		public List<Media> Medias { get; private set; } = new ();
@@ -39,7 +38,7 @@ namespace M3U8Parser
 			List<Media> medias = new ();
 			List<IframeStreamInf> iFrameStreams = new ();
 			List<StreamInf> streams = new ();
-			var hlsVersion = 4;
+			var hlsVersion = DefaultHlsVersion;
 
 			var matchHlsVersion = Regex.Match(text, "(?<=#EXT-X-VERSION:)(.*?)(?<=$)", RegexOptions.Multiline);
 			if (matchHlsVersion.Success)
@@ -75,12 +74,17 @@ namespace M3U8Parser
 			};
 		}
 
+		public void SetHlsVersion(int hlsVersion)
+		{
+			HlsVersion = hlsVersion;
+		}
+		
 		public override string ToString()
 		{
 			var strBuilder = new StringBuilder();
 
 			strBuilder.AppendLine("#EXTM3U");
-			strBuilder.AppendLine($"#EXT-X-VERSION:{_hlsVersion}");
+			strBuilder.AppendLine($"#EXT-X-VERSION:{HlsVersion}");
 
 			strBuilder.AppendLine();
 
