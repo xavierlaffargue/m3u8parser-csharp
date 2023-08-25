@@ -20,7 +20,7 @@ namespace M3U8Parser
 
         public int? MediaSequence { get; set; }
 
-        public List<MediaSegment> MediaSegments { get; private set; } = new ();
+        public List<MediaSegment> MediaSegments { get; set; } = new ();
 		
 		public bool HasEndList { get; set; }
 		
@@ -77,7 +77,6 @@ namespace M3U8Parser
                 else if (line.StartsWith(M3U8Parser.ExtXType.MediaSequence.Prefix))
                 {
                     mediaSequence = new MediaSequence(line).Value;
-
                 }
             }
             
