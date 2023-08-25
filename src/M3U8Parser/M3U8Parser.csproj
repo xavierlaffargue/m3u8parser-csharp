@@ -3,7 +3,7 @@
     <PropertyGroup>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageId>M3U8Parser</PackageId>
-        <PackageVersion>1.0.1</PackageVersion>
+        <PackageVersion>1.0.2</PackageVersion>
         <LangVersion>9.0</LangVersion>
         <Title>M3U8Parser</Title>
         <Authors>Xavier Laffargue</Authors>
