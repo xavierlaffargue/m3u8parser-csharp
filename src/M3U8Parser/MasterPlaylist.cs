@@ -10,18 +10,18 @@ namespace M3U8Parser
     public class MasterPlaylist
 	{
 		private const int DefaultHlsVersion = 4;
-		public int HlsVersion { get; private set; }
+		public int HlsVersion { get; set; }
 
 		public MasterPlaylist(int hlsVersion = DefaultHlsVersion)
 		{
 			HlsVersion = hlsVersion;
 		}
 
-		public List<Media> Medias { get; private set; } = new ();
+		public List<Media> Medias { get; set; } = new ();
 
-		public List<IframeStreamInf> IFrameStreams { get; private set; } = new ();
+		public List<IframeStreamInf> IFrameStreams { get; set; } = new ();
 
-		public List<StreamInf> Streams { get; private set; } = new ();
+		public List<StreamInf> Streams { get; set; } = new ();
 
 		public static MasterPlaylist LoadFromFile(string path)
 		{
@@ -74,11 +74,6 @@ namespace M3U8Parser
 			};
 		}
 
-		public void SetHlsVersion(int hlsVersion)
-		{
-			HlsVersion = hlsVersion;
-		}
-		
 		public override string ToString()
 		{
 			var strBuilder = new StringBuilder();
