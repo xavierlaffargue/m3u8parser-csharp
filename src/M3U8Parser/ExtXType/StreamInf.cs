@@ -123,6 +123,7 @@ namespace M3U8Parser.ExtXType
             strBuilder.AppendWithSeparator(_hdcpLevel.ToString(), ",");
             strBuilder.AppendWithSeparator(_video.ToString(), ",");
 			strBuilder.AppendWithSeparator(_audio.ToString(), ",");
+			strBuilder.AppendWithSeparator(_subtitles.ToString(), ",");
 
 			return strBuilder.ToString().RemoveLastCharacter() + "\r\n" + Uri;
 		}
