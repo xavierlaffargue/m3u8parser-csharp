@@ -147,6 +147,13 @@ namespace M3U8Parser.Tests
 		}
 
 		[Test]
+		public void ParseAndToStringMediaShouldBeEqualWithDoubleQuote()
+		{
+			var media = new Media("#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",NAME=\"English \\\"Original\\\"\",LANGUAGE=\"eng\",AUTOSELECT=YES,DEFAULT=YES,URI=\"uri/Manifest\"");
+			Assert.AreEqual("#EXT-X-MEDIA:AUTOSELECT=YES,DEFAULT=YES,GROUP-ID=\"audio\",LANGUAGE=\"eng\",TYPE=AUDIO,NAME=\"English \\\"Original\\\"\",URI=\"uri/Manifest\"", media.ToString());
+		}
+
+		[Test]
 		public void ParseAndToStringStreamShouldBeEqual()
 		{
 			var media = new StreamInf("#EXT-X-STREAM-INF:BANDWIDTH=3971374,AVERAGE-BANDWIDTH=2778321,VIDEO-RANGE=SDR,CODECS=\"hvc1.2.4.L123.B0\",RESOLUTION=1280x720,FRAME-RATE=23.976,HDCP-LEVEL=NONE\r\nsdr_720/prog_index.m3u8");

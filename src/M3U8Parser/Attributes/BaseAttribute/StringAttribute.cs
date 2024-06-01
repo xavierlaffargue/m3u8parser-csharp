@@ -11,12 +11,11 @@ namespace M3U8Parser.Attributes.BaseAttribute
         
 		public override string ToString()
 		{
-			if (Value != null)
-			{
-                return $"{AttributeName}=\"{Value}\"";
-			}
+			if (Value == null) return string.Empty;
 
-			return string.Empty;
+			Value = Regex.Replace(Value, "(?<!\\\\)\"", "\\\"");
+			return $"{AttributeName}=\"{Value}\"";
+
 		}
 
 		public override void Read(string content)
