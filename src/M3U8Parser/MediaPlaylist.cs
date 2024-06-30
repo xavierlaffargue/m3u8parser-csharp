@@ -11,6 +11,8 @@ namespace M3U8Parser
 	public class MediaPlaylist
 	{
 		public PlaylistType PlaylistType { get; set; } = new ();
+
+		public Map Map { get; set; } = new();
 		
 		public int HlsVersion { get; set; }
 
@@ -41,6 +43,7 @@ namespace M3U8Parser
 		public static MediaPlaylist LoadFromText(string text)
 		{
 			PlaylistType playlistType = null;
+			Map map = null;
 			List<MediaSegment> mediaSegments = new ();
 			var hlsVersion = 4;
 			var hasEndList = false;
@@ -61,6 +64,10 @@ namespace M3U8Parser
 				else if (line.StartsWith(ExtXType.HlsVersion.Prefix))
 				{
 					hlsVersion = new HlsVersion(line).Value;
+				}
+				else if (line.StartsWith(ExtXType.Map.Prefix))
+				{
+					map = new Map(line);
 				}
 				else if (line.StartsWith("#EXT-X-ENDLIST"))
 				{
@@ -118,7 +125,8 @@ namespace M3U8Parser
 				HasEndList = hasEndList,
                 TargetDuration = targetDuration,
 				MediaSequence = mediaSequence,
-                IFrameOnly = iFrameOnly
+                IFrameOnly = iFrameOnly,
+                Map = map
             };
 		}
 
@@ -147,6 +155,11 @@ namespace M3U8Parser
             if (IFrameOnly.HasValue && IFrameOnly.Value)
             {
                 strBuilder.AppendLine($"#EXT-X-I-FRAMES-ONLY");
+            }
+            
+            if (Map != null)
+            {
+	            strBuilder.AppendLine(Map.ToString());
             }
 
             foreach (var segment in MediaSegments)
