@@ -47,6 +47,18 @@ namespace M3U8Parser.Tests
 		{
 			Assert.AreEqual(4, _mediaPlaylist.HlsVersion);
 		}
+		
+		[Test]
+		public void MapShouldExist()
+		{
+			Assert.NotNull(_mediaPlaylist.Map);
+		}
+		
+		[Test]
+		public void MapUriShouldBeCorrect()
+		{
+			Assert.AreEqual("main.mp4", _mediaPlaylist.Map.Uri);
+		}
 
 		[Test]
 		public void MediaSegmentKeyShouldBeNull()
