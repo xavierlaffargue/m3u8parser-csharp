@@ -1,23 +1,13 @@
-﻿using System.Globalization;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using M3U8Parser.Interfaces;
-
-namespace M3U8Parser.ExtXType
+﻿namespace M3U8Parser.ExtXType
 {
+    using System.Globalization;
+    using System.IO;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using M3U8Parser.Interfaces;
+
     public class Segment : IExtXType
     {
-        public double Duration { get; set; }
-
-        public string Title { get; set; }
-
-        public string Uri { get; set; }
-
-        public long? ByteRangeLentgh { get; set; }
-
-        public long? ByteRangeStartSubRange { get; set; }
-
         public Segment()
         {
         }
@@ -30,8 +20,7 @@ namespace M3U8Parser.ExtXType
             {
                 if (line.StartsWith("#EXTINF"))
                 {
-                    var match = Regex.Match(line.Trim(), $"(?<=#EXTINF:)(.*?)(?=$)",
-                        RegexOptions.Multiline & RegexOptions.IgnoreCase);
+                    var match = Regex.Match(line.Trim(), "(?<=#EXTINF:)(.*?)(?=$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
 
                     if (match.Success)
                     {
@@ -41,7 +30,7 @@ namespace M3U8Parser.ExtXType
                 }
                 else if (line.StartsWith("#EXT-X-BYTERANGE"))
                 {
-                    var match = Regex.Match(line.Trim(), $"(?<=#EXT-X-BYTERANGE:)(.*?)(?=$)",
+                    var match = Regex.Match(line.Trim(), "(?<=#EXT-X-BYTERANGE:)(.*?)(?=$)",
                         RegexOptions.Multiline & RegexOptions.IgnoreCase);
 
                     if (match.Success)
@@ -49,10 +38,7 @@ namespace M3U8Parser.ExtXType
                         var byterange = match.Groups[0].Value.Split('@');
                         ByteRangeLentgh = long.Parse(byterange[0]);
 
-                        if (byterange.Length > 1)
-                        {
-                            ByteRangeStartSubRange = long.Parse(byterange[1]);
-                        }
+                        if (byterange.Length > 1) ByteRangeStartSubRange = long.Parse(byterange[1]);
                     }
                 }
                 else if (!line.StartsWith("#EXT"))
@@ -62,7 +48,17 @@ namespace M3U8Parser.ExtXType
             }
         }
 
-        public static string Prefix => "#EXTINF";
+        public double Duration { get; set; }
+
+        public string Title { get; set; }
+
+        public string Uri { get; set; }
+
+        public long? ByteRangeLentgh { get; set; }
+
+        public long? ByteRangeStartSubRange { get; set; }
+
+        public const string Prefix = "#EXTINF";
 
         public override string ToString()
         {
@@ -73,10 +69,7 @@ namespace M3U8Parser.ExtXType
             {
                 strBuilder.Append($"#EXT-X-BYTERANGE:{ByteRangeLentgh}");
 
-                if (ByteRangeStartSubRange != null)
-                {
-                    strBuilder.Append($"@{ByteRangeStartSubRange}");
-                }
+                if (ByteRangeStartSubRange != null) strBuilder.Append($"@{ByteRangeStartSubRange}");
 
                 strBuilder.AppendLine();
             }

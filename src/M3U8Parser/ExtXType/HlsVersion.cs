@@ -1,16 +1,12 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using M3U8Parser.Interfaces;
-
-namespace M3U8Parser.ExtXType
+﻿namespace M3U8Parser.ExtXType
 {
+    using System;
+    using System.Text.RegularExpressions;
+    using M3U8Parser.Interfaces;
+
     public class HlsVersion : BaseExtX
     {
-        public static string Prefix = "#EXT-X-VERSION";
-
-        protected override string ExtPrefix => HlsVersion.Prefix;
-
-        public int Value { get; set; }
+        public const string Prefix = "#EXT-X-VERSION";
 
         public HlsVersion()
         {
@@ -20,6 +16,10 @@ namespace M3U8Parser.ExtXType
         {
             Read(str);
         }
+
+        public int Value { get; set; }
+
+        protected override string ExtPrefix => Prefix;
 
         public void Read(string content)
         {
@@ -33,9 +33,7 @@ namespace M3U8Parser.ExtXType
                 var valueFounded = match.Groups[0].Value;
 
                 if (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
-                {
                     type = Nullable.GetUnderlyingType(type);
-                }
 
                 if (typeof(ICustomAttribute).IsAssignableFrom(type))
                 {
@@ -49,7 +47,7 @@ namespace M3U8Parser.ExtXType
             }
             else
             {
-                Value = default(int);
+                Value = default;
             }
         }
     }

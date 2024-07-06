@@ -1,58 +1,56 @@
-﻿using M3U8Parser.Attributes.BaseAttribute;
-using M3U8Parser.Interfaces;
-
-namespace M3U8Parser.ExtXType
+﻿namespace M3U8Parser.ExtXType
 {
-	using System;
-	using System.Text.RegularExpressions;
+    using System;
+    using System.Text.RegularExpressions;
+    using M3U8Parser.Attributes.BaseAttribute;
+    using M3U8Parser.Interfaces;
 
-	public class PlaylistTypeExt : BaseExtX
-	{
-		public static string Prefix = "#EXT-X-PLAYLIST-TYPE";
+    public class PlaylistTypeExt : BaseExtX
+    {
+        public const string Prefix = "#EXT-X-PLAYLIST-TYPE";
 
-		protected override string ExtPrefix => PlaylistTypeExt.Prefix;
+        public PlaylistTypeExt()
+        {
+        }
 
-		public PlaylistType Value { get; set; }
+        public PlaylistTypeExt(string str)
+        {
+            Read(str);
+        }
 
-		public PlaylistTypeExt()
-		{
-		}
+        protected override string ExtPrefix => Prefix;
 
-		public PlaylistTypeExt(string str)
-		{
-			Read(str);
-		}
+        public PlaylistType Value { get; set; }
 
-		public void Read(string content)
-		{
-			var match = Regex.Match(content.Trim(), $"(?<={Prefix}:)(.*?)(?=$)",
-				RegexOptions.Multiline & RegexOptions.IgnoreCase);
+        public void Read(string content)
+        {
+            var match = Regex.Match(content.Trim(), $"(?<={Prefix}:)(.*?)(?=$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
 
-			var type = typeof(PlaylistType);
+            var type = typeof(PlaylistType);
 
-			if (match.Success)
-			{
-				var valueFounded = match.Groups[0].Value;
+            if (match.Success)
+            {
+                var valueFounded = match.Groups[0].Value;
 
-				if (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
-				{
-					type = Nullable.GetUnderlyingType(type);
-				}
+                if (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+                {
+                    type = Nullable.GetUnderlyingType(type);
+                }
 
-				if (typeof(ICustomAttribute).IsAssignableFrom(type))
-				{
-					var instanceAttribute = (ICustomAttribute)Activator.CreateInstance(type, false);
-					Value = (PlaylistType)instanceAttribute.ParseFromString(valueFounded);
-				}
-				else
-				{
-					Value = (PlaylistType)Convert.ChangeType(valueFounded, type);
-				}
-			}
-			else
-			{
-				Value = default(PlaylistType);
-			}
-		}
-	}
+                if (typeof(ICustomAttribute).IsAssignableFrom(type))
+                {
+                    var instanceAttribute = (ICustomAttribute)Activator.CreateInstance(type, false);
+                    Value = (PlaylistType)instanceAttribute.ParseFromString(valueFounded);
+                }
+                else
+                {
+                    Value = (PlaylistType)Convert.ChangeType(valueFounded, type);
+                }
+            }
+            else
+            {
+                Value = default;
+            }
+        }
+    }
 }

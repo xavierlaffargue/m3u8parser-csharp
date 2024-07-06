@@ -1,16 +1,12 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using M3U8Parser.Interfaces;
-
-namespace M3U8Parser.ExtXType
+﻿namespace M3U8Parser.ExtXType
 {
+    using System;
+    using System.Text.RegularExpressions;
+    using M3U8Parser.Interfaces;
+
     public class TargetDuration : BaseExtX
     {
-        public static string Prefix = "#EXT-X-TARGETDURATION";
-
-        protected override string ExtPrefix => TargetDuration.Prefix;
-
-        public int Value { get; set; }
+        public const string Prefix = "#EXT-X-TARGETDURATION";
 
         public TargetDuration()
         {
@@ -20,6 +16,10 @@ namespace M3U8Parser.ExtXType
         {
             Read(str);
         }
+
+        protected override string ExtPrefix => Prefix;
+
+        public int Value { get; set; }
 
         public void Read(string content)
         {
@@ -33,9 +33,7 @@ namespace M3U8Parser.ExtXType
                 var valueFounded = match.Groups[0].Value;
 
                 if (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
-                {
                     type = Nullable.GetUnderlyingType(type);
-                }
 
                 if (typeof(ICustomAttribute).IsAssignableFrom(type))
                 {
@@ -49,7 +47,7 @@ namespace M3U8Parser.ExtXType
             }
             else
             {
-                Value = default(int);
+                Value = default;
             }
         }
     }

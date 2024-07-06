@@ -1,16 +1,12 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using M3U8Parser.Interfaces;
-
-namespace M3U8Parser.ExtXType
+﻿namespace M3U8Parser.ExtXType
 {
+    using System;
+    using System.Text.RegularExpressions;
+    using M3U8Parser.Interfaces;
+
     public class MediaSequence : BaseExtX
     {
-        public static string Prefix = "#EXT-X-MEDIA-SEQUENCE";
-
-        protected override string ExtPrefix => HlsVersion.Prefix;
-
-        public int Value { get; set; }
+        public const string Prefix = "#EXT-X-MEDIA-SEQUENCE";
 
         public MediaSequence()
         {
@@ -20,6 +16,10 @@ namespace M3U8Parser.ExtXType
         {
             Read(str);
         }
+
+        protected override string ExtPrefix => HlsVersion.Prefix;
+
+        public int Value { get; set; }
 
         public void Read(string content)
         {
@@ -49,7 +49,7 @@ namespace M3U8Parser.ExtXType
             }
             else
             {
-                Value = default(int);
+                Value = default;
             }
         }
     }

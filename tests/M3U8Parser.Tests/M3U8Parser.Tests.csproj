@@ -5,17 +5,18 @@
         <Nullable>enable</Nullable>
 
         <IsPackable>false</IsPackable>
+        <CodeAnalysisRuleSet>CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-        <PackageReference Include="NUnit" Version="3.13.2" />
-        <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
-        <PackageReference Include="coverlet.collector" Version="3.1.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0"/>
+        <PackageReference Include="NUnit" Version="3.13.2"/>
+        <PackageReference Include="NUnit3TestAdapter" Version="4.0.0"/>
+        <PackageReference Include="coverlet.collector" Version="3.1.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\M3U8Parser\M3U8Parser.csproj" />
+        <ProjectReference Include="..\..\src\M3U8Parser\M3U8Parser.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -23,13 +24,13 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="Sample\mediaplaylist_vod_1.m3u8">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="Sample\mediaplaylist_vod_2.m3u8">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="Sample\mediaplaylist_vod_3.m3u8">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 

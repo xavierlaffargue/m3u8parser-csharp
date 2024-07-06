@@ -16,11 +16,19 @@
         <PackageReadmeFile>readme.md</PackageReadmeFile>
         <RepositoryUrl>https://github.com/xavierlaffargue/m3u8parser-csharp.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
+        <CodeAnalysisRuleSet>CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="icon.png" Pack="true" PackagePath="" />
-        <None Include="../../readme.md" Pack="true" PackagePath="\" />
+        <None Include="icon.png" Pack="true" PackagePath=""/>
+        <None Include="../../readme.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
 </Project>

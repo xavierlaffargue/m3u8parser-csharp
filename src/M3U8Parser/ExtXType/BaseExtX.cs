@@ -1,20 +1,22 @@
-﻿using M3U8Parser.Extensions;
-using M3U8Parser.Interfaces;
-using System.Reflection;
-using System.Text;
-
-namespace M3U8Parser.ExtXType
+﻿namespace M3U8Parser.ExtXType
 {
+    using System.Reflection;
+    using System.Text;
+    using M3U8Parser.Extensions;
+    using M3U8Parser.Interfaces;
+
     public abstract class BaseExtX : IExtXType
     {
-        protected virtual string ExtPrefix => "";
-
-        public BaseExtX() { }
+        public BaseExtX()
+        {
+        }
 
         public BaseExtX(string str)
         {
             ReadAllAttributes(str);
         }
+
+        protected virtual string ExtPrefix => "";
 
         public override string ToString()
         {
@@ -29,13 +31,13 @@ namespace M3U8Parser.ExtXType
 
         protected void ReadAllAttributes(string str)
         {
-            foreach (var field in this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
+            foreach (var field in GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
             {
                 var isAnAttribute = typeof(IAttribute).IsAssignableFrom(field.FieldType);
 
                 if (isAnAttribute)
                 {
-                    MethodInfo m = field.FieldType.GetMethod("Read");
+                    var m = field.FieldType.GetMethod("Read");
                     m.Invoke(field.GetValue(this), new object[] { str });
                 }
             }
@@ -43,13 +45,13 @@ namespace M3U8Parser.ExtXType
 
         protected void WriteAllAttributes(StringBuilder strBuilder)
         {
-            foreach (var field in this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
+            foreach (var field in GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
             {
                 var isAnAttribute = typeof(IAttribute).IsAssignableFrom(field.FieldType);
 
                 if (isAnAttribute)
                 {
-                    MethodInfo m = field.FieldType.GetMethod("ToString");
+                    var m = field.FieldType.GetMethod("ToString");
                     var str = m.Invoke(field.GetValue(this), new object[] { });
                     strBuilder.AppendWithSeparator(str.ToString(), ",");
                 }
