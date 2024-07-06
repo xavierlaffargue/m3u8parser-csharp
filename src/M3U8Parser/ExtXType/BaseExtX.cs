@@ -16,7 +16,7 @@
             ReadAllAttributes(str);
         }
 
-        protected virtual string ExtPrefix => "";
+        protected virtual string ExtPrefix => string.Empty;
 
         public override string ToString()
         {
@@ -38,7 +38,10 @@
                 if (isAnAttribute)
                 {
                     var m = field.FieldType.GetMethod("Read");
-                    m.Invoke(field.GetValue(this), new object[] { str });
+                    if (m != null)
+                    {
+                        m.Invoke(field.GetValue(this), new object[] { str });
+                    }
                 }
             }
         }
@@ -52,8 +55,11 @@
                 if (isAnAttribute)
                 {
                     var m = field.FieldType.GetMethod("ToString");
-                    var str = m.Invoke(field.GetValue(this), new object[] { });
-                    strBuilder.AppendWithSeparator(str.ToString(), ",");
+                    if (m != null)
+                    {
+                        var str = m.Invoke(field.GetValue(this), new object[] { });
+                        strBuilder.AppendWithSeparator(str.ToString(), ",");
+                    }
                 }
             }
         }

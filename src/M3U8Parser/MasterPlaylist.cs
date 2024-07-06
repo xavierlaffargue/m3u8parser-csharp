@@ -25,7 +25,10 @@
 
         public static MasterPlaylist LoadFromFile(string path)
         {
-            if (!File.Exists(path)) throw new FileNotFoundException($"File not found : {path}");
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException($"File not found : {path}");
+            }
 
             return LoadFromText(File.ReadAllText(path));
         }
@@ -66,7 +69,7 @@
             {
                 Medias = medias,
                 Streams = streams,
-                IFrameStreams = iFrameStreams
+                IFrameStreams = iFrameStreams,
             };
         }
 
@@ -91,7 +94,10 @@
 
             if (IFrameStreams.Count > 0)
             {
-                foreach (var iframeStream in IFrameStreams) strBuilder.AppendLine(iframeStream.ToString());
+                foreach (var iframeStream in IFrameStreams)
+                {
+                    strBuilder.AppendLine(iframeStream.ToString());
+                }
 
                 strBuilder.AppendLine();
             }

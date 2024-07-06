@@ -5,13 +5,15 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
     public class HdcpLevelType : ICustomAttribute, IEquatable<HdcpLevelType>
     {
+        private readonly string _value;
+
         public HdcpLevelType()
         {
         }
 
         private HdcpLevelType(string value)
         {
-            this.value = value;
+            this._value = value;
         }
 
         public static HdcpLevelType NONE => new ("NONE");
@@ -19,8 +21,6 @@ namespace M3U8Parser.Attributes.BaseAttribute
         public static HdcpLevelType TYPE_0 => new ("TYPE-0");
 
         public static HdcpLevelType TYPE_1 => new ("TYPE-1");
-
-        private string value { get; }
 
         public object ParseFromString(string value)
         {
@@ -52,7 +52,7 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
         public override string ToString()
         {
-            return value;
+            return _value;
         }
     }
 }

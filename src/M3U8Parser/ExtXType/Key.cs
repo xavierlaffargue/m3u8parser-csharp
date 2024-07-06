@@ -13,7 +13,8 @@ namespace M3U8Parser.ExtXType
         {
         }
 
-        public Key(string str) : base(str)
+        public Key(string str)
+            : base(str)
         {
         }
 

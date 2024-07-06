@@ -23,7 +23,8 @@ namespace M3U8Parser.ExtXType
         {
         }
 
-        public IframeStreamInf(string str) : base(str)
+        public IframeStreamInf(string str)
+            : base(str)
         {
         }
 

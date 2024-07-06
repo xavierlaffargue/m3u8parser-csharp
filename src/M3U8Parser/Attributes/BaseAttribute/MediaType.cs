@@ -5,6 +5,8 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
     public class MediaType : ICustomAttribute, IEquatable<MediaType>
     {
+        private readonly string _value;
+
         public MediaType()
         {
         }
@@ -13,8 +15,6 @@ namespace M3U8Parser.Attributes.BaseAttribute
         {
             _value = value;
         }
-
-        private string _value { get; }
 
         public static MediaType Audio => new ("AUDIO");
 
@@ -47,7 +47,7 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
         public bool Equals(MediaType other)
         {
-            if (other.ToString() == ToString())
+            if (other != null && other.ToString() == ToString())
             {
                 return true;
             }

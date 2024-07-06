@@ -20,7 +20,10 @@
 
         public bool Equals(ResolutionType other)
         {
-            if (other!.Height == Height && other!.Width == Width) return true;
+            if (other!.Height == Height && other!.Width == Width)
+            {
+                return true;
+            }
 
             return false;
         }

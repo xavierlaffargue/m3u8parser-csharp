@@ -5,6 +5,8 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
     public class PlaylistType : ICustomAttribute, IEquatable<PlaylistType>
     {
+        private readonly string _value;
+
         public PlaylistType()
         {
         }
@@ -13,8 +15,6 @@ namespace M3U8Parser.Attributes.BaseAttribute
         {
             _value = value;
         }
-
-        private string _value { get; }
 
         public static PlaylistType Event => new ("EVENT");
 
@@ -37,7 +37,7 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
         public bool Equals(PlaylistType other)
         {
-            if (other.ToString() == ToString())
+            if (other != null && other.ToString() == ToString())
             {
                 return true;
             }

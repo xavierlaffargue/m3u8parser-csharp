@@ -121,7 +121,7 @@
                 TargetDuration = targetDuration,
                 MediaSequence = mediaSequence,
                 IFrameOnly = iFrameOnly,
-                Map = map
+                Map = map,
             };
         }
 

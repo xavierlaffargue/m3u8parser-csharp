@@ -9,5 +9,7 @@
         <Rule Id="SA1500" Action="None"/> <!-- Désactiver la règle SA1500 -->
         <Rule Id="SA1101" Action="None"/>
         <Rule Id="SA1309" Action="None"/>
+        <Rule Id="SA1300" Action="None"/>
+        <Rule Id="SA0001" Action="None"/>
     </Rules>
 </RuleSet>

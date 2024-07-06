@@ -27,8 +27,7 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
         public virtual void Read(string content)
         {
-            var match = Regex.Match(content.Trim(), $"[,|:](?={AttributeName})(.*?)(?=,|$)",
-                RegexOptions.Multiline & RegexOptions.IgnoreCase);
+            var match = Regex.Match(content.Trim(), $"[,|:](?={AttributeName})(.*?)(?=,|$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
 
             var type = typeof(T);
 
@@ -36,7 +35,7 @@ namespace M3U8Parser.Attributes.BaseAttribute
             {
                 var valueFounded = match.Groups[0].Value.Split('=')[1];
 
-                if (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {
                     type = Nullable.GetUnderlyingType(type);
                 }
@@ -44,11 +43,17 @@ namespace M3U8Parser.Attributes.BaseAttribute
                 if (typeof(ICustomAttribute).IsAssignableFrom(type))
                 {
                     var instanceAttribute = (ICustomAttribute)Activator.CreateInstance(type, false);
-                    Value = (T)instanceAttribute.ParseFromString(valueFounded);
+                    if (instanceAttribute != null)
+                    {
+                        Value = (T)instanceAttribute.ParseFromString(valueFounded);
+                    }
                 }
                 else
                 {
-                    Value = (T)Convert.ChangeType(valueFounded, type);
+                    if (type != null)
+                    {
+                        Value = (T)Convert.ChangeType(valueFounded, type);
+                    }
                 }
             }
             else

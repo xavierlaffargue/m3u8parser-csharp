@@ -4,6 +4,8 @@ namespace M3U8Parser.ExtXType
 
     public class Map : BaseExtX
     {
+        public const string Prefix = "#EXT-X-MAP";
+
         private readonly Uri _uri = new ();
 
         public Map()
@@ -11,7 +13,7 @@ namespace M3U8Parser.ExtXType
         }
 
         public Map(string str)
-            : base (str)
+            : base(str)
         {
         }
 
@@ -20,8 +22,6 @@ namespace M3U8Parser.ExtXType
             set => _uri.Value = value;
         }
 
-        public const string Prefix = "#EXT-X-MAP";
-        
         protected override string ExtPrefix => Map.Prefix;
     }
 }

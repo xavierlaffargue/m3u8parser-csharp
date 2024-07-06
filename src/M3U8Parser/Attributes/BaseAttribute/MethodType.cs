@@ -5,6 +5,8 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
     public class MethodType : ICustomAttribute, IEquatable<MethodType>
     {
+        private readonly string _value;
+
         public MethodType()
         {
         }
@@ -13,8 +15,6 @@ namespace M3U8Parser.Attributes.BaseAttribute
         {
             _value = value;
         }
-
-        private string _value { get; }
 
         public static MethodType None => new ("NONE");
 
@@ -42,7 +42,10 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
         public bool Equals(MethodType other)
         {
-            if (other.ToString() == ToString()) return true;
+            if (other != null && other.ToString() == ToString())
+            {
+                return true;
+            }
 
             return false;
         }

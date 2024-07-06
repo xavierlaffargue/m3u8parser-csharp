@@ -17,14 +17,13 @@
             Read(str);
         }
 
-        protected override string ExtPrefix => HlsVersion.Prefix;
-
         public int Value { get; set; }
+
+        protected override string ExtPrefix => HlsVersion.Prefix;
 
         public void Read(string content)
         {
-            var match = Regex.Match(content.Trim(), $"(?<={Prefix}:)(.*?)(?=$)",
-                RegexOptions.Multiline & RegexOptions.IgnoreCase);
+            var match = Regex.Match(content.Trim(), $"(?<={Prefix}:)(.*?)(?=$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
 
             var type = typeof(int);
 

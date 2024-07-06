@@ -18,9 +18,9 @@
             Read(str);
         }
 
-        protected override string ExtPrefix => Prefix;
-
         public PlaylistType Value { get; set; }
+
+        protected override string ExtPrefix => Prefix;
 
         public void Read(string content)
         {

@@ -5,6 +5,8 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
     public class VideoRangeType : ICustomAttribute, IEquatable<VideoRangeType>
     {
+        private readonly string _value;
+
         public VideoRangeType()
         {
         }
@@ -14,8 +16,6 @@ namespace M3U8Parser.Attributes.BaseAttribute
             _value = value;
         }
 
-        private string _value { get; }
-
         public static VideoRangeType PQ => new ("PQ");
 
         public static VideoRangeType HLG => new ("HLG");
@@ -24,20 +24,13 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
         public object ParseFromString(string value)
         {
-            switch (value)
+            return value switch
             {
-                case "PQ":
-                    return PQ;
-
-                case "HLG":
-                    return HLG;
-
-                case "SDR":
-                    return SDR;
-
-                default:
-                    return null;
-            }
+                "PQ" => PQ,
+                "HLG" => HLG,
+                "SDR" => SDR,
+                _ => null
+            };
         }
 
         public bool Equals(VideoRangeType other)

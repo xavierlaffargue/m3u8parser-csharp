@@ -5,7 +5,8 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
     public class DecimalAttribute : CustomAttribute<decimal?>
     {
-        public DecimalAttribute(string attributeName) : base(attributeName)
+        public DecimalAttribute(string attributeName)
+            : base(attributeName)
         {
         }
 

@@ -23,8 +23,7 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
         public override void Read(string content)
         {
-            var regexStr = Regex.Match(content.Trim(), $"(?<={AttributeName}=\")(.*?)(?=\",|\"$)",
-                RegexOptions.Multiline & RegexOptions.IgnoreCase);
+            var regexStr = Regex.Match(content.Trim(), $"(?<={AttributeName}=\")(.*?)(?=\",|\"$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
 
             if (regexStr.Success)
             {

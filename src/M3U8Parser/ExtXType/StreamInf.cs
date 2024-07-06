@@ -9,6 +9,8 @@ namespace M3U8Parser.ExtXType
 
     public class StreamInf : IExtXType
     {
+        public const string Prefix = "#EXT-X-STREAM-INF";
+
         private readonly Audio _audio = new ();
         private readonly AverageBandwidth _averageBandwidth = new ();
         private readonly Bandwidth _bandwidth = new ();
@@ -115,8 +117,6 @@ namespace M3U8Parser.ExtXType
             get => _resolutionAttribute.Value;
             set => _resolutionAttribute.Value = value;
         }
-
-        public const string Prefix = "#EXT-X-STREAM-INF";
 
         public override string ToString()
         {

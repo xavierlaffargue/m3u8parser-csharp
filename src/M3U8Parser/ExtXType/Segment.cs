@@ -8,6 +8,8 @@
 
     public class Segment : IExtXType
     {
+        public const string Prefix = "#EXTINF";
+
         public Segment()
         {
         }
@@ -15,7 +17,7 @@
         public Segment(string str)
         {
             using var reader = new StringReader(str);
-            var line = "";
+            string line;
             while ((line = reader.ReadLine()) != null)
             {
                 if (line.StartsWith("#EXTINF"))
@@ -30,15 +32,17 @@
                 }
                 else if (line.StartsWith("#EXT-X-BYTERANGE"))
                 {
-                    var match = Regex.Match(line.Trim(), "(?<=#EXT-X-BYTERANGE:)(.*?)(?=$)",
-                        RegexOptions.Multiline & RegexOptions.IgnoreCase);
+                    var match = Regex.Match(line.Trim(), "(?<=#EXT-X-BYTERANGE:)(.*?)(?=$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
 
                     if (match.Success)
                     {
                         var byterange = match.Groups[0].Value.Split('@');
                         ByteRangeLentgh = long.Parse(byterange[0]);
 
-                        if (byterange.Length > 1) ByteRangeStartSubRange = long.Parse(byterange[1]);
+                        if (byterange.Length > 1)
+                        {
+                            ByteRangeStartSubRange = long.Parse(byterange[1]);
+                        }
                     }
                 }
                 else if (!line.StartsWith("#EXT"))
@@ -58,8 +62,6 @@
 
         public long? ByteRangeStartSubRange { get; set; }
 
-        public const string Prefix = "#EXTINF";
-
         public override string ToString()
         {
             var strBuilder = new StringBuilder();
@@ -69,7 +71,10 @@
             {
                 strBuilder.Append($"#EXT-X-BYTERANGE:{ByteRangeLentgh}");
 
-                if (ByteRangeStartSubRange != null) strBuilder.Append($"@{ByteRangeStartSubRange}");
+                if (ByteRangeStartSubRange != null)
+                {
+                    strBuilder.Append($"@{ByteRangeStartSubRange}");
+                }
 
                 strBuilder.AppendLine();
             }

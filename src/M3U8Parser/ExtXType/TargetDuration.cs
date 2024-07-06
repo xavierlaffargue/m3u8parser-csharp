@@ -17,14 +17,13 @@
             Read(str);
         }
 
-        protected override string ExtPrefix => Prefix;
-
         public int Value { get; set; }
+
+        protected override string ExtPrefix => Prefix;
 
         public void Read(string content)
         {
-            var match = Regex.Match(content.Trim(), $"(?<={Prefix}:)(.*?)(?=$)",
-                RegexOptions.Multiline & RegexOptions.IgnoreCase);
+            var match = Regex.Match(content.Trim(), $"(?<={Prefix}:)(.*?)(?=$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
 
             var type = typeof(int);
 
@@ -33,7 +32,9 @@
                 var valueFounded = match.Groups[0].Value;
 
                 if (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+                {
                     type = Nullable.GetUnderlyingType(type);
+                }
 
                 if (typeof(ICustomAttribute).IsAssignableFrom(type))
                 {
