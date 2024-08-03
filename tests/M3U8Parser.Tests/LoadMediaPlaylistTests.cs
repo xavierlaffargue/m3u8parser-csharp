@@ -3,88 +3,87 @@ using System.Collections.Generic;
 using System.IO;
 using M3U8Parser.Attributes.BaseAttribute;
 using M3U8Parser.ExtXType;
-using NUnit.Framework;
+using Xunit;
 
 namespace M3U8Parser.Tests;
 
 public class LoadMediaPlaylistTests
 {
-    private MediaPlaylist _mediaPlaylist = new();
+    private readonly MediaPlaylist _mediaPlaylist;
 
-    [SetUp]
-    public void Setup()
+    public LoadMediaPlaylistTests()
     {
         _mediaPlaylist =
             MediaPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "mediaplaylist_vod_1.m3u8");
     }
 
-    [Test]
+    [Fact]
     public void PlaylistTypeShouldBePVod()
     {
-        Assert.AreEqual(PlaylistType.Vod, _mediaPlaylist.PlaylistType);
+        Assert.Equal(PlaylistType.Vod, _mediaPlaylist.PlaylistType);
     }
 
-    [Test]
+    [Fact]
     public void TargetDurationShouldBe10()
     {
-        Assert.AreEqual(10, _mediaPlaylist.TargetDuration);
+        Assert.Equal(10, _mediaPlaylist.TargetDuration);
     }
 
-    [Test]
+    [Fact]
     public void MediaSequenceShouldBe0()
     {
-        Assert.AreEqual(0, _mediaPlaylist.MediaSequence);
+        Assert.Equal(0, _mediaPlaylist.MediaSequence);
     }
 
-    [Test]
+    [Fact]
     public void MediaSequenceShouldBeTrue()
     {
-        Assert.AreEqual(true, _mediaPlaylist.IFrameOnly);
+        Assert.True(_mediaPlaylist.IFrameOnly);
     }
 
-    [Test]
+    [Fact]
     public void HlsVersionShouldBe4()
     {
-        Assert.AreEqual(4, _mediaPlaylist.HlsVersion);
+        Assert.Equal(4, _mediaPlaylist.HlsVersion);
     }
 
-    [Test]
+    [Fact]
     public void MapShouldExist()
     {
         Assert.NotNull(_mediaPlaylist.Map);
     }
 
-    [Test]
+    [Fact]
     public void MapUriShouldBeCorrect()
     {
-        Assert.AreEqual("main.mp4", _mediaPlaylist.Map.Uri);
+        Assert.Equal("main.mp4", _mediaPlaylist.Map.Uri);
     }
 
-    [Test]
+    [Fact]
     public void MediaSegmentKeyShouldBeNull()
     {
-        Assert.AreEqual(null, _mediaPlaylist.MediaSegments[0].Key);
+        Assert.Null(_mediaPlaylist.MediaSegments[0].Key);
     }
 
-    [Test]
+    [Fact]
     public void MediaSegmentCountShouldBe4()
     {
-        Assert.AreEqual(4, _mediaPlaylist.MediaSegments[0].Segments.Count);
+        Assert.Equal(4, _mediaPlaylist.MediaSegments[0].Segments.Count);
     }
 
-    [Test]
+    [Fact]
     public void FirstMediaSegmentDurationShouldBe10()
     {
-        Assert.AreEqual(10, _mediaPlaylist.MediaSegments[0].Segments[0].Duration);
+        Assert.Equal(10, _mediaPlaylist.MediaSegments[0].Segments[0].Duration);
     }
 
-    [Test]
+    [Fact]
     public void UrlMediaSegmentDurationShouldBefileSequenceTs()
     {
-        Assert.AreEqual("http://example.com/movie1/fileSequenceA.ts", _mediaPlaylist.MediaSegments[0].Segments[0].Uri);
+        Assert.Equal("http://example.com/movie1/fileSequenceA.ts", _mediaPlaylist.MediaSegments[0].Segments[0].Uri);
     }
 
-    [Test]
+    [Fact]
     public void WriteToString()
     {
         var mediaPlaylist =
@@ -92,7 +91,7 @@ public class LoadMediaPlaylistTests
         Console.WriteLine(mediaPlaylist.ToString());
     }
 
-    [Test]
+    [Fact]
     public void CreateMediaPlaylist()
     {
         var mediaPlaylist = new MediaPlaylist
