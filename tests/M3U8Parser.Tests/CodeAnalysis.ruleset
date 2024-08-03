@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="CustomRules" Description="Custom ruleset for my project" ToolsVersion="16.0">
+    <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp" RuleNamespace="Microsoft.CodeAnalysis.CSharp">
+        <Rule Id="CS1591" Action="None"/> <!-- Désactiver les avertissements de documentation XML manquante -->
+        <Rule Id="CS0168" Action="Warning"/> <!-- Traiter les variables inutilisées comme des avertissements -->
+    </Rules>
+    <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+        <Rule Id="SA1600" Action="None"/> <!-- Désactiver la règle SA1600 -->
+        <Rule Id="SA1500" Action="None"/> <!-- Désactiver la règle SA1500 -->
+    </Rules>
+</RuleSet>

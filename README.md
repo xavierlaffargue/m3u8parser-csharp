@@ -1,19 +1,22 @@
 # M3U8 HLS Parser C#
 
 ## Installation
+
 Package NuGet : https://www.nuget.org/packages/M3U8Parser/
 
 ```dotnet add package M3U8Parser```
 
 ## Documentation
 
-M3U8Parser makes it easy to read, edit and create a m3u8 file. 
+M3U8Parser makes it easy to read, edit and create a m3u8 file.
+
 * M3U8Parser does not try to validate your file, it's your responsability to follow RFC.
 * Require .netstandard2.0 / .net6
 
 Usage:
 
 Read a file and edit it
+
 ```csharp
     // Load a file
     var masterPlaylist = MasterPlaylist.LoadFromFile("master.m3u8");
@@ -29,6 +32,7 @@ Read a file and edit it
 ```
 
 Or your can create a master file
+
 ```csharp
     var masterPlaylist = new MasterPlaylist(hlsVersion: 4);
 
@@ -67,6 +71,7 @@ Or your can create a master file
 ```
 
 This code should produce the following master playlist:
+
 ```
 #EXTM3U
 #EXT-X-VERSION:4
@@ -80,23 +85,26 @@ v0.m3u8
 v1.m3u8
 ```
 
-Limitation: 
+Limitation:
+
 * Alpha version : Only master is supported (playlist be coming)
 
-
 ## Supported tags
+
 The following tags should be fully supported:
 
 ### Basics
-| TAGS  |
-| ------------- |
-| EXTM3U |
+
+| TAGS          |
+|---------------|
+| EXTM3U        |
 | EXT-X-VERSION |
 
 ### Master Playlist Tags
-| TAGS  | ATTRIBUTE                                                                                                           |
-| ------------- |---------------------------------------------------------------------------------------------------------------------|
-| EXT-X-MEDIA  | GROUP-ID, AUTOSELECT, DEFAULT, LANGUAGE, NAME, TYPE, URI, CHARACTERISTICS, INSTREAM-ID                              |
-| EXT-X-STREAM-INF  | BANDWIDTH, CODECS, RESOLUTION, URI,  SUBTITLES, VIDEO-RANGE, HDCP-LEVEL, AVERAGE-BANDWIDTH                                                                                  |
-| EXT-X-I-FRAME-STREAM-INF  | BANDWIDTH, CODECS, RESOLUTION, AUDIO, VIDEO, CLOSED-CAPTIONS |
+
+| TAGS                     | ATTRIBUTE                                                                                  |
+|--------------------------|--------------------------------------------------------------------------------------------|
+| EXT-X-MEDIA              | GROUP-ID, AUTOSELECT, DEFAULT, LANGUAGE, NAME, TYPE, URI, CHARACTERISTICS, INSTREAM-ID     |
+| EXT-X-STREAM-INF         | BANDWIDTH, CODECS, RESOLUTION, URI,  SUBTITLES, VIDEO-RANGE, HDCP-LEVEL, AVERAGE-BANDWIDTH |
+| EXT-X-I-FRAME-STREAM-INF | BANDWIDTH, CODECS, RESOLUTION, AUDIO, VIDEO, CLOSED-CAPTIONS                               |
 

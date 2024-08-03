@@ -1,22 +1,14 @@
-﻿using System.Globalization;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using M3U8Parser.Interfaces;
-
-namespace M3U8Parser.ExtXType
+﻿namespace M3U8Parser.ExtXType
 {
+    using System.Globalization;
+    using System.IO;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using M3U8Parser.Interfaces;
+
     public class Segment : IExtXType
     {
-        public double Duration { get; set; }
-
-        public string Title { get; set; }
-
-        public string Uri { get; set; }
-
-        public long? ByteRangeLentgh { get; set; }
-
-        public long? ByteRangeStartSubRange { get; set; }
+        public const string Prefix = "#EXTINF";
 
         public Segment()
         {
@@ -25,13 +17,11 @@ namespace M3U8Parser.ExtXType
         public Segment(string str)
         {
             using var reader = new StringReader(str);
-            var line = "";
-            while ((line = reader.ReadLine()) != null)
+            while (reader.ReadLine() is { } line)
             {
                 if (line.StartsWith("#EXTINF"))
                 {
-                    var match = Regex.Match(line.Trim(), $"(?<=#EXTINF:)(.*?)(?=$)",
-                        RegexOptions.Multiline & RegexOptions.IgnoreCase);
+                    var match = Regex.Match(line.Trim(), "(?<=#EXTINF:)(.*?)(?=$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
 
                     if (match.Success)
                     {
@@ -41,8 +31,7 @@ namespace M3U8Parser.ExtXType
                 }
                 else if (line.StartsWith("#EXT-X-BYTERANGE"))
                 {
-                    var match = Regex.Match(line.Trim(), $"(?<=#EXT-X-BYTERANGE:)(.*?)(?=$)",
-                        RegexOptions.Multiline & RegexOptions.IgnoreCase);
+                    var match = Regex.Match(line.Trim(), "(?<=#EXT-X-BYTERANGE:)(.*?)(?=$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
 
                     if (match.Success)
                     {
@@ -62,7 +51,15 @@ namespace M3U8Parser.ExtXType
             }
         }
 
-        public static string Prefix => "#EXTINF";
+        public double Duration { get; set; }
+
+        public string Title { get; set; }
+
+        public string Uri { get; set; }
+
+        public long? ByteRangeLentgh { get; set; }
+
+        public long? ByteRangeStartSubRange { get; set; }
 
         public override string ToString()
         {

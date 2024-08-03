@@ -1,20 +1,19 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using M3U8Parser.Attributes.BaseAttribute;
-
-namespace M3U8Parser
+﻿namespace M3U8Parser
 {
-	using M3U8Parser.ExtXType;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using M3U8Parser.Attributes.BaseAttribute;
+    using M3U8Parser.ExtXType;
 
-	public class MediaPlaylist
-	{
-		public PlaylistType PlaylistType { get; set; } = new ();
+    public class MediaPlaylist
+    {
+        public PlaylistType PlaylistType { get; set; } = new ();
 
-		public Map Map { get; set; } = new();
-		
-		public int HlsVersion { get; set; }
+        public Map Map { get; set; } = new ();
+
+        public int HlsVersion { get; set; }
 
         public bool? IFrameOnly { get; set; }
 
@@ -23,157 +22,150 @@ namespace M3U8Parser
         public int? MediaSequence { get; set; }
 
         public List<MediaSegment> MediaSegments { get; set; } = new ();
-		
-		public bool HasEndList { get; set; }
-		
-		public MediaPlaylist()
-		{
-		}
-		
-		public static MediaPlaylist LoadFromFile(string path)
-		{
-			if (!File.Exists(path))
-			{
-				throw new FileNotFoundException($"File not found : {path}");
-			}
 
-			return LoadFromText(File.ReadAllText(path));
-		}
-		
-		public static MediaPlaylist LoadFromText(string text)
-		{
-			PlaylistType playlistType = null;
-			Map map = null;
-			List<MediaSegment> mediaSegments = new ();
-			var hlsVersion = 4;
-			var hasEndList = false;
-			int? targetDuration = null;
+        public bool HasEndList { get; set; }
+
+        public static MediaPlaylist LoadFromFile(string path)
+        {
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException($"File not found : {path}");
+            }
+
+            return LoadFromText(File.ReadAllText(path));
+        }
+
+        public static MediaPlaylist LoadFromText(string text)
+        {
+            PlaylistType playlistType = null;
+            Map map = null;
+            List<MediaSegment> mediaSegments = new ();
+            var hlsVersion = 4;
+            var hasEndList = false;
+            int? targetDuration = null;
             int? mediaSequence = null;
-			bool? iFrameOnly = null;
+            bool? iFrameOnly = null;
 
-			Regex regex = new Regex("(?=#EXT-X)(.*?)(?<=$)", RegexOptions.Multiline);
-			var matches = regex.Matches(text);
+            var regex = new Regex("(?=#EXT-X)(.*?)(?<=$)", RegexOptions.Multiline);
+            var matches = regex.Matches(text);
 
             foreach (Match match in matches)
-			{
-				var line = match.Value;
-				if (line.StartsWith(PlaylistTypeExt.Prefix))
-				{
-					playlistType = new PlaylistTypeExt(line).Value;
-				}
-				else if (line.StartsWith(ExtXType.HlsVersion.Prefix))
-				{
-					hlsVersion = new HlsVersion(line).Value;
-				}
-				else if (line.StartsWith(ExtXType.Map.Prefix))
-				{
-					map = new Map(line);
-				}
-				else if (line.StartsWith("#EXT-X-ENDLIST"))
-				{
-					hasEndList = true;
-				}
-				else if(line.StartsWith("#EXT-X-I-FRAMES-ONLY"))
-				{
+            {
+                var line = match.Value;
+                if (line.StartsWith(PlaylistTypeExt.Prefix))
+                {
+                    playlistType = new PlaylistTypeExt(line).Value;
+                }
+                else if (line.StartsWith(ExtXType.HlsVersion.Prefix))
+                {
+                    hlsVersion = new HlsVersion(line).Value;
+                }
+                else if (line.StartsWith(Map.Prefix))
+                {
+                    map = new Map(line);
+                }
+                else if (line.StartsWith("#EXT-X-ENDLIST"))
+                {
+                    hasEndList = true;
+                }
+                else if (line.StartsWith("#EXT-X-I-FRAMES-ONLY"))
+                {
                     iFrameOnly = true;
                 }
-				else if(line.StartsWith(ExtXType.TargetDuration.Prefix))
-				{
+                else if (line.StartsWith(ExtXType.TargetDuration.Prefix))
+                {
                     targetDuration = new TargetDuration(line).Value;
                 }
-                else if (line.StartsWith(M3U8Parser.ExtXType.MediaSequence.Prefix))
+                else if (line.StartsWith(ExtXType.MediaSequence.Prefix))
                 {
                     mediaSequence = new MediaSequence(line).Value;
                 }
             }
-            
-            var l = Regex.Split(text, $"(?=#EXT-X-KEY|#EXTINF)");
-			var segments = new List<Segment>();
+
+            var l = Regex.Split(text, "(?=#EXT-X-KEY|#EXTINF)");
+            var segments = new List<Segment>();
             MediaSegment mediaSegment = null;
-			foreach (var line in l)
-			{
+            foreach (var line in l)
+            {
                 if (line.StartsWith(Key.Prefix))
                 {
-                    if(mediaSegment != null)
+                    if (mediaSegment != null)
                     {
-						mediaSegment.Segments = segments;
-						mediaSegments.Add(mediaSegment);
-					}
+                        mediaSegment.Segments = segments;
+                        mediaSegments.Add(mediaSegment);
+                    }
 
                     mediaSegment = new MediaSegment(line);
                 }
 
                 if (line.StartsWith(Segment.Prefix))
-				{
-					if (mediaSegment == null)
-					{
-						mediaSegment= new MediaSegment();
-					}
+                {
+                    mediaSegment ??= new MediaSegment();
 
-					segments.Add(new Segment(line));
-				}
-			}
+                    segments.Add(new Segment(line));
+                }
+            }
 
             mediaSegment.Segments = segments;
             mediaSegments.Add(mediaSegment);
 
-			return new MediaPlaylist()
-			{
-				PlaylistType = playlistType,
-				HlsVersion = hlsVersion,
-				MediaSegments = mediaSegments,
-				HasEndList = hasEndList,
+            return new MediaPlaylist
+            {
+                PlaylistType = playlistType,
+                HlsVersion = hlsVersion,
+                MediaSegments = mediaSegments,
+                HasEndList = hasEndList,
                 TargetDuration = targetDuration,
-				MediaSequence = mediaSequence,
+                MediaSequence = mediaSequence,
                 IFrameOnly = iFrameOnly,
                 Map = map
             };
-		}
+        }
 
-		public override string ToString()
-		{
-			var strBuilder = new StringBuilder();
+        public override string ToString()
+        {
+            var strBuilder = new StringBuilder();
 
-			strBuilder.AppendLine("#EXTM3U");
-			strBuilder.AppendLine($"#EXT-X-VERSION:{HlsVersion}");
+            strBuilder.AppendLine("#EXTM3U");
+            strBuilder.AppendLine($"#EXT-X-VERSION:{HlsVersion}");
 
-			if (TargetDuration != null)
-			{
-				strBuilder.AppendLine($"#EXT-X-TARGETDURATION:{TargetDuration}");
-			}
+            if (TargetDuration != null)
+            {
+                strBuilder.AppendLine($"#EXT-X-TARGETDURATION:{TargetDuration}");
+            }
 
-			if (MediaSequence != null)
-			{
-				strBuilder.AppendLine($"#EXT-X-MEDIA-SEQUENCE:{MediaSequence}");
-			}
+            if (MediaSequence != null)
+            {
+                strBuilder.AppendLine($"#EXT-X-MEDIA-SEQUENCE:{MediaSequence}");
+            }
 
-			if (PlaylistType != null)
-			{
-				strBuilder.AppendLine($"#EXT-X-PLAYLIST-TYPE:{PlaylistType}");
-			}
+            if (PlaylistType != null)
+            {
+                strBuilder.AppendLine($"#EXT-X-PLAYLIST-TYPE:{PlaylistType}");
+            }
 
             if (IFrameOnly.HasValue && IFrameOnly.Value)
             {
-                strBuilder.AppendLine($"#EXT-X-I-FRAMES-ONLY");
+                strBuilder.AppendLine("#EXT-X-I-FRAMES-ONLY");
             }
-            
+
             if (Map != null)
             {
-	            strBuilder.AppendLine(Map.ToString());
+                strBuilder.AppendLine(Map.ToString());
             }
 
             foreach (var segment in MediaSegments)
-			{
-				strBuilder.AppendLine();
-				strBuilder.Append(segment);
-			}
+            {
+                strBuilder.AppendLine();
+                strBuilder.Append(segment);
+            }
 
-			if (HasEndList)
-			{
-				strBuilder.AppendLine($"#EXT-X-ENDLIST");
-			}
+            if (HasEndList)
+            {
+                strBuilder.AppendLine("#EXT-X-ENDLIST");
+            }
 
-			return strBuilder.ToString().TrimEnd();
-		}
-	}
+            return strBuilder.ToString().TrimEnd();
+        }
+    }
 }

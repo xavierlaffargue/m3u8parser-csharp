@@ -1,60 +1,60 @@
-using System;
-using System.Text.RegularExpressions;
-using M3U8Parser.Interfaces;
-
 namespace M3U8Parser.Attributes.BaseAttribute
 {
-	public class CustomAttribute<T> : IAttribute
-	{
-		public CustomAttribute(string attributeName)
-		{
-			AttributeName = attributeName;
-		}
+    using System;
+    using System.Text.RegularExpressions;
+    using M3U8Parser.Interfaces;
 
-		public T Value { get; set; }
+    public class CustomAttribute<T> : IAttribute
+    {
+        public CustomAttribute(string attributeName)
+        {
+            AttributeName = attributeName;
+        }
 
-		protected string AttributeName { get; }
+        public T Value { get; set; }
 
-		public override string ToString()
-		{
-			if (Value != null)
-			{
-				return $"{AttributeName}={Value}";
-			}
+        protected string AttributeName { get; }
 
-			return string.Empty;
-		}
+        public override string ToString()
+        {
+            return Value != null ? $"{AttributeName}={Value}" : string.Empty;
+        }
 
-		public virtual void Read(string content)
-		{
-			var match = Regex.Match(content.Trim(), $"[,|:](?={AttributeName})(.*?)(?=,|$)",
-				RegexOptions.Multiline & RegexOptions.IgnoreCase);
+        public virtual void Read(string content)
+        {
+            var match = Regex.Match(content.Trim(), $"[,|:](?={AttributeName})(.*?)(?=,|$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
 
-			var type = typeof(T);
+            var type = typeof(T);
 
-			if (match.Success)
-			{
-				var valueFounded = match.Groups[0].Value.Split('=')[1];
+            if (match.Success)
+            {
+                var valueFounded = match.Groups[0].Value.Split('=')[1];
 
-				if (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
-				{
-					type = Nullable.GetUnderlyingType(type);
-				}
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    type = Nullable.GetUnderlyingType(type);
+                }
 
-				if (typeof(ICustomAttribute).IsAssignableFrom(type))
-				{
-					var instanceAttribute = (ICustomAttribute)Activator.CreateInstance(type, false);
-					Value = (T)instanceAttribute.ParseFromString(valueFounded);
-				}
-				else
-				{
-					Value = (T)Convert.ChangeType(valueFounded, type);
-				}
-			}
-			else
-			{
-				Value = default(T);
-			}
-		}
-	}
+                if (typeof(ICustomAttribute).IsAssignableFrom(type))
+                {
+                    var instanceAttribute = (ICustomAttribute)Activator.CreateInstance(type, false);
+                    if (instanceAttribute != null)
+                    {
+                        Value = (T)instanceAttribute.ParseFromString(valueFounded);
+                    }
+                }
+                else
+                {
+                    if (type != null)
+                    {
+                        Value = (T)Convert.ChangeType(valueFounded, type);
+                    }
+                }
+            }
+            else
+            {
+                Value = default;
+            }
+        }
+    }
 }

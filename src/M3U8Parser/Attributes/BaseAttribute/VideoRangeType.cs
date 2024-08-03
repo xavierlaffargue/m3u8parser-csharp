@@ -1,58 +1,57 @@
-using System;
-using M3U8Parser.Interfaces;
-
+// ReSharper disable InconsistentNaming
 namespace M3U8Parser.Attributes.BaseAttribute
 {
-	public class VideoRangeType : ICustomAttribute, IEquatable<VideoRangeType>
-	{
-		public VideoRangeType()
-		{
-		}
+    using System;
+    using M3U8Parser.Interfaces;
 
-		private VideoRangeType(string value)
-		{
-			_value = value;
-		}
+    public class VideoRangeType : ICustomAttribute, IEquatable<VideoRangeType>
+    {
+        private readonly string _value;
 
-		private string _value { get; }
+        public VideoRangeType()
+        {
+        }
 
-		public static VideoRangeType PQ => new ("PQ");
+        private VideoRangeType(string value)
+        {
+            _value = value;
+        }
 
-		public static VideoRangeType HLG => new ("HLG");
+        public static VideoRangeType PQ => new ("PQ");
 
-		public static VideoRangeType SDR => new ("SDR");
+        public static VideoRangeType HLG => new ("HLG");
+
+        public static VideoRangeType SDR => new ("SDR");
+
+        public object ParseFromString(string value)
+        {
+            return value switch
+            {
+                "PQ" => PQ,
+                "HLG" => HLG,
+                "SDR" => SDR,
+                _ => null
+            };
+        }
+
+        public bool Equals(VideoRangeType other)
+        {
+            return other!.ToString() == ToString();
+        }
 
         public override string ToString()
-		{
-			return _value;
-		}
+        {
+            return _value;
+        }
 
-		public object ParseFromString(string value)
-		{
-			switch (value)
-			{
-				case "PQ":
-					return PQ;
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as VideoRangeType);
+        }
 
-				case "HLG":
-					return HLG;
-
-				case "SDR":
-					return SDR;
-                
-				default:
-					return null;
-			}
-		}
-
-		public bool Equals(VideoRangeType other)
-		{
-			if (other!.ToString() == ToString())
-			{
-				return true;
-			}
-
-			return false;
-		}
-	}
+        public override int GetHashCode()
+        {
+            return _value != null ? _value.GetHashCode() : 0;
+        }
+    }
 }

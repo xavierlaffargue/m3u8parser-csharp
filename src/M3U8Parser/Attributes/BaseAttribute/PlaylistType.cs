@@ -1,53 +1,43 @@
-using System;
-using M3U8Parser.Interfaces;
-
 namespace M3U8Parser.Attributes.BaseAttribute
 {
-	public class PlaylistType : ICustomAttribute, IEquatable<PlaylistType>
-	{
-		public PlaylistType()
-		{
-		}
+    using System;
+    using M3U8Parser.Interfaces;
 
-		private PlaylistType(string value)
-		{
-			_value = value;
-		}
+    public class PlaylistType : ICustomAttribute, IEquatable<PlaylistType>
+    {
+        private readonly string _value;
 
-		private string _value { get; }
+        public PlaylistType()
+        {
+        }
 
-		public static PlaylistType Event => new ("EVENT");
+        private PlaylistType(string value)
+        {
+            _value = value;
+        }
 
-		public static PlaylistType Vod => new ("VOD");
+        public static PlaylistType Event => new ("EVENT");
 
-		public override string ToString()
-		{
-			return _value;
-		}
+        public static PlaylistType Vod => new ("VOD");
 
-		public object ParseFromString(string value)
-		{
-			switch (value)
-			{
-				case "EVENT":
-					return Event;
+        public object ParseFromString(string value)
+        {
+            return value switch
+            {
+                "EVENT" => Event,
+                "VOD" => Vod,
+                _ => (object)null
+            };
+        }
 
-				case "VOD":
-					return Vod;
+        public bool Equals(PlaylistType other)
+        {
+            return other != null && other.ToString() == ToString();
+        }
 
-				default:
-					return null;
-			}
-		}
-
-		public bool Equals(PlaylistType other)
-		{
-			if (other.ToString() == ToString())
-			{
-				return true;
-			}
-
-			return false;
-		}
-	}
+        public override string ToString()
+        {
+            return _value;
+        }
+    }
 }

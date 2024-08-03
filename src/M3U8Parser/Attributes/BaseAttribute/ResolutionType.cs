@@ -1,16 +1,14 @@
-﻿// <copyright file="ResolutionType.cs" company="PlaceholderCompany">Copyright (c) PlaceholderCompany. All rights reserved.</copyright>
-
-using System;
-using M3U8Parser.Interfaces;
-
-namespace M3U8Parser.Attributes.BaseAttribute
+﻿namespace M3U8Parser.Attributes.BaseAttribute
 {
+    using System;
+    using M3U8Parser.Interfaces;
+
     public class ResolutionType : ICustomAttribute, IEquatable<ResolutionType>
     {
         public long Width { get; set; }
 
         public long Height { get; set; }
-        
+
         public object ParseFromString(string value)
         {
             var widthAndHeight = value.Split('x');
@@ -20,11 +18,6 @@ namespace M3U8Parser.Attributes.BaseAttribute
             return this;
         }
 
-        public override string ToString()
-        {
-            return $"{Width}x{Height}";
-        }
-        
         public bool Equals(ResolutionType other)
         {
             if (other!.Height == Height && other!.Width == Width)
@@ -33,6 +26,11 @@ namespace M3U8Parser.Attributes.BaseAttribute
             }
 
             return false;
+        }
+
+        public override string ToString()
+        {
+            return $"{Width}x{Height}";
         }
     }
 }

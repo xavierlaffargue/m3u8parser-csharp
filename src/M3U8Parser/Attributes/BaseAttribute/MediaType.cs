@@ -1,63 +1,49 @@
-using System;
-using M3U8Parser.Interfaces;
-
 namespace M3U8Parser.Attributes.BaseAttribute
 {
-	public class MediaType : ICustomAttribute, IEquatable<MediaType>
-	{
-		public MediaType()
-		{
-		}
+    using System;
+    using M3U8Parser.Interfaces;
 
-		private MediaType(string value)
-		{
-			_value = value;
-		}
+    public class MediaType : ICustomAttribute, IEquatable<MediaType>
+    {
+        private readonly string _value;
 
-		private string _value { get; }
+        public MediaType()
+        {
+        }
 
-		public static MediaType Audio => new ("AUDIO");
+        private MediaType(string value)
+        {
+            _value = value;
+        }
 
-		public static MediaType Video => new ("VIDEO");
+        public static MediaType Audio => new ("AUDIO");
 
-		public static MediaType Subtitles => new ("SUBTITLES");
+        public static MediaType Video => new ("VIDEO");
 
-		public static MediaType CloseCaptions => new ("CLOSED-CAPTIONS");
+        public static MediaType Subtitles => new ("SUBTITLES");
 
-		public override string ToString()
-		{
-			return _value;
-		}
+        public static MediaType CloseCaptions => new ("CLOSED-CAPTIONS");
 
-		public object ParseFromString(string value)
-		{
-			switch (value)
-			{
-				case "AUDIO":
-					return Audio;
+        public object ParseFromString(string value)
+        {
+            return value switch
+            {
+                "AUDIO" => Audio,
+                "VIDEO" => Video,
+                "SUBTITLES" => Subtitles,
+                "CLOSED-CAPTIONS" => CloseCaptions,
+                _ => (object)null
+            };
+        }
 
-				case "VIDEO":
-					return Video;
+        public bool Equals(MediaType other)
+        {
+            return other != null && other.ToString() == ToString();
+        }
 
-				case "SUBTITLES":
-					return Subtitles;
-
-				case "CLOSED-CAPTIONS":
-					return CloseCaptions;
-
-				default:
-					return null;
-			}
-		}
-
-		public bool Equals(MediaType other)
-		{
-			if (other.ToString() == ToString())
-			{
-				return true;
-			}
-
-			return false;
-		}
-	}
+        public override string ToString()
+        {
+            return _value;
+        }
+    }
 }

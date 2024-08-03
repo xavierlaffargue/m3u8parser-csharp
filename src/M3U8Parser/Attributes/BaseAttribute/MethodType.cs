@@ -1,58 +1,48 @@
-using System;
-using M3U8Parser.Interfaces;
-
 namespace M3U8Parser.Attributes.BaseAttribute
 {
-	public class MethodType : ICustomAttribute, IEquatable<MethodType>
-	{
-		public MethodType()
-		{
-		}
+    using System;
+    using M3U8Parser.Interfaces;
 
-		private MethodType(string value)
-		{
-			_value = value;
-		}
+    public class MethodType : ICustomAttribute, IEquatable<MethodType>
+    {
+        private readonly string _value;
 
-		private string _value { get; }
+        public MethodType()
+        {
+        }
 
-		public static MethodType None => new ("NONE");
+        private MethodType(string value)
+        {
+            _value = value;
+        }
 
-        public static MethodType AES_128 => new("AES-128");
+        public static MethodType None => new ("NONE");
 
-        public static MethodType SAMPLE_AES => new("SAMPLE-AES");
+        // ReSharper disable once InconsistentNaming
+        public static MethodType AES_128 => new ("AES-128");
+
+        // ReSharper disable once InconsistentNaming
+        public static MethodType SAMPLE_AES => new ("SAMPLE-AES");
+
+        public object ParseFromString(string value)
+        {
+            return value switch
+            {
+                "NONE" => None,
+                "AES-128" => AES_128,
+                "SAMPLE-AES" => SAMPLE_AES,
+                _ => (object)null
+            };
+        }
+
+        public bool Equals(MethodType other)
+        {
+            return other != null && other.ToString() == ToString();
+        }
 
         public override string ToString()
-		{
-			return _value;
-		}
-
-		public object ParseFromString(string value)
-		{
-			switch (value)
-			{
-				case "NONE":
-					return None;
-
-				case "AES-128":
-					return AES_128;
-
-				case "SAMPLE-AES":
-					return SAMPLE_AES;
-
-				default:
-					return null;
-			}
-		}
-
-		public bool Equals(MethodType other)
-		{
-			if (other.ToString() == ToString())
-			{
-				return true;
-			}
-
-			return false;
-		}
-	}
+        {
+            return _value;
+        }
+    }
 }
