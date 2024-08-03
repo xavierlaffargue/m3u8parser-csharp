@@ -15,8 +15,7 @@
         public MediaSegment(string str)
         {
             using var reader = new StringReader(str);
-            string line;
-            while ((line = reader.ReadLine()) != null)
+            while (reader.ReadLine() is { } line)
             {
                 if (line.StartsWith(Key.Prefix))
                 {
@@ -43,7 +42,7 @@
                 strBuilder.AppendLine(Key.ToString());
             }
 
-            if (Segments != null && Segments.Count > 0)
+            if (Segments is { Count: > 0 })
             {
                 foreach (var segment in Segments)
                 {

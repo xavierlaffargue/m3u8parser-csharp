@@ -100,10 +100,7 @@
 
                 if (line.StartsWith(Segment.Prefix))
                 {
-                    if (mediaSegment == null)
-                    {
-                        mediaSegment = new MediaSegment();
-                    }
+                    mediaSegment ??= new MediaSegment();
 
                     segments.Add(new Segment(line));
                 }
@@ -121,7 +118,7 @@
                 TargetDuration = targetDuration,
                 MediaSequence = mediaSequence,
                 IFrameOnly = iFrameOnly,
-                Map = map,
+                Map = map
             };
         }
 

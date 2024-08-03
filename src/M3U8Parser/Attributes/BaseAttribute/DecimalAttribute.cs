@@ -12,12 +12,9 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
         public override string ToString()
         {
-            if (Value != null)
-            {
-                return $"{AttributeName}={Value.Value.ToString(CultureInfo.InvariantCulture)}";
-            }
-
-            return string.Empty;
+            return Value != null
+                ? $"{AttributeName}={Value.Value.ToString(CultureInfo.InvariantCulture)}"
+                : string.Empty;
         }
 
         public override void Read(string content)

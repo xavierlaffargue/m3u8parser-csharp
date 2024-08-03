@@ -21,20 +21,21 @@ namespace M3U8Parser.Attributes.BaseAttribute
         {
             var pattern = $"(?={AttributeName})(.*?)(?=,|$)";
             var match = Regex.Match(content.Trim(), pattern, RegexOptions.Multiline & RegexOptions.IgnoreCase);
-
-            if (match.Success)
+            if (!match.Success)
             {
-                var valueFounded = match.Groups[0].Value.Split('=')[1];
-                Value = StringToBool(valueFounded);
+                return;
             }
+
+            var valueFounded = match.Groups[0].Value.Split('=')[1];
+            Value = StringToBool(valueFounded);
         }
 
-        private string BoolToString(bool value)
+        private static string BoolToString(bool value)
         {
             return value ? YesValue : NoValue;
         }
 
-        private bool StringToBool(string value)
+        private static bool StringToBool(string value)
         {
             return value == YesValue;
         }

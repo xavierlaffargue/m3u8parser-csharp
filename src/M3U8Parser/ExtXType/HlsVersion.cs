@@ -31,7 +31,7 @@
             {
                 var valueFounded = match.Groups[0].Value;
 
-                if (type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {
                     type = Nullable.GetUnderlyingType(type);
                 }

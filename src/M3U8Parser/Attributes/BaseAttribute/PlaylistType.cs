@@ -22,27 +22,17 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
         public object ParseFromString(string value)
         {
-            switch (value)
+            return value switch
             {
-                case "EVENT":
-                    return Event;
-
-                case "VOD":
-                    return Vod;
-
-                default:
-                    return null;
-            }
+                "EVENT" => Event,
+                "VOD" => Vod,
+                _ => (object)null
+            };
         }
 
         public bool Equals(PlaylistType other)
         {
-            if (other != null && other.ToString() == ToString())
-            {
-                return true;
-            }
-
-            return false;
+            return other != null && other.ToString() == ToString();
         }
 
         public override string ToString()

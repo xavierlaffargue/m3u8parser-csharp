@@ -18,36 +18,26 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
         public static MethodType None => new ("NONE");
 
+        // ReSharper disable once InconsistentNaming
         public static MethodType AES_128 => new ("AES-128");
 
+        // ReSharper disable once InconsistentNaming
         public static MethodType SAMPLE_AES => new ("SAMPLE-AES");
 
         public object ParseFromString(string value)
         {
-            switch (value)
+            return value switch
             {
-                case "NONE":
-                    return None;
-
-                case "AES-128":
-                    return AES_128;
-
-                case "SAMPLE-AES":
-                    return SAMPLE_AES;
-
-                default:
-                    return null;
-            }
+                "NONE" => None,
+                "AES-128" => AES_128,
+                "SAMPLE-AES" => SAMPLE_AES,
+                _ => (object)null
+            };
         }
 
         public bool Equals(MethodType other)
         {
-            if (other != null && other.ToString() == ToString())
-            {
-                return true;
-            }
-
-            return false;
+            return other != null && other.ToString() == ToString();
         }
 
         public override string ToString()

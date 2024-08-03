@@ -1,3 +1,4 @@
+// ReSharper disable InconsistentNaming
 namespace M3U8Parser.Attributes.BaseAttribute
 {
     using System;
@@ -35,17 +36,22 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
         public bool Equals(VideoRangeType other)
         {
-            if (other!.ToString() == ToString())
-            {
-                return true;
-            }
-
-            return false;
+            return other!.ToString() == ToString();
         }
 
         public override string ToString()
         {
             return _value;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as VideoRangeType);
+        }
+
+        public override int GetHashCode()
+        {
+            return _value != null ? _value.GetHashCode() : 0;
         }
     }
 }

@@ -17,12 +17,7 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
         public override string ToString()
         {
-            if (Value != null)
-            {
-                return $"{AttributeName}={Value}";
-            }
-
-            return string.Empty;
+            return Value != null ? $"{AttributeName}={Value}" : string.Empty;
         }
 
         public virtual void Read(string content)

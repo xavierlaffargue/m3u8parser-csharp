@@ -24,12 +24,13 @@ namespace M3U8Parser.Attributes.BaseAttribute
         public override void Read(string content)
         {
             var regexStr = Regex.Match(content.Trim(), $"(?<={AttributeName}=\")(.*?)(?=\",|\"$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
-
-            if (regexStr.Success)
+            if (!regexStr.Success)
             {
-                var valueFounded = regexStr.Groups[0].Value;
-                Value = (string)Convert.ChangeType(valueFounded, typeof(string));
+                return;
             }
+
+            var valueFounded = regexStr.Groups[0].Value;
+            Value = (string)Convert.ChangeType(valueFounded, typeof(string));
         }
     }
 }

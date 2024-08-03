@@ -22,7 +22,7 @@
         {
             var strBuilder = new StringBuilder();
             strBuilder.Append(ExtPrefix);
-            strBuilder.Append(":");
+            strBuilder.Append(':');
 
             WriteAllAttributes(strBuilder);
 
@@ -57,7 +57,7 @@
                     var m = field.FieldType.GetMethod("ToString");
                     if (m != null)
                     {
-                        var str = m.Invoke(field.GetValue(this), new object[] { });
+                        var str = m.Invoke(field.GetValue(this), System.Array.Empty<object>());
                         strBuilder.AppendWithSeparator(str.ToString(), ",");
                     }
                 }

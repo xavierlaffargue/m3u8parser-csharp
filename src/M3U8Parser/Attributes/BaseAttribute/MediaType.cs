@@ -26,33 +26,19 @@ namespace M3U8Parser.Attributes.BaseAttribute
 
         public object ParseFromString(string value)
         {
-            switch (value)
+            return value switch
             {
-                case "AUDIO":
-                    return Audio;
-
-                case "VIDEO":
-                    return Video;
-
-                case "SUBTITLES":
-                    return Subtitles;
-
-                case "CLOSED-CAPTIONS":
-                    return CloseCaptions;
-
-                default:
-                    return null;
-            }
+                "AUDIO" => Audio,
+                "VIDEO" => Video,
+                "SUBTITLES" => Subtitles,
+                "CLOSED-CAPTIONS" => CloseCaptions,
+                _ => (object)null
+            };
         }
 
         public bool Equals(MediaType other)
         {
-            if (other != null && other.ToString() == ToString())
-            {
-                return true;
-            }
-
-            return false;
+            return other != null && other.ToString() == ToString();
         }
 
         public override string ToString()

@@ -22,6 +22,6 @@ namespace M3U8Parser.ExtXType
             set => _uri.Value = value;
         }
 
-        protected override string ExtPrefix => Map.Prefix;
+        protected override string ExtPrefix => Prefix;
     }
 }

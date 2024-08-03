@@ -19,6 +19,7 @@
 
         public List<Media> Medias { get; set; } = new ();
 
+        // ReSharper disable once InconsistentNaming
         public List<IframeStreamInf> IFrameStreams { get; set; } = new ();
 
         public List<StreamInf> Streams { get; set; } = new ();
@@ -69,7 +70,7 @@
             {
                 Medias = medias,
                 Streams = streams,
-                IFrameStreams = iFrameStreams,
+                IFrameStreams = iFrameStreams
             };
         }
 

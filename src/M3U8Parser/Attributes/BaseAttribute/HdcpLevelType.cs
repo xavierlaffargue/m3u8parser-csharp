@@ -16,28 +16,24 @@ namespace M3U8Parser.Attributes.BaseAttribute
             this._value = value;
         }
 
+        // ReSharper disable once InconsistentNaming
         public static HdcpLevelType NONE => new ("NONE");
 
+        // ReSharper disable once InconsistentNaming
         public static HdcpLevelType TYPE_0 => new ("TYPE-0");
 
+        // ReSharper disable once InconsistentNaming
         public static HdcpLevelType TYPE_1 => new ("TYPE-1");
 
         public object ParseFromString(string value)
         {
-            switch (value)
+            return value switch
             {
-                case "NONE":
-                    return NONE;
-
-                case "TYPE-0":
-                    return TYPE_0;
-
-                case "TYPE-1":
-                    return TYPE_1;
-
-                default:
-                    return null;
-            }
+                "NONE" => NONE,
+                "TYPE-0" => TYPE_0,
+                "TYPE-1" => TYPE_1,
+                _ => (object)null
+            };
         }
 
         public bool Equals(HdcpLevelType other)

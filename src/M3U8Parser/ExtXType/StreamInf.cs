@@ -29,12 +29,9 @@ namespace M3U8Parser.ExtXType
 
         public StreamInf(string str)
         {
-            string lineWithAttribute;
-            string lineWithUri;
-
             using var reader = new StringReader(str);
-            lineWithAttribute = reader.ReadLine();
-            lineWithUri = reader.ReadLine();
+            var lineWithAttribute = reader.ReadLine();
+            var lineWithUri = reader.ReadLine();
 
             _bandwidth.Read(lineWithAttribute);
             _averageBandwidth.Read(lineWithAttribute);
@@ -122,7 +119,7 @@ namespace M3U8Parser.ExtXType
         {
             var strBuilder = new StringBuilder();
             strBuilder.Append(Prefix);
-            strBuilder.Append(":");
+            strBuilder.Append(':');
             strBuilder.AppendWithSeparator(_bandwidth.ToString(), ",");
             strBuilder.AppendWithSeparator(_averageBandwidth.ToString(), ",");
             strBuilder.AppendWithSeparator(_videoRange.ToString(), ",");

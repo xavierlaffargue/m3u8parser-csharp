@@ -17,8 +17,7 @@
         public Segment(string str)
         {
             using var reader = new StringReader(str);
-            string line;
-            while ((line = reader.ReadLine()) != null)
+            while (reader.ReadLine() is { } line)
             {
                 if (line.StartsWith("#EXTINF"))
                 {
