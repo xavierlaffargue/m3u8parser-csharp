@@ -2,131 +2,130 @@ using System;
 using System.IO;
 using M3U8Parser.Attributes.BaseAttribute;
 using M3U8Parser.ExtXType;
-using NUnit.Framework;
+using Xunit;
 
 namespace M3U8Parser.Tests;
 
 public class LoadMasterPlaylistTests
 {
-    private MasterPlaylist _masterPlaylist = new();
+    private readonly MasterPlaylist _masterPlaylist;
 
-    [SetUp]
-    public void Setup()
+    public LoadMasterPlaylistTests()
     {
         _masterPlaylist = MasterPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "manifest_1.m3u8");
     }
 
-    [Test]
+    [Fact]
     public void ShouldBeHave5Medias()
     {
-        Assert.AreEqual(5, _masterPlaylist.Medias.Count);
+        Assert.Equal(5, _masterPlaylist.Medias.Count);
     }
 
-    [Test]
+    [Fact]
     public void ShouldBeHave5Streams()
     {
-        Assert.AreEqual(7, _masterPlaylist.Streams.Count);
+        Assert.Equal(7, _masterPlaylist.Streams.Count);
     }
 
-    [Test]
+    [Fact]
     public void ShouldBeHave5IFrameStreams()
     {
-        Assert.AreEqual(6, _masterPlaylist.IFrameStreams.Count);
+        Assert.Equal(6, _masterPlaylist.IFrameStreams.Count);
     }
 
-    [Test]
+    [Fact]
     public void ShouldBeHlsVersion7()
     {
-        Assert.AreEqual(7, _masterPlaylist.HlsVersion);
+        Assert.Equal(7, _masterPlaylist.HlsVersion);
     }
 
-    [Test]
+    [Fact]
     public void CheckFirstMedia()
     {
-        Assert.AreEqual(MediaType.Audio, _masterPlaylist.Medias[0].Type);
-        Assert.AreEqual("audio", _masterPlaylist.Medias[0].GroupId);
-        Assert.AreEqual("English", _masterPlaylist.Medias[0].Name);
-        Assert.AreEqual("eng", _masterPlaylist.Medias[0].Language);
-        Assert.AreEqual(true, _masterPlaylist.Medias[0].AutoSelect);
-        Assert.AreEqual(true, _masterPlaylist.Medias[0].Default);
-        Assert.AreEqual("QualityLevels(192000)/Manifest(audio_eng_aacl,format=m3u8-aapl,filter=desktop)",
+        Assert.Equal(MediaType.Audio, _masterPlaylist.Medias[0].Type);
+        Assert.Equal("audio", _masterPlaylist.Medias[0].GroupId);
+        Assert.Equal("English", _masterPlaylist.Medias[0].Name);
+        Assert.Equal("eng", _masterPlaylist.Medias[0].Language);
+        Assert.True(_masterPlaylist.Medias[0].AutoSelect);
+        Assert.True(_masterPlaylist.Medias[0].Default);
+        Assert.Equal("QualityLevels(192000)/Manifest(audio_eng_aacl,format=m3u8-aapl,filter=desktop)",
             _masterPlaylist.Medias[0].Uri);
     }
 
-    [Test]
+    [Fact]
     public void AfterEditMediaTypeShouldBeChanged()
     {
         _masterPlaylist.Medias[0].Type = MediaType.Video;
-        Assert.AreEqual(MediaType.Video, _masterPlaylist.Medias[0].Type);
+        Assert.Equal(MediaType.Video, _masterPlaylist.Medias[0].Type);
     }
 
-    [Test]
+    [Fact]
     public void AfterEditAutoSelectShouldBeChanged()
     {
         _masterPlaylist.Medias[0].AutoSelect = false;
-        Assert.AreEqual(false, _masterPlaylist.Medias[0].AutoSelect);
+        Assert.False(_masterPlaylist.Medias[0].AutoSelect);
     }
 
-    [Test]
+    [Fact]
     public void AfterEditLanguageShouldBeChanged()
     {
         _masterPlaylist.Medias[0].Language = "fre";
-        Assert.AreEqual("fre", _masterPlaylist.Medias[0].Language);
+        Assert.Equal("fre", _masterPlaylist.Medias[0].Language);
     }
 
-    [Test]
+    [Fact]
     public void DefaultVersionShouldBe4()
     {
         var masterPlaylist = new MasterPlaylist();
-        Assert.AreEqual(4, masterPlaylist.HlsVersion);
+        Assert.Equal(4, masterPlaylist.HlsVersion);
     }
 
-    [Test]
+    [Fact]
     public void ParseClosedCaptionsMediaShouldBeOk()
     {
         var media = new Media(
             "#EXT-X-MEDIA:TYPE=CLOSED-CAPTIONS,GROUP-ID=\"cc\",NAME=\"CEA608_CC\",AUTOSELECT=NO,DEFAULT=NO,INSTREAM-ID=\"CC1\"");
-        Assert.AreEqual(MediaType.CloseCaptions, media.Type);
-        Assert.AreEqual("cc", media.GroupId);
-        Assert.AreEqual("CEA608_CC", media.Name);
-        Assert.AreEqual(false, media.AutoSelect);
-        Assert.AreEqual(false, media.Default);
-        Assert.AreEqual("CC1", media.InstreamId);
-        Assert.AreEqual(null, media.Language);
+        Assert.Equal(MediaType.CloseCaptions, media.Type);
+        Assert.Equal("cc", media.GroupId);
+        Assert.Equal("CEA608_CC", media.Name);
+        Assert.False(media.AutoSelect);
+        Assert.False(media.Default);
+        Assert.Equal("CC1", media.InstreamId);
+        Assert.Null(media.Language);
     }
 
-    [Test]
+    [Fact]
     public void ParseVideoMediaShouldBeOk()
     {
         var media = new Media(
             "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",NAME=\"English\",LANGUAGE=\"eng\",AUTOSELECT=YES,DEFAULT=YES,URI=\"uri/Manifest\"");
-        Assert.AreEqual(MediaType.Audio, media.Type);
-        Assert.AreEqual("audio", media.GroupId);
-        Assert.AreEqual("English", media.Name);
-        Assert.AreEqual("eng", media.Language);
-        Assert.AreEqual(true, media.AutoSelect);
-        Assert.AreEqual(true, media.Default);
-        Assert.AreEqual("uri/Manifest", media.Uri);
-        Assert.AreEqual(null, media.InstreamId);
+        Assert.Equal(MediaType.Audio, media.Type);
+        Assert.Equal("audio", media.GroupId);
+        Assert.Equal("English", media.Name);
+        Assert.Equal("eng", media.Language);
+        Assert.True(media.AutoSelect);
+        Assert.True(media.Default);
+        Assert.Equal("uri/Manifest", media.Uri);
+        Assert.Null(media.InstreamId);
     }
 
-    [Test]
+    [Fact]
     public void ParseStreamInfShouldBeOk()
     {
         var media = new StreamInf(
             "#EXT-X-STREAM-INF:AVERAGE-BANDWIDTH=2778321,BANDWIDTH=3971374,VIDEO-RANGE=PQ,CODECS=\"hvc1.2.4.L123.B0\",RESOLUTION=1280x720,FRAME-RATE=23.976,CLOSED-CAPTIONS=NONE,HDCP-LEVEL=TYPE-1\r\nsdr_720/prog_index.m3u8");
-        Assert.AreEqual(2778321, media.AverageBandwidth);
-        Assert.AreEqual(3971374, media.Bandwidth);
-        Assert.AreEqual(VideoRangeType.PQ, media.VideoRange);
-        Assert.AreEqual("hvc1.2.4.L123.B0", media.Codecs);
-        Assert.AreEqual(23.976, media.FrameRate);
-        Assert.AreEqual(HdcpLevelType.TYPE_1, media.HdcpLevel);
-        Assert.AreEqual(1280, media.Resolution.Width);
-        Assert.AreEqual(720, media.Resolution.Height);
-        Assert.AreEqual("sdr_720/prog_index.m3u8", media.Uri);
+        Assert.Equal(2778321, media.AverageBandwidth);
+        Assert.Equal(3971374, media.Bandwidth);
+        Assert.Equal(VideoRangeType.PQ, media.VideoRange);
+        Assert.Equal("hvc1.2.4.L123.B0", media.Codecs);
+        Assert.Equivalent(23.976, media.FrameRate);
+        Assert.Equal(HdcpLevelType.TYPE_1, media.HdcpLevel);
+        Assert.Equal(1280, media.Resolution.Width);
+        Assert.Equal(720, media.Resolution.Height);
+        Assert.Equal("sdr_720/prog_index.m3u8", media.Uri);
     }
 
-    [Test]
+    [Fact]
     public void EditResolutionShouldBeOk()
     {
         var media = new StreamInf("#EXT-X-STREAM-INF:RESOLUTION=1280x720")
@@ -138,71 +137,71 @@ public class LoadMasterPlaylistTests
             }
         };
 
-        Assert.AreEqual(1920, media.Resolution.Width);
-        Assert.AreEqual(1080, media.Resolution.Height);
+        Assert.Equal(1920, media.Resolution.Width);
+        Assert.Equal(1080, media.Resolution.Height);
     }
 
-    [Test]
+    [Fact]
     public void ParseAndToStringMediaShouldBeEqual()
     {
         var media = new Media(
             "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",NAME=\"English\",LANGUAGE=\"eng\",AUTOSELECT=YES,DEFAULT=YES,URI=\"uri/Manifest\"");
-        Assert.AreEqual(
+        Assert.Equal(
             "#EXT-X-MEDIA:AUTOSELECT=YES,DEFAULT=YES,GROUP-ID=\"audio\",LANGUAGE=\"eng\",TYPE=AUDIO,NAME=\"English\",URI=\"uri/Manifest\"",
             media.ToString());
     }
 
-    [Test]
+    [Fact]
     public void ParseAndToStringMediaShouldBeEqualWithDoubleQuote()
     {
         var media = new Media(
             "#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=\"audio\",NAME=\"English \\\"Original\\\"\",LANGUAGE=\"eng\",AUTOSELECT=YES,DEFAULT=YES,URI=\"uri/Manifest\"");
-        Assert.AreEqual(
+        Assert.Equal(
             "#EXT-X-MEDIA:AUTOSELECT=YES,DEFAULT=YES,GROUP-ID=\"audio\",LANGUAGE=\"eng\",TYPE=AUDIO,NAME=\"English \\\"Original\\\"\",URI=\"uri/Manifest\"",
             media.ToString());
     }
 
-    [Test]
+    [Fact]
     public void ParseAndToStringStreamShouldBeEqual()
     {
         var media = new StreamInf(
             "#EXT-X-STREAM-INF:BANDWIDTH=3971374,AVERAGE-BANDWIDTH=2778321,VIDEO-RANGE=SDR,CODECS=\"hvc1.2.4.L123.B0\",RESOLUTION=1280x720,FRAME-RATE=23.976,HDCP-LEVEL=NONE,SUBTITLES=\"subtitle\"\r\nsdr_720/prog_index.m3u8");
-        Assert.AreEqual(
+        Assert.Equal(
             "#EXT-X-STREAM-INF:BANDWIDTH=3971374,AVERAGE-BANDWIDTH=2778321,VIDEO-RANGE=SDR,CODECS=\"hvc1.2.4.L123.B0\",RESOLUTION=1280x720,FRAME-RATE=23.976,HDCP-LEVEL=NONE,SUBTITLES=\"subtitle\"\r\nsdr_720/prog_index.m3u8",
             media.ToString());
     }
 
-    [Test]
+    [Fact]
     public void OptionnalAttributesShouldBeNullable()
     {
         var media = new StreamInf(
             "#EXT-X-STREAM-INF:BANDWIDTH=2778321,CODECS=\"hvc1.2.4.L123.B0\"\r\nsdr_720/prog_index.m3u8");
-        Assert.AreEqual(media.AverageBandwidth, null);
-        Assert.AreEqual(media.FrameRate, null);
-        Assert.AreEqual(media.VideoRange, null);
-        Assert.AreEqual(media.Resolution, null);
-        Assert.AreEqual(media.HdcpLevel, null);
+        Assert.Null(media.AverageBandwidth);
+        Assert.Null(media.FrameRate);
+        Assert.Null(media.VideoRange);
+        Assert.Null(media.Resolution);
+        Assert.Null(media.HdcpLevel);
     }
 
-    [Test]
+    [Fact]
     public void ParseAndToStringIFrameStreamShouldBeEqual()
     {
         var media = new IframeStreamInf(
             "#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=621335,CODECS=\"avc1.42c00d\",RESOLUTION=416x234,URI=\"QualityLevels(399992)/Manifest(video,format=m3u8-aapl,filter=desktop,type=keyframes)\"");
-        Assert.AreEqual(
+        Assert.Equal(
             "#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=621335,CODECS=\"avc1.42c00d\",RESOLUTION=416x234,URI=\"QualityLevels(399992)/Manifest(video,format=m3u8-aapl,filter=desktop,type=keyframes)\"",
             media.ToString());
     }
 
-    [Test]
+    [Fact]
     public void MasterPlaylistShouldBeContainExtM3U()
     {
-        Assert.That(_masterPlaylist.ToString(), Does.Contain("#EXTM3U" + Environment.NewLine));
+        Assert.Contains("#EXTM3U" + Environment.NewLine, _masterPlaylist.ToString());
     }
 
-    [Test]
+    [Fact]
     public void MasterPlaylistShouldBeContainVersionExtM3U()
     {
-        Assert.That(_masterPlaylist.ToString(), Does.Contain("#EXT-X-VERSION:7" + Environment.NewLine));
+        Assert.Contains("#EXT-X-VERSION:7" + Environment.NewLine, _masterPlaylist.ToString());
     }
 }

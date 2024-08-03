@@ -1,11 +1,11 @@
 using System.IO;
-using NUnit.Framework;
+using Xunit;
 
 namespace M3U8Parser.Tests;
 
 public class LoadFromFileTest
 {
-    [Test]
+    [Fact]
     public void LoadFromFileMediaPlaylist()
     {
         var result = MediaPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "mediaplaylist_vod_1.m3u8");
@@ -13,7 +13,7 @@ public class LoadFromFileTest
         Assert.NotNull(result);
     }
 
-    [Test]
+    [Fact]
     public void LoadFromFileMasterPlaylist()
     {
         var result = MasterPlaylist.LoadFromFile(@"Sample" + Path.DirectorySeparatorChar + "manifest_1.m3u8");

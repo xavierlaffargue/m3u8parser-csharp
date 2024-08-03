@@ -1,15 +1,15 @@
 using System;
-using NUnit.Framework;
+using Xunit;
 
 namespace M3U8Parser.Tests;
 
 public class CreateMediaPlaylistTests
 {
-    [Test]
+    [Fact]
     public void DefaultHlsValueShouldContainOnlyVersion4()
     {
         var mp = new MasterPlaylist();
-        Assert.AreEqual(4, mp.HlsVersion);
-        Assert.AreEqual($"#EXTM3U{Environment.NewLine}#EXT-X-VERSION:4", mp.ToString());
+        Assert.Equal(4, mp.HlsVersion);
+        Assert.Equal($"#EXTM3U{Environment.NewLine}#EXT-X-VERSION:4", mp.ToString());
     }
 }
