@@ -1,7 +1,7 @@
 using System;
 using System.IO;
-using M3U8Parser.Attributes.BaseAttribute;
-using M3U8Parser.ExtXType;
+using M3U8Parser.Attributes.ValueType;
+using M3U8Parser.Tags.MultivariantPlaylist;
 using Xunit;
 
 namespace M3U8Parser.Tests;

@@ -31,4 +31,9 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Tags\MediaMetadata\" />
+      <Folder Include="Tags\SharedMediaMultivariantPlaylist\" />
+    </ItemGroup>
+
 </Project>

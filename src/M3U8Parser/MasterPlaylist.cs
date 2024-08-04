@@ -4,7 +4,8 @@
     using System.IO;
     using System.Text;
     using System.Text.RegularExpressions;
-    using M3U8Parser.ExtXType;
+    using M3U8Parser.Tags.Basic;
+    using M3U8Parser.Tags.MultivariantPlaylist;
 
     public class MasterPlaylist
     {
@@ -41,26 +42,23 @@
             List<StreamInf> streams = new ();
             var hlsVersion = DefaultHlsVersion;
 
-            var matchHlsVersion = Regex.Match(text, "(?<=#EXT-X-VERSION:)(.*?)(?<=$)", RegexOptions.Multiline);
-            if (matchHlsVersion.Success)
-            {
-                var info = matchHlsVersion.Groups[0].Value;
-                hlsVersion = int.Parse(info);
-            }
-
-            var l = Regex.Split(text, "(?=#EXT)");
+            var l = Regex.Split(text, $"(?={Tag.EXTX})");
 
             foreach (var line in l)
             {
-                if (line.StartsWith(Media.Prefix))
+                if (line.StartsWith(Tag.EXTXVERSION))
+                {
+                    hlsVersion = new HlsVersion(line).Value;
+                }
+                else if (line.StartsWith(Tag.EXTXMEDIA))
                 {
                     medias.Add(new Media(line));
                 }
-                else if (line.StartsWith(IframeStreamInf.Prefix))
+                else if (line.StartsWith(Tag.EXTXIFRAMESTREAMINF))
                 {
                     iFrameStreams.Add(new IframeStreamInf(line));
                 }
-                else if (line.StartsWith(StreamInf.Prefix))
+                else if (line.StartsWith(Tag.EXTXSTREAMINF))
                 {
                     streams.Add(new StreamInf(line));
                 }
@@ -78,8 +76,8 @@
         {
             var strBuilder = new StringBuilder();
 
-            strBuilder.AppendLine("#EXTM3U");
-            strBuilder.AppendLine($"#EXT-X-VERSION:{HlsVersion}");
+            strBuilder.AppendLine(Tag.EXTM3U);
+            strBuilder.AppendLine($"{Tag.EXTXVERSION}:{HlsVersion}");
 
             strBuilder.AppendLine();
 
