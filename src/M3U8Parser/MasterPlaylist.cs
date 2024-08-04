@@ -18,6 +18,8 @@
 
         public int HlsVersion { get; set; }
 
+        public bool IndependentSegments { get; set; }
+
         public List<Media> Medias { get; set; } = new ();
 
         // ReSharper disable once InconsistentNaming
@@ -41,6 +43,7 @@
             List<IframeStreamInf> iFrameStreams = new ();
             List<StreamInf> streams = new ();
             var hlsVersion = DefaultHlsVersion;
+            var independentSegments = false;
 
             var l = Regex.Split(text, $"(?={Tag.EXTX})");
 
@@ -49,6 +52,10 @@
                 if (line.StartsWith(Tag.EXTXVERSION))
                 {
                     hlsVersion = new HlsVersion(line).Value;
+                }
+                else if (line.StartsWith(Tag.EXTXINDEPENDENTSEGMENTS))
+                {
+                    independentSegments = true;
                 }
                 else if (line.StartsWith(Tag.EXTXMEDIA))
                 {
@@ -68,7 +75,8 @@
             {
                 Medias = medias,
                 Streams = streams,
-                IFrameStreams = iFrameStreams
+                IFrameStreams = iFrameStreams,
+                IndependentSegments = independentSegments
             };
         }
 
@@ -78,6 +86,10 @@
 
             strBuilder.AppendLine(Tag.EXTM3U);
             strBuilder.AppendLine($"{Tag.EXTXVERSION}:{HlsVersion}");
+            if (IndependentSegments)
+            {
+                strBuilder.AppendLine(Tag.EXTXINDEPENDENTSEGMENTS);
+            }
 
             strBuilder.AppendLine();
 

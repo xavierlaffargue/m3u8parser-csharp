@@ -17,6 +17,8 @@
 
         public int HlsVersion { get; set; }
 
+        public bool IndependentSegments { get; set; }
+
         public bool? IFrameOnly { get; set; }
 
         public int? TargetDuration { get; set; }
@@ -47,6 +49,7 @@
             int? targetDuration = null;
             int? mediaSequence = null;
             bool? iFrameOnly = null;
+            bool independentSegments = false;
 
             var regex = new Regex($"(?={Tag.EXTX})(.*?)(?<=$)", RegexOptions.Multiline);
             var matches = regex.Matches(text);
@@ -54,7 +57,11 @@
             foreach (Match match in matches)
             {
                 var line = match.Value;
-                if (line.StartsWith(Tag.EXTXPLAYLISTTYPE))
+                if (line.StartsWith(Tag.EXTXINDEPENDENTSEGMENTS))
+                {
+                    independentSegments = true;
+                }
+                else if (line.StartsWith(Tag.EXTXPLAYLISTTYPE))
                 {
                     playlistType = new PlaylistTypeExt(line).Value;
                 }
@@ -120,7 +127,8 @@
                 TargetDuration = targetDuration,
                 MediaSequence = mediaSequence,
                 IFrameOnly = iFrameOnly,
-                Map = map
+                Map = map,
+                IndependentSegments = independentSegments
             };
         }
 
@@ -130,6 +138,11 @@
 
             strBuilder.AppendLine(Tag.EXTM3U);
             strBuilder.AppendLine($"{Tag.EXTXVERSION}:{HlsVersion}");
+
+            if (IndependentSegments)
+            {
+                strBuilder.AppendLine(Tag.EXTXINDEPENDENTSEGMENTS);
+            }
 
             if (TargetDuration != null)
             {
