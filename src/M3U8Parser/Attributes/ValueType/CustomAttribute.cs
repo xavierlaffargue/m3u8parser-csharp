@@ -11,7 +11,7 @@ namespace M3U8Parser.Attributes.ValueType
             AttributeName = attributeName;
         }
 
-        public T Value { get; set; }
+        public virtual T Value { get; set; }
 
         protected string AttributeName { get; }
 

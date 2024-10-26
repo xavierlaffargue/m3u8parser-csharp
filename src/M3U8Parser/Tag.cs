@@ -6,14 +6,14 @@ namespace M3U8Parser
         public static readonly string EXTINF = "#EXTINF";
         public static readonly string EXTM3U = "#EXTM3U";
         public static readonly string EXTXVERSION = $"{EXTX}-VERSION";
-        public static readonly string EXTXBYTERANGE = $"{EXTX}-X-BYTERANGE";
+        public static readonly string EXTXBYTERANGE = $"{EXTX}-BYTERANGE";
         public static readonly string EXTXMEDIA = $"{EXTX}-MEDIA";
         public static readonly string EXTXSTREAMINF = $"{EXTX}-STREAM-INF";
         public static readonly string EXTXIFRAMESTREAMINF = $"{EXTX}-I-FRAME-STREAM-INF";
         public static readonly string EXTXINDEPENDENTSEGMENTS = $"{EXTX}-INDEPENDENT-SEGMENTS";
         public static readonly string EXTXTARGETDURATION = $"{EXTX}-TARGETDURATION";
         public static readonly string EXTXMEDIASEQUENCE = $"{EXTX}-MEDIA-SEQUENCE";
-        public static readonly string EXTXDISCONTINUITYSEQUENCE = "EXT-X-DISCONTINUITY-SEQUENCE";
+        public static readonly string EXTXDISCONTINUITYSEQUENCE = $"{EXTX}-DISCONTINUITY-SEQUENCE";
         public static readonly string EXTXPLAYLISTTYPE = $"{EXTX}-PLAYLIST-TYPE";
         public static readonly string EXTXIFRAMESONLY = $"{EXTX}-I-FRAMES-ONLY";
         public static readonly string EXTXMAP = $"{EXTX}-MAP";

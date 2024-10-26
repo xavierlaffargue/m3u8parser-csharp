@@ -7,7 +7,7 @@ namespace M3U8Parser.Tags.MultivariantPlaylist
     using M3U8Parser.Extensions;
     using M3U8Parser.Interfaces;
 
-    public class StreamInf : ITag
+    public class StreamInf : AbstractTag
     {
         private readonly Audio _audio = new ();
         private readonly AverageBandwidth _averageBandwidth = new ();
@@ -45,7 +45,11 @@ namespace M3U8Parser.Tags.MultivariantPlaylist
             Uri = lineWithUri;
         }
 
-        public string Uri { get; set; }
+        public string Uri
+        {
+            get;
+            set;
+        }
 
         public long Bandwidth
         {

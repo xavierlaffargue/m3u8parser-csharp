@@ -18,7 +18,7 @@
 
         protected virtual string TagName => string.Empty;
 
-        public new string ToString()
+        public virtual string ToString()
         {
             var strBuilder = new StringBuilder();
             strBuilder.Append(TagName);

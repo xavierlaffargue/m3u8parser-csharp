@@ -123,6 +123,7 @@ public class LoadMasterPlaylistTests
         Assert.Equal(1280, media.Resolution.Width);
         Assert.Equal(720, media.Resolution.Height);
         Assert.Equal("sdr_720/prog_index.m3u8", media.Uri);
+        Assert.Equal("NONE", media.ClosedCaptions);
     }
 
     [Fact]
@@ -165,9 +166,9 @@ public class LoadMasterPlaylistTests
     public void ParseAndToStringStreamShouldBeEqual()
     {
         var media = new StreamInf(
-            "#EXT-X-STREAM-INF:BANDWIDTH=3971374,AVERAGE-BANDWIDTH=2778321,VIDEO-RANGE=SDR,CODECS=\"hvc1.2.4.L123.B0\",RESOLUTION=1280x720,FRAME-RATE=23.976,HDCP-LEVEL=NONE,SUBTITLES=\"subtitle\"\r\nsdr_720/prog_index.m3u8");
+            "#EXT-X-STREAM-INF:BANDWIDTH=3971374,AVERAGE-BANDWIDTH=2778321,VIDEO-RANGE=SDR,CODECS=\"hvc1.2.4.L123.B0\",RESOLUTION=1280x720,FRAME-RATE=23.976,CLOSED-CAPTIONS=NONE,HDCP-LEVEL=NONE,SUBTITLES=\"subtitle\"\r\nsdr_720/prog_index.m3u8");
         Assert.Equal(
-            "#EXT-X-STREAM-INF:BANDWIDTH=3971374,AVERAGE-BANDWIDTH=2778321,VIDEO-RANGE=SDR,CODECS=\"hvc1.2.4.L123.B0\",RESOLUTION=1280x720,FRAME-RATE=23.976,HDCP-LEVEL=NONE,SUBTITLES=\"subtitle\"\r\nsdr_720/prog_index.m3u8",
+            "#EXT-X-STREAM-INF:BANDWIDTH=3971374,AVERAGE-BANDWIDTH=2778321,VIDEO-RANGE=SDR,CODECS=\"hvc1.2.4.L123.B0\",RESOLUTION=1280x720,FRAME-RATE=23.976,CLOSED-CAPTIONS=NONE,HDCP-LEVEL=NONE,SUBTITLES=\"subtitle\"\r\nsdr_720/prog_index.m3u8",
             media.ToString());
     }
 
