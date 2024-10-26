@@ -42,6 +42,12 @@ public class LoadMediaPlaylistTests
     }
 
     [Fact]
+    public void IndependentSegmentIsPresent()
+    {
+        Assert.True(_mediaPlaylist.IndependentSegments?.IsPresent);
+    }
+    
+    [Fact]
     public void HlsVersionShouldBe4()
     {
         Assert.Equal(4, _mediaPlaylist.HlsVersion);

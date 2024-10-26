@@ -13,6 +13,8 @@
     {
         public PlaylistType PlaylistType { get; set; } = new ();
 
+        public IndependentSegments IndependentSegments { get; set; } = new ();
+
         public Map Map { get; set; } = new ();
 
         public int HlsVersion { get; set; }
@@ -40,6 +42,7 @@
         public static MediaPlaylist LoadFromText(string text)
         {
             PlaylistType playlistType = null;
+            IndependentSegments IndependentSegments = null;
             Map map = null;
             List<MediaSegment> mediaSegments = new ();
             var hlsVersion = 4;
@@ -61,6 +64,10 @@
                 else if (line.StartsWith(Tag.EXTXVERSION))
                 {
                     hlsVersion = new HlsVersion(line).Value;
+                }
+                else if (line.StartsWith(Tag.EXTXINDEPENDENTSEGMENTS))
+                {
+                    IndependentSegments = new IndependentSegments(line);
                 }
                 else if (line.StartsWith(Tag.EXTXMAP))
                 {
@@ -120,6 +127,7 @@
                 TargetDuration = targetDuration,
                 MediaSequence = mediaSequence,
                 IFrameOnly = iFrameOnly,
+                IndependentSegments = IndependentSegments,
                 Map = map
             };
         }
@@ -130,6 +138,11 @@
 
             strBuilder.AppendLine(Tag.EXTM3U);
             strBuilder.AppendLine($"{Tag.EXTXVERSION}:{HlsVersion}");
+
+            if (IndependentSegments != null && IndependentSegments.IsPresent)
+            {
+                strBuilder.AppendLine(IndependentSegments.ToString());
+            }
 
             if (TargetDuration != null)
             {
