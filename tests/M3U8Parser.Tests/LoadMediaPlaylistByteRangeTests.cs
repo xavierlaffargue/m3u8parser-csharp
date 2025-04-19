@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using M3U8Parser.Attributes.BaseAttribute;
-using M3U8Parser.ExtXType;
+using M3U8Parser.Attributes.ValueType;
+using M3U8Parser.Tags.MediaSegment;
 using Xunit;
 
 namespace M3U8Parser.Tests;

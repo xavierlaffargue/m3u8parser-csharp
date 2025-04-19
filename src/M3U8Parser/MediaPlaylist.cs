@@ -4,12 +4,16 @@
     using System.IO;
     using System.Text;
     using System.Text.RegularExpressions;
-    using M3U8Parser.Attributes.BaseAttribute;
-    using M3U8Parser.ExtXType;
+    using M3U8Parser.Attributes.ValueType;
+    using M3U8Parser.Tags.Basic;
+    using M3U8Parser.Tags.MediaPlaylist;
+    using M3U8Parser.Tags.MediaSegment;
 
     public class MediaPlaylist
     {
         public PlaylistType PlaylistType { get; set; } = new ();
+
+        public IndependentSegments IndependentSegments { get; set; } = new ();
 
         public Map Map { get; set; } = new ();
 
@@ -38,6 +42,7 @@
         public static MediaPlaylist LoadFromText(string text)
         {
             PlaylistType playlistType = null;
+            IndependentSegments IndependentSegments = null;
             Map map = null;
             List<MediaSegment> mediaSegments = new ();
             var hlsVersion = 4;
@@ -46,48 +51,52 @@
             int? mediaSequence = null;
             bool? iFrameOnly = null;
 
-            var regex = new Regex("(?=#EXT-X)(.*?)(?<=$)", RegexOptions.Multiline);
+            var regex = new Regex($"(?={Tag.EXTX})(.*?)(?<=$)", RegexOptions.Multiline);
             var matches = regex.Matches(text);
 
             foreach (Match match in matches)
             {
                 var line = match.Value;
-                if (line.StartsWith(PlaylistTypeExt.Prefix))
+                if (line.StartsWith(Tag.EXTXPLAYLISTTYPE))
                 {
                     playlistType = new PlaylistTypeExt(line).Value;
                 }
-                else if (line.StartsWith(ExtXType.HlsVersion.Prefix))
+                else if (line.StartsWith(Tag.EXTXVERSION))
                 {
                     hlsVersion = new HlsVersion(line).Value;
                 }
-                else if (line.StartsWith(Map.Prefix))
+                else if (line.StartsWith(Tag.EXTXINDEPENDENTSEGMENTS))
+                {
+                    IndependentSegments = new IndependentSegments(line);
+                }
+                else if (line.StartsWith(Tag.EXTXMAP))
                 {
                     map = new Map(line);
                 }
-                else if (line.StartsWith("#EXT-X-ENDLIST"))
+                else if (line.StartsWith(Tag.EXTXENDLIST))
                 {
                     hasEndList = true;
                 }
-                else if (line.StartsWith("#EXT-X-I-FRAMES-ONLY"))
+                else if (line.StartsWith(Tag.EXTXIFRAMESONLY))
                 {
                     iFrameOnly = true;
                 }
-                else if (line.StartsWith(ExtXType.TargetDuration.Prefix))
+                else if (line.StartsWith(Tag.EXTXTARGETDURATION))
                 {
                     targetDuration = new TargetDuration(line).Value;
                 }
-                else if (line.StartsWith(ExtXType.MediaSequence.Prefix))
+                else if (line.StartsWith(Tag.EXTXMEDIASEQUENCE))
                 {
                     mediaSequence = new MediaSequence(line).Value;
                 }
             }
 
-            var l = Regex.Split(text, "(?=#EXT-X-KEY|#EXTINF)");
+            var l = Regex.Split(text, $"(?={Tag.EXTXKEY}|{Tag.EXTINF})");
             var segments = new List<Segment>();
             MediaSegment mediaSegment = null;
             foreach (var line in l)
             {
-                if (line.StartsWith(Key.Prefix))
+                if (line.StartsWith(Tag.EXTXKEY))
                 {
                     if (mediaSegment != null)
                     {
@@ -98,7 +107,7 @@
                     mediaSegment = new MediaSegment(line);
                 }
 
-                if (line.StartsWith(Segment.Prefix))
+                if (line.StartsWith(Tag.EXTINF))
                 {
                     mediaSegment ??= new MediaSegment();
 
@@ -118,6 +127,7 @@
                 TargetDuration = targetDuration,
                 MediaSequence = mediaSequence,
                 IFrameOnly = iFrameOnly,
+                IndependentSegments = IndependentSegments,
                 Map = map
             };
         }
@@ -126,27 +136,32 @@
         {
             var strBuilder = new StringBuilder();
 
-            strBuilder.AppendLine("#EXTM3U");
-            strBuilder.AppendLine($"#EXT-X-VERSION:{HlsVersion}");
+            strBuilder.AppendLine(Tag.EXTM3U);
+            strBuilder.AppendLine($"{Tag.EXTXVERSION}:{HlsVersion}");
+
+            if (IndependentSegments != null && IndependentSegments.IsPresent)
+            {
+                strBuilder.AppendLine(IndependentSegments.ToString());
+            }
 
             if (TargetDuration != null)
             {
-                strBuilder.AppendLine($"#EXT-X-TARGETDURATION:{TargetDuration}");
+                strBuilder.AppendLine($"{Tag.EXTXTARGETDURATION}:{TargetDuration}");
             }
 
             if (MediaSequence != null)
             {
-                strBuilder.AppendLine($"#EXT-X-MEDIA-SEQUENCE:{MediaSequence}");
+                strBuilder.AppendLine($"{Tag.EXTXMEDIASEQUENCE}:{MediaSequence}");
             }
 
             if (PlaylistType != null)
             {
-                strBuilder.AppendLine($"#EXT-X-PLAYLIST-TYPE:{PlaylistType}");
+                strBuilder.AppendLine($"{Tag.EXTXPLAYLISTTYPE}:{PlaylistType}");
             }
 
             if (IFrameOnly.HasValue && IFrameOnly.Value)
             {
-                strBuilder.AppendLine("#EXT-X-I-FRAMES-ONLY");
+                strBuilder.AppendLine(Tag.EXTXIFRAMESONLY);
             }
 
             if (Map != null)
@@ -162,7 +177,7 @@
 
             if (HasEndList)
             {
-                strBuilder.AppendLine("#EXT-X-ENDLIST");
+                strBuilder.AppendLine(Tag.EXTXENDLIST);
             }
 
             return strBuilder.ToString().TrimEnd();
