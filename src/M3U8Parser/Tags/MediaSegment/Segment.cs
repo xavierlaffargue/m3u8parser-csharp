@@ -19,7 +19,7 @@
             {
                 if (line.StartsWith(Tag.EXTINF))
                 {
-                    var match = Regex.Match(line.Trim(), $"(?<={Tag.EXTINF}:)(.*?)(?=$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
+                    var match = Regex.Match(line.Trim(), $"(?<={Tag.EXTINF}:)(.*?)(?=$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
                     if (match.Success)
                     {
@@ -29,7 +29,7 @@
                 }
                 else if (line.StartsWith(Tag.EXTXBYTERANGE))
                 {
-                    var match = Regex.Match(line.Trim(), $"(?<={Tag.EXTXBYTERANGE}:)(.*?)(?=$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
+                    var match = Regex.Match(line.Trim(), $"(?<={Tag.EXTXBYTERANGE}:)(.*?)(?=$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
                     if (match.Success)
                     {
@@ -41,6 +41,19 @@
                             ByteRangeStartSubRange = long.Parse(byterange[1]);
                         }
                     }
+                }
+                else if (line.StartsWith(Tag.EXTXPROGRAMDATETIME))
+                {
+                    var match = Regex.Match(line.Trim(), $"(?<={Tag.EXTXPROGRAMDATETIME}:)(.*?)(?=$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+
+                    if (match.Success)
+                    {
+                        ProgramDateTime = match.Groups[0].Value;
+                    }
+                }
+                else if (line.StartsWith(Tag.EXTXMAP))
+                {
+                    Map = new Map(line);
                 }
                 else if (!line.StartsWith("#EXT"))
                 {
@@ -59,9 +72,24 @@
 
         public long? ByteRangeStartSubRange { get; set; }
 
+        public string ProgramDateTime { get; set; }
+
+        public Map Map { get; set; }
+
         public override string ToString()
         {
             var strBuilder = new StringBuilder();
+
+            if (ProgramDateTime != null)
+            {
+                strBuilder.AppendLine($"{Tag.EXTXPROGRAMDATETIME}:{ProgramDateTime}");
+            }
+
+            if (Map != null)
+            {
+                strBuilder.AppendLine(Map.ToString());
+            }
+
             strBuilder.AppendLine($"{Tag.EXTINF}:{Duration.ToString(CultureInfo.InvariantCulture)},{Title}");
 
             if (ByteRangeLentgh != null)

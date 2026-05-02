@@ -14,6 +14,7 @@ namespace M3U8Parser.Tags.MultivariantPlaylist
         private readonly Type _mediaType = new ();
         private readonly Name _name = new ();
         private readonly Uri _uri = new ();
+        private readonly Channels _channels = new ();
 
         public Media()
         {
@@ -76,6 +77,12 @@ namespace M3U8Parser.Tags.MultivariantPlaylist
         {
             get => _characteristics.Value;
             set => _characteristics.Value = value;
+        }
+
+        public string Channels
+        {
+            get => _channels.Value;
+            set => _channels.Value = value;
         }
 
         protected override string TagName => Tag.EXTXMEDIA;

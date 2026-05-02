@@ -22,7 +22,7 @@
                 {
                     Key = new Key(line);
                 }
-                else if (line.StartsWith(Tag.EXTINF))
+                else if (line.StartsWith(Tag.EXTINF) || line.StartsWith(Tag.EXTXMAP) || line.StartsWith(Tag.EXTXPROGRAMDATETIME))
                 {
                     var segment = new Segment(line);
                     Segments.Add(segment);
