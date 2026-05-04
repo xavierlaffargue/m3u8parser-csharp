@@ -5,6 +5,7 @@ namespace M3U8Parser.Tags.MediaSegment
     public class Map : AbstractTag
     {
         private readonly Uri _uri = new ();
+        private readonly ByteRange _byteRange = new ();
 
         public Map()
         {
@@ -18,6 +19,11 @@ namespace M3U8Parser.Tags.MediaSegment
         public string Uri {
             get => _uri.Value;
             set => _uri.Value = value;
+        }
+
+        public string ByteRange {
+            get => _byteRange.Value;
+            set => _byteRange.Value = value;
         }
 
         protected override string TagName => Tag.EXTXMAP;

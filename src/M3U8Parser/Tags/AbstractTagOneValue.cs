@@ -35,7 +35,7 @@ namespace M3U8Parser.Tags
 
         protected void ReadValue(string str)
         {
-            var match = Regex.Match(str.Trim(), $"(?<={TagName}:)(.*?)(?=$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
+            var match = Regex.Match(str.Trim(), $"(?<={TagName}:)(.*?)(?=$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
             var type = typeof(T);
 

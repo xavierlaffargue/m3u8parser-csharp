@@ -22,7 +22,7 @@ namespace M3U8Parser.Attributes.ValueType
 
         public virtual void Read(string content)
         {
-            var match = Regex.Match(content.Trim(), $"[,|:](?={AttributeName})(.*?)(?=,|$)", RegexOptions.Multiline & RegexOptions.IgnoreCase);
+            var match = Regex.Match(content.Trim(), $"[,|:](?={AttributeName})(.*?)(?=,|$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
             var type = typeof(T);
 

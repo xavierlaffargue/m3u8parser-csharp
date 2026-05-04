@@ -20,7 +20,7 @@ namespace M3U8Parser.Attributes.ValueType
         public override void Read(string content)
         {
             var pattern = $"(?={AttributeName})(.*?)(?=,|$)";
-            var match = Regex.Match(content.Trim(), pattern, RegexOptions.Multiline & RegexOptions.IgnoreCase);
+            var match = Regex.Match(content.Trim(), pattern, RegexOptions.Multiline | RegexOptions.IgnoreCase);
 
             if (match.Success)
             {

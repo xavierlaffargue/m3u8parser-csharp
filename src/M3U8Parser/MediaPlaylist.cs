@@ -1,5 +1,6 @@
-﻿namespace M3U8Parser
+namespace M3U8Parser
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
@@ -15,7 +16,38 @@
 
         public IndependentSegments IndependentSegments { get; set; } = new ();
 
-        public Map Map { get; set; } = new ();
+        public Map Map
+        {
+            get
+            {
+                if (MediaSegments.Count > 0)
+                {
+                    foreach (var mediaSegment in MediaSegments)
+                    {
+                        if (mediaSegment.Segments != null)
+                        {
+                            foreach (var segment in mediaSegment.Segments)
+                            {
+                                if (segment.Map != null)
+                                {
+                                    return segment.Map;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return null;
+            }
+
+            set
+            {
+                if (MediaSegments.Count > 0 && MediaSegments[0].Segments.Count > 0)
+                {
+                    MediaSegments[0].Segments[0].Map = value;
+                }
+            }
+        }
 
         public int HlsVersion { get; set; }
 
@@ -42,8 +74,7 @@
         public static MediaPlaylist LoadFromText(string text)
         {
             PlaylistType playlistType = null;
-            IndependentSegments IndependentSegments = null;
-            Map map = null;
+            IndependentSegments independentSegments = null;
             List<MediaSegment> mediaSegments = new ();
             var hlsVersion = 4;
             var hasEndList = false;
@@ -51,72 +82,102 @@
             int? mediaSequence = null;
             bool? iFrameOnly = null;
 
-            var regex = new Regex($"(?={Tag.EXTX})(.*?)(?<=$)", RegexOptions.Multiline);
-            var matches = regex.Matches(text);
+            Map currentMap = null;
+            string currentProgramDateTime = null;
+            Key currentKey = null;
 
-            foreach (Match match in matches)
+            using (var reader = new StringReader(text))
             {
-                var line = match.Value;
-                if (line.StartsWith(Tag.EXTXPLAYLISTTYPE))
+                List<Segment> currentSegments = new ();
+                string line;
+                while ((line = reader.ReadLine()) != null)
                 {
-                    playlistType = new PlaylistTypeExt(line).Value;
-                }
-                else if (line.StartsWith(Tag.EXTXVERSION))
-                {
-                    hlsVersion = new HlsVersion(line).Value;
-                }
-                else if (line.StartsWith(Tag.EXTXINDEPENDENTSEGMENTS))
-                {
-                    IndependentSegments = new IndependentSegments(line);
-                }
-                else if (line.StartsWith(Tag.EXTXMAP))
-                {
-                    map = new Map(line);
-                }
-                else if (line.StartsWith(Tag.EXTXENDLIST))
-                {
-                    hasEndList = true;
-                }
-                else if (line.StartsWith(Tag.EXTXIFRAMESONLY))
-                {
-                    iFrameOnly = true;
-                }
-                else if (line.StartsWith(Tag.EXTXTARGETDURATION))
-                {
-                    targetDuration = new TargetDuration(line).Value;
-                }
-                else if (line.StartsWith(Tag.EXTXMEDIASEQUENCE))
-                {
-                    mediaSequence = new MediaSequence(line).Value;
-                }
-            }
-
-            var l = Regex.Split(text, $"(?={Tag.EXTXKEY}|{Tag.EXTINF})");
-            var segments = new List<Segment>();
-            MediaSegment mediaSegment = null;
-            foreach (var line in l)
-            {
-                if (line.StartsWith(Tag.EXTXKEY))
-                {
-                    if (mediaSegment != null)
+                    line = line.Trim();
+                    if (string.IsNullOrEmpty(line) || line == Tag.EXTM3U)
                     {
-                        mediaSegment.Segments = segments;
-                        mediaSegments.Add(mediaSegment);
+                        continue;
                     }
 
-                    mediaSegment = new MediaSegment(line);
+                    if (line.StartsWith(Tag.EXTXVERSION))
+                    {
+                        hlsVersion = new HlsVersion(line).Value;
+                    }
+                    else if (line.StartsWith(Tag.EXTXPLAYLISTTYPE))
+                    {
+                        playlistType = new PlaylistTypeExt(line).Value;
+                    }
+                    else if (line.StartsWith(Tag.EXTXINDEPENDENTSEGMENTS))
+                    {
+                        independentSegments = new IndependentSegments(line);
+                    }
+                    else if (line.StartsWith(Tag.EXTXTARGETDURATION))
+                    {
+                        targetDuration = new TargetDuration(line).Value;
+                    }
+                    else if (line.StartsWith(Tag.EXTXMEDIASEQUENCE))
+                    {
+                        mediaSequence = new MediaSequence(line).Value;
+                    }
+                    else if (line.StartsWith(Tag.EXTXIFRAMESONLY))
+                    {
+                        iFrameOnly = true;
+                    }
+                    else if (line.StartsWith(Tag.EXTXENDLIST))
+                    {
+                        hasEndList = true;
+                    }
+                    else if (line.StartsWith(Tag.EXTXMAP))
+                    {
+                        currentMap = new Map(line);
+                    }
+                    else if (line.StartsWith(Tag.EXTXPROGRAMDATETIME))
+                    {
+                        var match = Regex.Match(line, $"(?<={Tag.EXTXPROGRAMDATETIME}:)(.*?)(?=$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+                        currentProgramDateTime = match.Success ? match.Groups[0].Value : line.Split(':')[1].Trim();
+                    }
+                    else if (line.StartsWith(Tag.EXTXKEY))
+                    {
+                        if (currentSegments.Count > 0 || (currentKey != null && currentKey.Method != MethodType.None))
+                        {
+                            mediaSegments.Add(new MediaSegment { Key = currentKey, Segments = currentSegments });
+                            currentSegments = new List<Segment>();
+                        }
+                        currentKey = new Key(line);
+                    }
+                    else if (line.StartsWith(Tag.EXTINF))
+                    {
+                        var segmentBlock = new StringBuilder();
+                        segmentBlock.AppendLine(line);
+
+                        string nextLine;
+                        while ((nextLine = reader.ReadLine()) != null)
+                        {
+                            string trimmedNext = nextLine.Trim();
+                            if (string.IsNullOrEmpty(trimmedNext))
+                            {
+                                continue;
+                            }
+
+                            segmentBlock.AppendLine(trimmedNext);
+                            if (!trimmedNext.StartsWith("#"))
+                            {
+                                break;
+                            }
+                        }
+
+                        var segment = new Segment(segmentBlock.ToString());
+                        segment.Map = currentMap;
+                        segment.ProgramDateTime = currentProgramDateTime;
+                        currentProgramDateTime = null; // Reset as per RFC 8216
+                        currentSegments.Add(segment);
+                    }
                 }
 
-                if (line.StartsWith(Tag.EXTINF))
+                if (currentSegments.Count > 0 || (currentKey != null && currentKey.Method != MethodType.None))
                 {
-                    mediaSegment ??= new MediaSegment();
-
-                    segments.Add(new Segment(line));
+                    mediaSegments.Add(new MediaSegment { Key = currentKey, Segments = currentSegments });
                 }
             }
-
-            mediaSegment.Segments = segments;
-            mediaSegments.Add(mediaSegment);
 
             return new MediaPlaylist
             {
@@ -127,8 +188,7 @@
                 TargetDuration = targetDuration,
                 MediaSequence = mediaSequence,
                 IFrameOnly = iFrameOnly,
-                IndependentSegments = IndependentSegments,
-                Map = map
+                IndependentSegments = independentSegments
             };
         }
 
@@ -162,11 +222,6 @@
             if (IFrameOnly.HasValue && IFrameOnly.Value)
             {
                 strBuilder.AppendLine(Tag.EXTXIFRAMESONLY);
-            }
-
-            if (Map != null)
-            {
-                strBuilder.AppendLine(Map.ToString());
             }
 
             foreach (var segment in MediaSegments)
