@@ -71,6 +71,8 @@ namespace M3U8Parser
 
         public List<Define> Defines { get; set; } = new ();
 
+        public List<DateRange> DateRanges { get; set; } = new ();
+
         public List<MediaSegment> MediaSegments { get; set; } = new ();
 
         public bool HasEndList { get; set; }
@@ -102,6 +104,7 @@ namespace M3U8Parser
             List<PreloadHint> preloadHints = new ();
             List<RenditionReport> renditionReports = new ();
             List<Define> defines = new ();
+            List<DateRange> dateRanges = new ();
 
             Map currentMap = null;
             string currentProgramDateTime = null;
@@ -193,6 +196,10 @@ namespace M3U8Parser
                     {
                         defines.Add(new Define(line));
                     }
+                    else if (line.StartsWith(Tag.EXTXDATERANGE))
+                    {
+                        dateRanges.Add(new DateRange(line));
+                    }
                     else if (line.StartsWith(Tag.EXTXGAP))
                     {
                         currentGap = true;
@@ -267,7 +274,8 @@ namespace M3U8Parser
                 PreloadHints = preloadHints,
                 RenditionReports = renditionReports,
                 Parts = currentParts,
-                Defines = defines
+                Defines = defines,
+                DateRanges = dateRanges
             };
         }
 
@@ -324,6 +332,14 @@ namespace M3U8Parser
             if (Skip != null)
             {
                 strBuilder.AppendLine(Skip.ToString());
+            }
+
+            if (DateRanges is { Count: > 0 })
+            {
+                foreach (var dateRange in DateRanges)
+                {
+                    strBuilder.AppendLine(dateRange.ToString());
+                }
             }
 
             foreach (var segment in MediaSegments)

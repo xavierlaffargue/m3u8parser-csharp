@@ -165,5 +165,82 @@ segment13.ts
             Assert.Equal(mediaPlaylist.PreloadHints[0].Type, roundTrip.PreloadHints[0].Type);
             Assert.Equal(mediaPlaylist.RenditionReports[0].Uri, roundTrip.RenditionReports[0].Uri);
         }
+
+        [Fact]
+        public void TestDateRangeAndHlsInterstitials()
+        {
+            var manifestText = @"#EXTM3U
+#EXT-X-VERSION:13
+#EXT-X-TARGETDURATION:6
+#EXT-X-DATERANGE:ID=""ad1"",CLASS=""com.apple.hls.interstitial"",START-DATE=""2020-01-02T21:55:44.000Z"",CUE=""PRE,POST"",DURATION=15.0,PLANNED-DURATION=15.0,END-ON-NEXT=YES,X-ASSET-URI=""http://example.com/ad1.m3u8"",X-ASSET-LIST=""http://example.com/adv.json"",X-RESUME-OFFSET=0,X-PLAYOUT-LIMIT=15.0,X-SNAP=""OUT,IN"",X-RESTRICT=""SKIP,JUMP"",X-CONTENT-MAY-VARY=""YES"",X-TIMELINE-OCCUPIES=""POINT"",X-TIMELINE-STYLE=""HIGHLIGHT"",X-SKIP-CONTROL-OFFSET=2,X-SKIP-CONTROL-DURATION=5,X-SKIP-CONTROL-LABEL-ID=""Exit-Label"",X-URI=""http://preload.com"",X-TARGET-ID=""target-1"",X-TARGET-CLASS=""class-1""
+
+#EXTINF:6,
+main1.ts";
+
+            var mediaPlaylist = MediaPlaylist.LoadFromText(manifestText);
+
+            // Assertions for DateRanges
+            Assert.Single(mediaPlaylist.DateRanges);
+            var dateRange = mediaPlaylist.DateRanges[0];
+
+            Assert.Equal("ad1", dateRange.Id);
+            Assert.Equal("com.apple.hls.interstitial", dateRange.Class);
+            Assert.Equal("2020-01-02T21:55:44.000Z", dateRange.StartDate);
+            Assert.Equal("PRE,POST", dateRange.Cue);
+            Assert.Equal(15.0m, dateRange.Duration);
+            Assert.Equal(15.0m, dateRange.PlannedDuration);
+            Assert.Equal("YES", dateRange.EndOnNext);
+
+            // Assertions for Interstitials
+            Assert.Equal("http://example.com/ad1.m3u8", dateRange.XAssetUri);
+            Assert.Equal("http://example.com/adv.json", dateRange.XAssetList);
+            Assert.Equal(0m, dateRange.XResumeOffset);
+            Assert.Equal(15.0m, dateRange.XPlayoutLimit);
+            Assert.Equal("OUT,IN", dateRange.XSnap);
+            Assert.Equal("SKIP,JUMP", dateRange.XRestrict);
+            Assert.Equal("YES", dateRange.XContentMayVary);
+            Assert.Equal("POINT", dateRange.XTimelineOccupies);
+            Assert.Equal("HIGHLIGHT", dateRange.XTimelineStyle);
+
+            // Assertions for Skip control
+            Assert.Equal(2, dateRange.XSkipControlOffset);
+            Assert.Equal(5, dateRange.XSkipControlDuration);
+            Assert.Equal("Exit-Label", dateRange.XSkipControlLabelId);
+
+            // Assertions for Preloading
+            Assert.Equal("http://preload.com", dateRange.XUri);
+            Assert.Equal("target-1", dateRange.XTargetId);
+            Assert.Equal("class-1", dateRange.XTargetClass);
+
+            // Round-trip test
+            var serialized = mediaPlaylist.ToString();
+            var roundTrip = MediaPlaylist.LoadFromText(serialized);
+
+            Assert.Single(roundTrip.DateRanges);
+            var roundTripDateRange = roundTrip.DateRanges[0];
+
+            Assert.Equal(dateRange.Id, roundTripDateRange.Id);
+            Assert.Equal(dateRange.Class, roundTripDateRange.Class);
+            Assert.Equal(dateRange.StartDate, roundTripDateRange.StartDate);
+            Assert.Equal(dateRange.Cue, roundTripDateRange.Cue);
+            Assert.Equal(dateRange.Duration, roundTripDateRange.Duration);
+            Assert.Equal(dateRange.PlannedDuration, roundTripDateRange.PlannedDuration);
+            Assert.Equal(dateRange.EndOnNext, roundTripDateRange.EndOnNext);
+            Assert.Equal(dateRange.XAssetUri, roundTripDateRange.XAssetUri);
+            Assert.Equal(dateRange.XAssetList, roundTripDateRange.XAssetList);
+            Assert.Equal(dateRange.XResumeOffset, roundTripDateRange.XResumeOffset);
+            Assert.Equal(dateRange.XPlayoutLimit, roundTripDateRange.XPlayoutLimit);
+            Assert.Equal(dateRange.XSnap, roundTripDateRange.XSnap);
+            Assert.Equal(dateRange.XRestrict, roundTripDateRange.XRestrict);
+            Assert.Equal(dateRange.XContentMayVary, roundTripDateRange.XContentMayVary);
+            Assert.Equal(dateRange.XTimelineOccupies, roundTripDateRange.XTimelineOccupies);
+            Assert.Equal(dateRange.XTimelineStyle, roundTripDateRange.XTimelineStyle);
+            Assert.Equal(dateRange.XSkipControlOffset, roundTripDateRange.XSkipControlOffset);
+            Assert.Equal(dateRange.XSkipControlDuration, roundTripDateRange.XSkipControlDuration);
+            Assert.Equal(dateRange.XSkipControlLabelId, roundTripDateRange.XSkipControlLabelId);
+            Assert.Equal(dateRange.XUri, roundTripDateRange.XUri);
+            Assert.Equal(dateRange.XTargetId, roundTripDateRange.XTargetId);
+            Assert.Equal(dateRange.XTargetClass, roundTripDateRange.XTargetClass);
+        }
     }
 }
