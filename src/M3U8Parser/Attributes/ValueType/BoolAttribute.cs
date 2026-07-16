@@ -19,14 +19,20 @@ namespace M3U8Parser.Attributes.ValueType
 
         public override void Read(string content)
         {
-            var pattern = $"(?={AttributeName})(.*?)(?=,|$)";
-            var match = Regex.Match(content.Trim(), pattern, RegexOptions.Multiline | RegexOptions.IgnoreCase);
-            if (!match.Success)
+            string valueFounded;
+            if (!M3U8AttributeParser.TryGetValue(AttributeName, out valueFounded))
             {
-                return;
+                var pattern = $"(?={AttributeName})(.*?)(?=,|$)";
+                var match = Regex.Match(content.Trim(), pattern, RegexOptions.Multiline | RegexOptions.IgnoreCase);
+                if (!match.Success)
+                {
+                    return;
+                }
+
+                var parts = match.Groups[0].Value.Split(new[] { '=' }, 2);
+                valueFounded = parts.Length > 1 ? parts[1] : string.Empty;
             }
 
-            var valueFounded = match.Groups[0].Value.Split('=')[1];
             Value = StringToBool(valueFounded);
         }
 

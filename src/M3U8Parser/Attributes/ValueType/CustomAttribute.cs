@@ -22,38 +22,42 @@ namespace M3U8Parser.Attributes.ValueType
 
         public virtual void Read(string content)
         {
-            var match = Regex.Match(content.Trim(), $"[,|:](?={AttributeName})(.*?)(?=,|$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
-
-            var type = typeof(T);
-
-            if (match.Success)
+            string valueFounded;
+            if (!M3U8AttributeParser.TryGetValue(AttributeName, out valueFounded))
             {
-                var valueFounded = match.Groups[0].Value.Split('=')[1];
-
-                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+                var match = Regex.Match(content.Trim(), $"[,|:](?={AttributeName})(.*?)(?=,|$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+                if (match.Success)
                 {
-                    type = Nullable.GetUnderlyingType(type);
-                }
-
-                if (typeof(ICustomAttribute).IsAssignableFrom(type))
-                {
-                    var instanceAttribute = (ICustomAttribute)Activator.CreateInstance(type, false);
-                    if (instanceAttribute != null)
-                    {
-                        Value = (T)instanceAttribute.ParseFromString(valueFounded);
-                    }
+                    var parts = match.Groups[0].Value.Split(new[] { '=' }, 2);
+                    valueFounded = parts.Length > 1 ? parts[1] : string.Empty;
                 }
                 else
                 {
-                    if (type != null)
-                    {
-                        Value = (T)Convert.ChangeType(valueFounded, type);
-                    }
+                    Value = default;
+                    return;
+                }
+            }
+
+            var type = typeof(T);
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                type = Nullable.GetUnderlyingType(type);
+            }
+
+            if (typeof(ICustomAttribute).IsAssignableFrom(type))
+            {
+                var instanceAttribute = (ICustomAttribute)Activator.CreateInstance(type, false);
+                if (instanceAttribute != null)
+                {
+                    Value = (T)instanceAttribute.ParseFromString(valueFounded);
                 }
             }
             else
             {
-                Value = default;
+                if (type != null)
+                {
+                    Value = (T)Convert.ChangeType(valueFounded, type);
+                }
             }
         }
     }

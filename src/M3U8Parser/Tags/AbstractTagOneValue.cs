@@ -1,6 +1,8 @@
 namespace M3U8Parser.Tags
 {
     using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Reflection;
     using System.Text;
     using System.Text.RegularExpressions;
@@ -9,6 +11,8 @@ namespace M3U8Parser.Tags
 
     public abstract class AbstractTagOneValue<T> : ITag
     {
+        private static readonly ConcurrentDictionary<Type, FieldInfo[]> AttributeFieldsCache = new ();
+
         protected AbstractTagOneValue()
         {
         }
@@ -25,12 +29,14 @@ namespace M3U8Parser.Tags
         public override string ToString()
         {
             var strBuilder = new StringBuilder();
-            strBuilder.Append(TagName);
-            strBuilder.Append(':');
-
             WriteAllAttributes(strBuilder);
 
-            return strBuilder.ToString().RemoveLastCharacter();
+            if (strBuilder.Length > 0)
+            {
+                return $"{TagName}:{strBuilder}";
+            }
+
+            return TagName;
         }
 
         protected void ReadValue(string str)
@@ -66,20 +72,43 @@ namespace M3U8Parser.Tags
 
         protected void WriteAllAttributes(StringBuilder strBuilder)
         {
-            foreach (var field in GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
+            var fields = GetAttributeFields(GetType());
+            bool first = true;
+            foreach (var field in fields)
             {
-                var isAnAttribute = typeof(IAttribute).IsAssignableFrom(field.FieldType);
-
-                if (isAnAttribute)
+                var attr = field.GetValue(this) as IAttribute;
+                if (attr != null)
                 {
-                    var m = field.FieldType.GetMethod("ToString");
-                    if (m != null)
+                    var str = attr.ToString();
+                    if (!string.IsNullOrEmpty(str))
                     {
-                        var str = m.Invoke(field.GetValue(this), System.Array.Empty<object>());
-                        strBuilder.AppendWithSeparator(str.ToString(), ",");
+                        if (!first)
+                        {
+                            strBuilder.Append(',');
+                        }
+
+                        strBuilder.Append(str);
+                        first = false;
                     }
                 }
             }
+        }
+
+        private static FieldInfo[] GetAttributeFields(Type type)
+        {
+            return AttributeFieldsCache.GetOrAdd(type, t =>
+            {
+                var list = new List<FieldInfo>();
+                foreach (var field in t.GetFields(BindingFlags.NonPublic | BindingFlags.Instance))
+                {
+                    if (typeof(IAttribute).IsAssignableFrom(field.FieldType))
+                    {
+                        list.Add(field);
+                    }
+                }
+
+                return list.ToArray();
+            });
         }
     }
 }

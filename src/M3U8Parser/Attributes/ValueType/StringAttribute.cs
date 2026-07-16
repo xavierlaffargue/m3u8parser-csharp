@@ -23,13 +23,18 @@ namespace M3U8Parser.Attributes.ValueType
 
         public override void Read(string content)
         {
-            var regexStr = Regex.Match(content.Trim(), $"(?<={AttributeName}=\")(.*?)(?=\",|\"\r?$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
-            if (!regexStr.Success)
+            string valueFounded;
+            if (!M3U8AttributeParser.TryGetValue(AttributeName, out valueFounded))
             {
-                return;
+                var regexStr = Regex.Match(content.Trim(), $"(?<={AttributeName}=\")(.*?)(?=\",|\"\r?$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+                if (!regexStr.Success)
+                {
+                    return;
+                }
+
+                valueFounded = regexStr.Groups[0].Value;
             }
 
-            var valueFounded = regexStr.Groups[0].Value;
             Value = (string)Convert.ChangeType(valueFounded, typeof(string));
         }
     }
