@@ -21,6 +21,14 @@ namespace M3U8Parser.Tags.MultivariantPlaylist
         private readonly Video _video = new ();
         private readonly VideoRange _videoRange = new ();
 
+        // New attributes introduced in RFC 8216 Bis / draft 22
+        private readonly DecimalAttribute _score = new ("SCORE");
+        private readonly StringAttribute _supplementalCodecs = new ("SUPPLEMENTAL-CODECS");
+        private readonly StringAttribute _allowedCpc = new ("ALLOWED-CPC");
+        private readonly StringAttribute _stableVariantId = new ("STABLE-VARIANT-ID");
+        private readonly StringAttribute _pathwayId = new ("PATHWAY-ID");
+        private readonly StringAttribute _reqVideoLayout = new ("REQ-VIDEO-LAYOUT");
+
         public StreamInf()
         {
         }
@@ -42,6 +50,14 @@ namespace M3U8Parser.Tags.MultivariantPlaylist
             _subtitles.Read(lineWithAttribute);
             _closedCaptions.Read(lineWithAttribute);
             _resolutionAttribute.Read(lineWithAttribute);
+
+            _score.Read(lineWithAttribute);
+            _supplementalCodecs.Read(lineWithAttribute);
+            _allowedCpc.Read(lineWithAttribute);
+            _stableVariantId.Read(lineWithAttribute);
+            _pathwayId.Read(lineWithAttribute);
+            _reqVideoLayout.Read(lineWithAttribute);
+
             Uri = lineWithUri;
         }
 
@@ -117,6 +133,42 @@ namespace M3U8Parser.Tags.MultivariantPlaylist
             set => _resolutionAttribute.Value = value;
         }
 
+        public decimal? Score
+        {
+            get => _score.Value;
+            set => _score.Value = value;
+        }
+
+        public string SupplementalCodecs
+        {
+            get => _supplementalCodecs.Value;
+            set => _supplementalCodecs.Value = value;
+        }
+
+        public string AllowedCpc
+        {
+            get => _allowedCpc.Value;
+            set => _allowedCpc.Value = value;
+        }
+
+        public string StableVariantId
+        {
+            get => _stableVariantId.Value;
+            set => _stableVariantId.Value = value;
+        }
+
+        public string PathwayId
+        {
+            get => _pathwayId.Value;
+            set => _pathwayId.Value = value;
+        }
+
+        public string ReqVideoLayout
+        {
+            get => _reqVideoLayout.Value;
+            set => _reqVideoLayout.Value = value;
+        }
+
         public override string ToString()
         {
             var strBuilder = new StringBuilder();
@@ -133,6 +185,13 @@ namespace M3U8Parser.Tags.MultivariantPlaylist
             strBuilder.AppendWithSeparator(_video.ToString(), ",");
             strBuilder.AppendWithSeparator(_audio.ToString(), ",");
             strBuilder.AppendWithSeparator(_subtitles.ToString(), ",");
+
+            strBuilder.AppendWithSeparator(_score.ToString(), ",");
+            strBuilder.AppendWithSeparator(_supplementalCodecs.ToString(), ",");
+            strBuilder.AppendWithSeparator(_allowedCpc.ToString(), ",");
+            strBuilder.AppendWithSeparator(_stableVariantId.ToString(), ",");
+            strBuilder.AppendWithSeparator(_pathwayId.ToString(), ",");
+            strBuilder.AppendWithSeparator(_reqVideoLayout.ToString(), ",");
 
             return strBuilder.ToString().RemoveLastCharacter() + "\r\n" + Uri;
         }

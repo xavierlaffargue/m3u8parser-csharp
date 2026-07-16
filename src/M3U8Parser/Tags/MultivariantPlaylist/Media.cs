@@ -16,6 +16,11 @@ namespace M3U8Parser.Tags.MultivariantPlaylist
         private readonly Uri _uri = new ();
         private readonly Channels _channels = new ();
 
+        // New attributes introduced in RFC 8216 Bis / draft 22
+        private readonly StringAttribute _stableRenditionId = new ("STABLE-RENDITION-ID");
+        private readonly IntegerAttribute _bitDepth = new ("BIT-DEPTH");
+        private readonly IntegerAttribute _sampleRate = new ("SAMPLE-RATE");
+
         public Media()
         {
         }
@@ -83,6 +88,24 @@ namespace M3U8Parser.Tags.MultivariantPlaylist
         {
             get => _channels.Value;
             set => _channels.Value = value;
+        }
+
+        public string StableRenditionId
+        {
+            get => _stableRenditionId.Value;
+            set => _stableRenditionId.Value = value;
+        }
+
+        public int? BitDepth
+        {
+            get => _bitDepth.Value;
+            set => _bitDepth.Value = value;
+        }
+
+        public int? SampleRate
+        {
+            get => _sampleRate.Value;
+            set => _sampleRate.Value = value;
         }
 
         protected override string TagName => Tag.EXTXMEDIA;

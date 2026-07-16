@@ -1,5 +1,6 @@
-﻿namespace M3U8Parser.Tags.MediaSegment
+namespace M3U8Parser.Tags.MediaSegment
 {
+    using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
     using System.Text;
@@ -55,6 +56,22 @@
                 {
                     Map = new Map(line);
                 }
+                else if (line.StartsWith(Tag.EXTXGAP))
+                {
+                    Gap = true;
+                }
+                else if (line.StartsWith(Tag.EXTXBITRATE))
+                {
+                    var match = Regex.Match(line.Trim(), $"(?<={Tag.EXTXBITRATE}:)(.*?)(?=$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+                    if (match.Success)
+                    {
+                        Bitrate = int.Parse(match.Groups[0].Value);
+                    }
+                }
+                else if (line.StartsWith(Tag.EXTXPART))
+                {
+                    Parts.Add(new Part(line));
+                }
                 else if (!line.StartsWith("#EXT"))
                 {
                     Uri = line;
@@ -76,6 +93,12 @@
 
         public Map Map { get; set; }
 
+        public bool Gap { get; set; }
+
+        public int? Bitrate { get; set; }
+
+        public List<Part> Parts { get; set; } = new ();
+
         public override string ToString()
         {
             var strBuilder = new StringBuilder();
@@ -88,6 +111,24 @@
             if (Map != null)
             {
                 strBuilder.AppendLine(Map.ToString());
+            }
+
+            if (Parts is { Count: > 0 })
+            {
+                foreach (var part in Parts)
+                {
+                    strBuilder.AppendLine(part.ToString());
+                }
+            }
+
+            if (Gap)
+            {
+                strBuilder.AppendLine(Tag.EXTXGAP);
+            }
+
+            if (Bitrate != null)
+            {
+                strBuilder.AppendLine($"{Tag.EXTXBITRATE}:{Bitrate}");
             }
 
             strBuilder.AppendLine($"{Tag.EXTINF}:{Duration.ToString(CultureInfo.InvariantCulture)},{Title}");

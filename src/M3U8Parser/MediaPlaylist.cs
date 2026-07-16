@@ -57,6 +57,20 @@ namespace M3U8Parser
 
         public int? MediaSequence { get; set; }
 
+        public ServerControl ServerControl { get; set; }
+
+        public Skip Skip { get; set; }
+
+        public PartInf PartInf { get; set; }
+
+        public List<PreloadHint> PreloadHints { get; set; } = new ();
+
+        public List<RenditionReport> RenditionReports { get; set; } = new ();
+
+        public List<Part> Parts { get; set; } = new ();
+
+        public List<Define> Defines { get; set; } = new ();
+
         public List<MediaSegment> MediaSegments { get; set; } = new ();
 
         public bool HasEndList { get; set; }
@@ -82,9 +96,19 @@ namespace M3U8Parser
             int? mediaSequence = null;
             bool? iFrameOnly = null;
 
+            ServerControl serverControl = null;
+            Skip skip = null;
+            PartInf partInf = null;
+            List<PreloadHint> preloadHints = new ();
+            List<RenditionReport> renditionReports = new ();
+            List<Define> defines = new ();
+
             Map currentMap = null;
             string currentProgramDateTime = null;
             Key currentKey = null;
+            bool currentGap = false;
+            int? currentBitrate = null;
+            List<Part> currentParts = new ();
 
             using (var reader = new StringReader(text))
             {
@@ -142,7 +166,48 @@ namespace M3U8Parser
                             mediaSegments.Add(new MediaSegment { Key = currentKey, Segments = currentSegments });
                             currentSegments = new List<Segment>();
                         }
+
                         currentKey = new Key(line);
+                    }
+                    else if (line.StartsWith(Tag.EXTXSERVERCONTROL))
+                    {
+                        serverControl = new ServerControl(line);
+                    }
+                    else if (line.StartsWith(Tag.EXTXSKIP))
+                    {
+                        skip = new Skip(line);
+                    }
+                    else if (line.StartsWith(Tag.EXTXPARTINF))
+                    {
+                        partInf = new PartInf(line);
+                    }
+                    else if (line.StartsWith(Tag.EXTXPRELOADHINT))
+                    {
+                        preloadHints.Add(new PreloadHint(line));
+                    }
+                    else if (line.StartsWith(Tag.EXTXRENDITIONREPORT))
+                    {
+                        renditionReports.Add(new RenditionReport(line));
+                    }
+                    else if (line.StartsWith(Tag.EXTXDEFINE))
+                    {
+                        defines.Add(new Define(line));
+                    }
+                    else if (line.StartsWith(Tag.EXTXGAP))
+                    {
+                        currentGap = true;
+                    }
+                    else if (line.StartsWith(Tag.EXTXBITRATE))
+                    {
+                        var match = Regex.Match(line, $"(?<={Tag.EXTXBITRATE}:)(.*?)(?=$)", RegexOptions.Multiline | RegexOptions.IgnoreCase);
+                        if (match.Success)
+                        {
+                            currentBitrate = int.Parse(match.Groups[0].Value);
+                        }
+                    }
+                    else if (line.StartsWith(Tag.EXTXPART))
+                    {
+                        currentParts.Add(new Part(line));
                     }
                     else if (line.StartsWith(Tag.EXTINF))
                     {
@@ -168,7 +233,14 @@ namespace M3U8Parser
                         var segment = new Segment(segmentBlock.ToString());
                         segment.Map = currentMap;
                         segment.ProgramDateTime = currentProgramDateTime;
+                        segment.Gap = currentGap;
+                        segment.Bitrate = currentBitrate;
+                        segment.Parts = currentParts;
+
                         currentProgramDateTime = null; // Reset as per RFC 8216
+                        currentGap = false; // Reset for next segment
+                        currentParts = new List<Part>(); // Reset for next segment
+
                         currentSegments.Add(segment);
                     }
                 }
@@ -188,7 +260,14 @@ namespace M3U8Parser
                 TargetDuration = targetDuration,
                 MediaSequence = mediaSequence,
                 IFrameOnly = iFrameOnly,
-                IndependentSegments = independentSegments
+                IndependentSegments = independentSegments,
+                ServerControl = serverControl,
+                Skip = skip,
+                PartInf = partInf,
+                PreloadHints = preloadHints,
+                RenditionReports = renditionReports,
+                Parts = currentParts,
+                Defines = defines
             };
         }
 
@@ -202,6 +281,24 @@ namespace M3U8Parser
             if (IndependentSegments != null && IndependentSegments.IsPresent)
             {
                 strBuilder.AppendLine(IndependentSegments.ToString());
+            }
+
+            if (Defines is { Count: > 0 })
+            {
+                foreach (var define in Defines)
+                {
+                    strBuilder.AppendLine(define.ToString());
+                }
+            }
+
+            if (ServerControl != null)
+            {
+                strBuilder.AppendLine(ServerControl.ToString());
+            }
+
+            if (PartInf != null)
+            {
+                strBuilder.AppendLine(PartInf.ToString());
             }
 
             if (TargetDuration != null)
@@ -224,10 +321,40 @@ namespace M3U8Parser
                 strBuilder.AppendLine(Tag.EXTXIFRAMESONLY);
             }
 
+            if (Skip != null)
+            {
+                strBuilder.AppendLine(Skip.ToString());
+            }
+
             foreach (var segment in MediaSegments)
             {
                 strBuilder.AppendLine();
                 strBuilder.Append(segment);
+            }
+
+            if (Parts is { Count: > 0 })
+            {
+                strBuilder.AppendLine();
+                foreach (var part in Parts)
+                {
+                    strBuilder.AppendLine(part.ToString());
+                }
+            }
+
+            if (PreloadHints is { Count: > 0 })
+            {
+                foreach (var hint in PreloadHints)
+                {
+                    strBuilder.AppendLine(hint.ToString());
+                }
+            }
+
+            if (RenditionReports is { Count: > 0 })
+            {
+                foreach (var report in RenditionReports)
+                {
+                    strBuilder.AppendLine(report.ToString());
+                }
             }
 
             if (HasEndList)
