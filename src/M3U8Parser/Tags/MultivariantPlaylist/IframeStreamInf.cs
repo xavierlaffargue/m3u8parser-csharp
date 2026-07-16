@@ -14,6 +14,14 @@ namespace M3U8Parser.Tags.MultivariantPlaylist
         private readonly Video _video = new ();
         private readonly VideoRange _videoRange = new ();
 
+        // New attributes introduced in RFC 8216 Bis / draft 22
+        private readonly DecimalAttribute _score = new ("SCORE");
+        private readonly StringAttribute _supplementalCodecs = new ("SUPPLEMENTAL-CODECS");
+        private readonly StringAttribute _allowedCpc = new ("ALLOWED-CPC");
+        private readonly StringAttribute _stableVariantId = new ("STABLE-VARIANT-ID");
+        private readonly StringAttribute _pathwayId = new ("PATHWAY-ID");
+        private readonly StringAttribute _reqVideoLayout = new ("REQ-VIDEO-LAYOUT");
+
         public IframeStreamInf()
         {
         }
@@ -69,6 +77,42 @@ namespace M3U8Parser.Tags.MultivariantPlaylist
         {
             get => _uri.Value;
             set => _uri.Value = value;
+        }
+
+        public decimal? Score
+        {
+            get => _score.Value;
+            set => _score.Value = value;
+        }
+
+        public string SupplementalCodecs
+        {
+            get => _supplementalCodecs.Value;
+            set => _supplementalCodecs.Value = value;
+        }
+
+        public string AllowedCpc
+        {
+            get => _allowedCpc.Value;
+            set => _allowedCpc.Value = value;
+        }
+
+        public string StableVariantId
+        {
+            get => _stableVariantId.Value;
+            set => _stableVariantId.Value = value;
+        }
+
+        public string PathwayId
+        {
+            get => _pathwayId.Value;
+            set => _pathwayId.Value = value;
+        }
+
+        public string ReqVideoLayout
+        {
+            get => _reqVideoLayout.Value;
+            set => _reqVideoLayout.Value = value;
         }
 
         protected override string TagName => Tag.EXTXIFRAMESTREAMINF;

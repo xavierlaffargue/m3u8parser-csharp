@@ -25,5 +25,16 @@ namespace M3U8Parser
         public static readonly string EXTXCUEIN = $"{EXTX}-CUE-IN";
         public static readonly string EXTXSTART = $"{EXTX}-START";
         public static readonly string EXTXENDLIST = $"{EXTX}-ENDLIST";
+        public static readonly string EXTXDATERANGE = $"{EXTX}-DATERANGE";
+        public static readonly string EXTXGAP = $"{EXTX}-GAP";
+        public static readonly string EXTXBITRATE = $"{EXTX}-BITRATE";
+        public static readonly string EXTXSERVERCONTROL = $"{EXTX}-SERVER-CONTROL";
+        public static readonly string EXTXSKIP = $"{EXTX}-SKIP";
+        public static readonly string EXTXPARTINF = $"{EXTX}-PART-INF";
+        public static readonly string EXTXPART = $"{EXTX}-PART";
+        public static readonly string EXTXPRELOADHINT = $"{EXTX}-PRELOAD-HINT";
+        public static readonly string EXTXRENDITIONREPORT = $"{EXTX}-RENDITION-REPORT";
+        public static readonly string EXTXCONTENTSTEERING = $"{EXTX}-CONTENT-STEERING";
+        public static readonly string EXTXDEFINE = $"{EXTX}-DEFINE";
     }
 }

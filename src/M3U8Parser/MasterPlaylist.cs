@@ -1,4 +1,4 @@
-﻿namespace M3U8Parser
+namespace M3U8Parser
 {
     using System.Collections.Generic;
     using System.IO;
@@ -19,6 +19,10 @@
         public int HlsVersion { get; set; }
 
         public IndependentSegments IndependentSegments { get; set; } = new ();
+
+        public ContentSteering ContentSteering { get; set; }
+
+        public List<Define> Defines { get; set; } = new ();
 
         public List<Media> Medias { get; set; } = new ();
 
@@ -44,6 +48,8 @@
             List<StreamInf> streams = new ();
             var hlsVersion = DefaultHlsVersion;
             IndependentSegments independentSegments = null;
+            ContentSteering contentSteering = null;
+            List<Define> defines = new ();
 
             var l = Regex.Split(text, $"(?={Tag.EXTX})");
 
@@ -69,6 +75,14 @@
                 {
                     streams.Add(new StreamInf(line));
                 }
+                else if (line.StartsWith(Tag.EXTXCONTENTSTEERING))
+                {
+                    contentSteering = new ContentSteering(line);
+                }
+                else if (line.StartsWith(Tag.EXTXDEFINE))
+                {
+                    defines.Add(new Define(line));
+                }
             }
 
             return new MasterPlaylist(hlsVersion)
@@ -76,7 +90,9 @@
                 Medias = medias,
                 Streams = streams,
                 IFrameStreams = iFrameStreams,
-                IndependentSegments = independentSegments
+                IndependentSegments = independentSegments,
+                ContentSteering = contentSteering,
+                Defines = defines
             };
         }
 
@@ -90,6 +106,19 @@
             if (IndependentSegments != null && IndependentSegments.IsPresent)
             {
                 strBuilder.AppendLine(IndependentSegments.ToString());
+            }
+
+            if (ContentSteering != null)
+            {
+                strBuilder.AppendLine(ContentSteering.ToString());
+            }
+
+            if (Defines is { Count: > 0 })
+            {
+                foreach (var define in Defines)
+                {
+                    strBuilder.AppendLine(define.ToString());
+                }
             }
 
             strBuilder.AppendLine();
