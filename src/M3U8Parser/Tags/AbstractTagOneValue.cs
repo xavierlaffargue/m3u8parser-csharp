@@ -22,7 +22,7 @@ namespace M3U8Parser.Tags
 
         protected virtual string TagName => string.Empty;
 
-        public new string ToString()
+        public override string ToString()
         {
             var strBuilder = new StringBuilder();
             strBuilder.Append(TagName);

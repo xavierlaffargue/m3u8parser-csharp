@@ -18,7 +18,7 @@
 
         protected virtual string TagName => string.Empty;
 
-        public virtual string ToString()
+        public override string ToString()
         {
             var strBuilder = new StringBuilder();
             strBuilder.Append(TagName);
