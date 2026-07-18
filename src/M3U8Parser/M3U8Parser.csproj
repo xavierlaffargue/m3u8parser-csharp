@@ -11,7 +11,7 @@
         <PackageReleaseNotes>See https://github.com/xavierlaffargue/m3u8parser-csharp/releases</PackageReleaseNotes>
         <Company>M3U8Parser</Company>
         <Product>M3U8Parser</Product>
-        <TargetFrameworks>net9.0;netstandard2.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net10.0</TargetFrameworks>
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>readme.md</PackageReadmeFile>
         <RepositoryUrl>https://github.com/xavierlaffargue/m3u8parser-csharp.git</RepositoryUrl>
