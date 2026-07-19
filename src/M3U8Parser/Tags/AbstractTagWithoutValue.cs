@@ -9,8 +9,6 @@ namespace M3U8Parser.Tags
 
     public abstract class AbstractTagWithoutValue<T> : ITag
     {
-        public bool IsPresent { get; }
-
         protected AbstractTagWithoutValue()
         {
         }
@@ -27,9 +25,11 @@ namespace M3U8Parser.Tags
             }
         }
 
+        public bool IsPresent { get; }
+
         protected virtual string TagName => string.Empty;
 
-        public new string ToString()
+        public override string ToString()
         {
             if (IsPresent)
             {
